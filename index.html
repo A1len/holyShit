@@ -140,6 +140,93 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mysql" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/11/29/mysql/">体系结构和存储引擎</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/11/29/mysql/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:29:27.425Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">关键字 关于mysql 体系结构 插件式存储引擎</a></li>
+</ul>
+<h2 id="关于mysql"><a href="#关于mysql" class="headerlink" title="关于mysql"></a>关于mysql</h2><ul>
+<li><a href="#">1995年成立于瑞典并发布第一个版本</a></li>
+<li><a href="#">2008年2月被Sun收购</a></li>
+<li><a href="#">2010年1月被Oracle收购</a></li>
+<li><a href="#">2010年12月发布5.5版本</a></li>
+<li><a href="#">2012年2月发布7.2</a></li>
+<li><a href="#">2013念2月发布5.6</a></li>
+<li><a href="#">2015年10月发布5.7</a></li>
+<li><a href="#">2018年发布8.0</a></li>
+</ul>
+<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p><img src="/holyShit//img/02.png" alt="avatar"></p>
+<h2 id="内存模型简说"><a href="#内存模型简说" class="headerlink" title="内存模型简说"></a>内存模型简说</h2><p>1.计算机内存模型是分为主内存 缓存 CPU<br>2.JMM及java内存模型分为 主内存 工作内存</p>
+<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>现在明白了关键字的概念以及内存模型的概念。下面可以开始说到重点内容了。<br>多线程执行的时候各自都会有一份工作内存，共享变量也会从主内存中拷贝到工作内存当中去。<br>上面的代码存在的问题是<br>看似简单的一段赋值语句：instance = new Singleton();，其实JVM内部已经转换为多条指令：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>ctorInstance(memory); //2：初始化对象</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址</p>
+<p>但是经过重排序后如下：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址，此时对象还没被初始化</p>
+<p>ctorInstance(memory); //2：初始化对象<br>可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面，在线程A初始化完成这段内存之前，线程B虽然进不去同步代码块，但是在同步代码块之前的判断就会发现instance不为空，此时线程B获得instance对象进行使用就可能发生错误。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;加上<span class="keyword">volatile</span>禁止重排序。</span><br></pre></td></tr></table></figure></p>
+<p>后续有时间会详细写关于内存模型的文章</p>
+<p> <a href="#"> GN Al1en</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/11/29/mysql/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-单例双重检测问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
