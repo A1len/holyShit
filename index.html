@@ -140,35 +140,42 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-设计模式-工厂模式" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/hello-world/">Hello World</a>
+      <a class="article-title" href="/holyShit/2018/11/29/设计模式-工厂模式/">单例DCK问题（一）</a>
     </h1>
   
 
         
-        <a href="/holyShit/2018/11/29/hello-world/" class="archive-article-date">
-  	<time datetime="2018-11-28T16:32:53.992Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+        <a href="/holyShit/2018/11/29/设计模式-工厂模式/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:16:25.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <ul>
+<li><a href="#">关键字synchronized volatile</a></li>
+</ul>
+<h2 id="重排序问题导致双重检验出错"><a href="#重排序问题导致双重检验出错" class="headerlink" title="重排序问题导致双重检验出错"></a>重排序问题导致双重检验出错</h2><p>废话不多说上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>  </span>&#123;			</span><br><span class="line">	<span class="keyword">private</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">				instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance;</span><br><span class="line">  &#125;				</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="概念说明"><a href="#概念说明" class="headerlink" title="概念说明"></a>概念说明</h2><p>1.synchronized 原子性 可见性 有序性，synchronized通过锁住对象实现并发。说白了就是排队一个一个来，这怎么不能保证原子 可见，已经有序了？<br>2.volatile 可见性以及禁止重排序。<br>根据happens-before原则如下：<br>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。如果一个线程先去写一个变量，然后一个线程去进行读取，那么写入操作肯定会先行发生于读操作。<br>这里要说明一点别被误导了以及加了volatile就可以实现原子性！<br>当并发计数出现的时候都有读写操作。都是一起读一起写。只是读的时候获取的是同一个值而已。</p>
+<h2 id="内存模型简说"><a href="#内存模型简说" class="headerlink" title="内存模型简说"></a>内存模型简说</h2><p>1.计算机内存模型是分为主内存 缓存 CPU<br>2.JMM及java内存模型分为 主内存 工作内存</p>
+<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>现在明白了关键字的概念以及内存模型的概念。下面可以开始说到重点内容了。<br>多线程执行的时候各自都会有一份工作内存，共享变量也会从主内存中拷贝到工作内存当中去。<br>上面的代码存在的问题是<br>看似简单的一段赋值语句：instance = new Singleton();，其实JVM内部已经转换为多条指令：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>ctorInstance(memory); //2：初始化对象</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址</p>
+<p>但是经过重排序后如下：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址，此时对象还没被初始化</p>
+<p>ctorInstance(memory); //2：初始化对象<br>可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面，在线程A初始化完成这段内存之前，线程B虽然进不去同步代码块，但是在同步代码块之前的判断就会发现instance不为空，此时线程B获得instance对象进行使用就可能发生错误。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;加上<span class="keyword">volatile</span>禁止重排序。</span><br></pre></td></tr></table></figure></p>
+<p>后续有时间会详细写关于内存模型的文章</p>
+<p> <a href="#"> GN Al1en</a></p>
 
       
 
@@ -181,7 +188,369 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/holyShit/2018/11/29/设计模式-工厂模式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-单例双重检测问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">关键字synchronized volatile</a></li>
+</ul>
+<h2 id="重排序问题导致双重检验出错"><a href="#重排序问题导致双重检验出错" class="headerlink" title="重排序问题导致双重检验出错"></a>重排序问题导致双重检验出错</h2><p>废话不多说上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>  </span>&#123;			</span><br><span class="line">	<span class="keyword">private</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">				instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance;</span><br><span class="line">  &#125;				</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="概念说明"><a href="#概念说明" class="headerlink" title="概念说明"></a>概念说明</h2><p>1.synchronized 原子性 可见性 有序性，synchronized通过锁住对象实现并发。说白了就是排队一个一个来，这怎么不能保证原子 可见，已经有序了？<br>2.volatile 可见性以及禁止重排序。<br>根据happens-before原则如下：<br>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。如果一个线程先去写一个变量，然后一个线程去进行读取，那么写入操作肯定会先行发生于读操作。<br>这里要说明一点别被误导了以及加了volatile就可以实现原子性！<br>当并发计数出现的时候都有读写操作。都是一起读一起写。只是读的时候获取的是同一个值而已。</p>
+<h2 id="内存模型简说"><a href="#内存模型简说" class="headerlink" title="内存模型简说"></a>内存模型简说</h2><p>1.计算机内存模型是分为主内存 缓存 CPU<br>2.JMM及java内存模型分为 主内存 工作内存</p>
+<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>现在明白了关键字的概念以及内存模型的概念。下面可以开始说到重点内容了。<br>多线程执行的时候各自都会有一份工作内存，共享变量也会从主内存中拷贝到工作内存当中去。<br>上面的代码存在的问题是<br>看似简单的一段赋值语句：instance = new Singleton();，其实JVM内部已经转换为多条指令：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>ctorInstance(memory); //2：初始化对象</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址</p>
+<p>但是经过重排序后如下：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址，此时对象还没被初始化</p>
+<p>ctorInstance(memory); //2：初始化对象<br>可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面，在线程A初始化完成这段内存之前，线程B虽然进不去同步代码块，但是在同步代码块之前的判断就会发现instance不为空，此时线程B获得instance对象进行使用就可能发生错误。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;加上<span class="keyword">volatile</span>禁止重排序。</span><br></pre></td></tr></table></figure></p>
+<p>后续有时间会详细写关于内存模型的文章</p>
+<p> <a href="#"> GN Al1en</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/11/29/单例双重检测问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-并发编程" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/11/29/并发编程/">并发编程线程通信（一）</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/11/29/并发编程/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:16:25.137Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">关键字wait notify</a></li>
+<li><a href="#">CountDownLatch的使用</a></li>
+</ul>
+<h2 id="wait以及notify基础知识"><a href="#wait以及notify基础知识" class="headerlink" title="wait以及notify基础知识"></a>wait以及notify基础知识</h2><p>wait线程等待并释放锁，notify通知唤醒线程但不释放锁。看下面一段代码t2获取lock对象但并不满足执行条件选择wait.<br>t1执行过程中达到了t2需要的条件立即通知t2,t2执行完代码通知t1可以继续执行.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Threads</span>  </span>&#123;		</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line">		Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">				<span class="keyword">synchronized</span>(lock) &#123;</span><br><span class="line">					<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++) &#123;</span><br><span class="line">						list.add(<span class="string">"1"</span>);</span><br><span class="line">						System.out.println(<span class="string">"当前线程"</span>+Thread.currentThread().getName()+<span class="string">"添加了一个元素"</span>);</span><br><span class="line">						<span class="keyword">try</span> &#123;</span><br><span class="line">							Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">						&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">							e.printStackTrace();</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="keyword">if</span>(list.size()==<span class="number">5</span>) &#123;</span><br><span class="line">							lock.notify();</span><br><span class="line">							System.out.println(<span class="string">"唤醒线程2"</span>);</span><br><span class="line">							<span class="keyword">try</span> &#123;</span><br><span class="line">								lock.wait();</span><br><span class="line">							&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">								e.printStackTrace();</span><br><span class="line">							&#125;							</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">				</span><br><span class="line">			&#125;		</span><br><span class="line">		&#125;,<span class="string">"t1"</span>);</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		Thread t2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					<span class="keyword">synchronized</span>(lock) &#123;</span><br><span class="line">							<span class="keyword">if</span>(list.size()!=<span class="number">5</span>) &#123;</span><br><span class="line">								</span><br><span class="line">									lock.wait();</span><br><span class="line">							&#125;</span><br><span class="line">							<span class="keyword">if</span>(list.size()==<span class="number">5</span>) &#123;</span><br><span class="line">								</span><br><span class="line">								lock.notify();</span><br><span class="line">								System.out.println(<span class="string">"线程2被唤醒"</span>);</span><br><span class="line">								<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">							&#125;</span><br><span class="line">							</span><br><span class="line">					&#125;</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">						e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">					</span><br><span class="line">			&#125;	</span><br><span class="line">		&#125;,<span class="string">"t2"</span>);</span><br><span class="line">		t2.start();</span><br><span class="line">		t1.start();</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">唤醒线程<span class="number">2</span></span><br><span class="line">Exception in thread <span class="string">"t2"</span> 线程<span class="number">2</span>被唤醒</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">java.lang.RuntimeException</span><br><span class="line">	at org.ae.eureka.Threads$<span class="number">2</span>.run(Threads.java:<span class="number">57</span>)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:<span class="number">748</span>)</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br><span class="line">当前线程t1添加了一个元素</span><br></pre></td></tr></table></figure>
+<p>这种方式实现是否存在如下几点问题<br>1.代码不够清晰<br>2.如果场景是我不止一个t1通知而是有十个任务都完成的情况下才会通知t2.可想而知代码会有多操蛋<br>综上有没有更合理一点的实现方式？答案是有的,使用工具类CountDownLatch.</p>
+<h2 id="CountDownLatch工具类的使用"><a href="#CountDownLatch工具类的使用" class="headerlink" title="CountDownLatch工具类的使用"></a>CountDownLatch工具类的使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.ae.eureka;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Threads</span>  </span>&#123;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">final</span> CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</span><br><span class="line">		Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++) &#123;</span><br><span class="line"></span><br><span class="line">				list.add(<span class="string">"1"</span>);</span><br><span class="line">				System.out.println(<span class="string">"当前线程"</span>+Thread.currentThread().getName()+<span class="string">"添加了一个元素"</span>);</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					e.printStackTrace();</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span>(list.size()==<span class="number">5</span>) &#123;</span><br><span class="line">					countDownLatch.countDown();</span><br><span class="line">					System.out.println(<span class="string">"唤醒线程2"</span>);							</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			  &#125;</span><br><span class="line">				</span><br><span class="line">			&#125;		</span><br><span class="line">		&#125;,<span class="string">"t1"</span>);</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		Thread t2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(list.size()!=<span class="number">5</span>) &#123;	</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						countDownLatch.await();</span><br><span class="line">					&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">						e.printStackTrace();</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span>(list.size()==<span class="number">5</span>) &#123;</span><br><span class="line">					System.out.println(<span class="string">"线程2被唤醒"</span>);</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">				&#125;					</span><br><span class="line">			&#125;</span><br><span class="line">					</span><br><span class="line">		&#125;,<span class="string">"t2"</span>);</span><br><span class="line">		t1.start();</span><br><span class="line">		t2.start();		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基本使用先写到这，有时间再继续完善。以及CountDownLatch源码实现原理，顺带着再补充一个小的知识点。<br>在使用CountDownLatch的时候如果出现了要给线程卡住了，那就会出现不返回主线程然后机器卡在那了。<br>并且又没有设置超时时间，游戏GG<br>遇到这种问题怎么办？一般可以分析是否是死锁了？死锁会有什么特征一直执行等待。说白了就是内存就不会释放。<br>怎么看？用jconsole查看JVM内存情况，具体分析。</p>
+<p> <a href="#"> GN Al1en</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/11/29/并发编程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-String StringBuilder StringBuffer" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">String是final类线程安全，简单拼接效率高于StringBuffer</a></li>
+<li><a href="#">StringBuffer线程安全,效率StringBuilder</a></li>
+<li><a href="#">StringBuilder线程安全，效率</a></li>
+</ul>
+<h2 id="线程安全编码测试"><a href="#线程安全编码测试" class="headerlink" title="线程安全编码测试"></a>线程安全编码测试</h2><p>测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">new</span> A(builder, buffer).start();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> StringBuilder builder;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> StringBuffer buffer;</span><br><span class="line"></span><br><span class="line">  A(StringBuilder builder, StringBuffer buffer) &#123;</span><br><span class="line">    <span class="keyword">this</span>.buffer = buffer;</span><br><span class="line">    <span class="keyword">this</span>.builder = builder;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">      builder.append(<span class="string">"c"</span>);</span><br><span class="line">      buffer.append(<span class="string">"c"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">"["</span> + Thread.currentThread().getName() + <span class="string">"]builder:"</span> + builder.length());</span><br><span class="line">    System.out.println(<span class="string">"["</span> + Thread.currentThread().getName() + <span class="string">"]buffer:"</span> + buffer.length());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><p>StringBuffer最终的length总是1000，但是StringBuilder的length总是少于1000。说明StringBuilder有被线程。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[Thread-<span class="number">4</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">0</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">3</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">5</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">1</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">2</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">1</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">5</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">3</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">0</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">4</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">2</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">7</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">8</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">6</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">9</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">9</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">6</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">8</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">7</span>]buffer:<span class="number">1000</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>在啥情况下String可以逆袭二哥StringBuffer了？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"hello"</span> + <span class="string">"my dear"</span> +<span class="string">"brother StringBuffer"</span>;</span><br><span class="line">StringBuffer Sb = <span class="keyword">new</span> StringBuilder(<span class="string">"hello"</span>).append(<span class="string">"my dear"</span>).append(<span class="string">"brother StringBuffer"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这种简单字符串的情况String快于StringBuffer。<br>因为String str = “hello” + “my dear” +”brother StringBuffer”;<br>直接被翻译String str = “hello my dear brother StringBuffer”;</p>
+<p> <a href="#"> GN Al1en</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-20180109记录下" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/11/29/20180109记录下/">阿里面试总结与学习计划</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/11/29/20180109记录下/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">技术不够深入</a></li>
+<li><a href="#">分布式的框架其实我都有用过…但是一想是阿里的面试就怂了不敢说知道</a></li>
+</ul>
+<h2 id="学习计划"><a href="#学习计划" class="headerlink" title="学习计划"></a>学习计划</h2><ul>
+<li><a href="#">并发编程</a></li>
+<li><a href="#">网络通信编程</a></li>
+<li><a href="#">JAVA虚拟机</a></li>
+<li><a href="#">LINUX</a></li>
+<li><a href="#">数据库设计与调优</a></li>
+<li><a href="#">中间件架构与设计</a></li>
+</ul>
+<p>现在开始会学习完一个周期写一篇日志总结回顾，在学习的过程中希望也能分享知识。</p>
+<p> <a href="#"> GN Al1en</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/11/29/20180109记录下/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-startBlog" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/11/29/startBlog/">一直想记录点什么</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/11/29/startBlog/" class="archive-article-date">
+  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这几天生病一直在想是不是该记录点什么。<br>病了就天天想，会不会就这么走了。<br>《冰与火之歌》里，史塔克家族家训“凛冬将至”的逼格何在？<br>最终达成了谜一般的结论，它跟“中华民族到了最危险的时候”的意境是一样的…<br>其实不无道理。起风了，唯努力生存。<br>希望每个人都能在这个时节照顾好自己。</p>
+<p> <a href="#"> Winter creeps on</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/11/29/startBlog/">展开全文 >></a>
         </p>
       
 

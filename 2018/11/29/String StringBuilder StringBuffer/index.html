@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives | Al1en的博客</title>
+  <title>String,StringBuffer与StringBuilder的区别|线程安全与线程不安全 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/index.html">
+  <meta name="description" content="String是final类线程安全，简单拼接效率高于StringBuffer StringBuffer线程安全,效率StringBuilder StringBuilder线程安全，效率  线程安全编码测试测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作123456789">
+<meta property="og:type" content="article">
+<meta property="og:title" content="String,StringBuffer与StringBuilder的区别|线程安全与线程不安全">
+<meta property="og:url" content="https://github.com/2018/11/29/String StringBuilder StringBuffer/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="String是final类线程安全，简单拼接效率高于StringBuffer StringBuffer线程安全,效率StringBuilder StringBuilder线程安全，效率  线程安全编码测试测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作123456789">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-08T17:32:27.147Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="String,StringBuffer与StringBuilder的区别|线程安全与线程不安全">
+<meta name="twitter:description" content="String是final类线程安全，简单拼接效率高于StringBuffer StringBuffer线程安全,效率StringBuilder StringBuilder线程安全，效率  线程安全编码测试测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作123456789">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,184 +142,179 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-String StringBuilder StringBuffer" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/设计模式-工厂模式/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/设计模式-工厂模式/">单例DCK问题（一）</a>
+    <h1 class="article-title" itemprop="name">
+      String,StringBuffer与StringBuilder的区别|线程安全与线程不安全
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/并发编程/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.137Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/并发编程/">并发编程线程通信（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
+        
+        <a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
   	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">String是final类线程安全，简单拼接效率高于StringBuffer</a></li>
+<li><a href="#">StringBuffer线程安全,效率StringBuilder</a></li>
+<li><a href="#">StringBuilder线程安全，效率</a></li>
+</ul>
+<h2 id="线程安全编码测试"><a href="#线程安全编码测试" class="headerlink" title="线程安全编码测试"></a>线程安全编码测试</h2><p>测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">new</span> A(builder, buffer).start();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> StringBuilder builder;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> StringBuffer buffer;</span><br><span class="line"></span><br><span class="line">  A(StringBuilder builder, StringBuffer buffer) &#123;</span><br><span class="line">    <span class="keyword">this</span>.buffer = buffer;</span><br><span class="line">    <span class="keyword">this</span>.builder = builder;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">      builder.append(<span class="string">"c"</span>);</span><br><span class="line">      buffer.append(<span class="string">"c"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">"["</span> + Thread.currentThread().getName() + <span class="string">"]builder:"</span> + builder.length());</span><br><span class="line">    System.out.println(<span class="string">"["</span> + Thread.currentThread().getName() + <span class="string">"]buffer:"</span> + buffer.length());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><p>StringBuffer最终的length总是1000，但是StringBuilder的length总是少于1000。说明StringBuilder有被线程。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[Thread-<span class="number">4</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">0</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">3</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">5</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">1</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">2</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">1</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">5</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">3</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">0</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">4</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">2</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">7</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">8</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">6</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">9</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">9</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">6</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">8</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">7</span>]buffer:<span class="number">1000</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>在啥情况下String可以逆袭二哥StringBuffer了？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"hello"</span> + <span class="string">"my dear"</span> +<span class="string">"brother StringBuffer"</span>;</span><br><span class="line">StringBuffer Sb = <span class="keyword">new</span> StringBuilder(<span class="string">"hello"</span>).append(<span class="string">"my dear"</span>).append(<span class="string">"brother StringBuffer"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这种简单字符串的情况String快于StringBuffer。<br>因为String str = “hello” + “my dear” +”brother StringBuffer”;<br>直接被翻译String str = “hello my dear brother StringBuffer”;</p>
+<p> <a href="#"> GN Al1en</a></p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你的咖啡<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixinpay.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/11/29/String StringBuilder StringBuffer/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/20180109记录下/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/holyShit/2018/11/29/并发编程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          并发编程线程通信（一）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/holyShit/2018/11/29/20180109记录下/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">阿里面试总结与学习计划</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/20180109记录下/">阿里面试总结与学习计划</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/startBlog/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/startBlog/">一直想记录点什么</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -338,8 +337,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

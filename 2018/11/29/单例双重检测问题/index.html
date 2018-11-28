@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives | Al1en的博客</title>
+  <title>单例DCK问题（一） | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/index.html">
+  <meta name="description" content="关键字synchronized volatile  重排序问题导致双重检验出错废话不多说上代码1234567891011121314public class Singleton  &amp;#123;				private Singleton instance = null;	public static Singleton getInstance()&amp;#123;	if(instance==null)&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单例DCK问题（一）">
+<meta property="og:url" content="https://github.com/2018/11/29/单例双重检测问题/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="关键字synchronized volatile  重排序问题导致双重检验出错废话不多说上代码1234567891011121314public class Singleton  &amp;#123;				private Singleton instance = null;	public static Singleton getInstance()&amp;#123;	if(instance==null)&amp;#">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-14T13:31:36.062Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="单例DCK问题（一）">
+<meta name="twitter:description" content="关键字synchronized volatile  重排序问题导致双重检验出错废话不多说上代码1234567891011121314public class Singleton  &amp;#123;				private Singleton instance = null;	public static Singleton getInstance()&amp;#123;	if(instance==null)&amp;#">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,184 +142,185 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-单例双重检测问题" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/设计模式-工厂模式/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.139Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/设计模式-工厂模式/">单例DCK问题（一）</a>
+    <h1 class="article-title" itemprop="name">
+      单例DCK问题（一）
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
+        
+        <a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
   	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">关键字synchronized volatile</a></li>
+</ul>
+<h2 id="重排序问题导致双重检验出错"><a href="#重排序问题导致双重检验出错" class="headerlink" title="重排序问题导致双重检验出错"></a>重排序问题导致双重检验出错</h2><p>废话不多说上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>  </span>&#123;			</span><br><span class="line">	<span class="keyword">private</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">				instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance;</span><br><span class="line">  &#125;				</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="概念说明"><a href="#概念说明" class="headerlink" title="概念说明"></a>概念说明</h2><p>1.synchronized 原子性 可见性 有序性，synchronized通过锁住对象实现并发。说白了就是排队一个一个来，这怎么不能保证原子 可见，已经有序了？<br>2.volatile 可见性以及禁止重排序。<br>根据happens-before原则如下：<br>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。如果一个线程先去写一个变量，然后一个线程去进行读取，那么写入操作肯定会先行发生于读操作。<br>这里要说明一点别被误导了以及加了volatile就可以实现原子性！<br>当并发计数出现的时候都有读写操作。都是一起读一起写。只是读的时候获取的是同一个值而已。</p>
+<h2 id="内存模型简说"><a href="#内存模型简说" class="headerlink" title="内存模型简说"></a>内存模型简说</h2><p>1.计算机内存模型是分为主内存 缓存 CPU<br>2.JMM及java内存模型分为 主内存 工作内存</p>
+<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>现在明白了关键字的概念以及内存模型的概念。下面可以开始说到重点内容了。<br>多线程执行的时候各自都会有一份工作内存，共享变量也会从主内存中拷贝到工作内存当中去。<br>上面的代码存在的问题是<br>看似简单的一段赋值语句：instance = new Singleton();，其实JVM内部已经转换为多条指令：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>ctorInstance(memory); //2：初始化对象</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址</p>
+<p>但是经过重排序后如下：</p>
+<p>memory = allocate(); //1：分配对象的内存空间</p>
+<p>instance = memory; //3：设置instance指向刚分配的内存地址，此时对象还没被初始化</p>
+<p>ctorInstance(memory); //2：初始化对象<br>可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面，在线程A初始化完成这段内存之前，线程B虽然进不去同步代码块，但是在同步代码块之前的判断就会发现instance不为空，此时线程B获得instance对象进行使用就可能发生错误。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;加上<span class="keyword">volatile</span>禁止重排序。</span><br></pre></td></tr></table></figure></p>
+<p>后续有时间会详细写关于内存模型的文章</p>
+<p> <a href="#"> GN Al1en</a></p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你的咖啡<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixinpay.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/11/29/单例双重检测问题/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/并发编程/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.137Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/holyShit/2018/11/29/设计模式-工厂模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          单例DCK问题（一）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/holyShit/2018/11/29/并发编程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">并发编程线程通信（一）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/并发编程/">并发编程线程通信（一）</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/20180109记录下/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/20180109记录下/">阿里面试总结与学习计划</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/startBlog/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/startBlog/">一直想记录点什么</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -338,8 +343,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
