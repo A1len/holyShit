@@ -8,19 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>阿里面试总结与学习计划 | Al1en的博客</title>
+  <title>MySql对象设计 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="技术不够深入 分布式的框架其实我都有用过…但是一想是阿里的面试就怂了不敢说知道  学习计划 并发编程 网络通信编程 JAVA虚拟机 LINUX 数据库设计与调优 中间件架构与设计  现在开始会学习完一个周期写一篇日志总结回顾，在学习的过程中希望也能分享知识。   GN Al1en">
+  <meta name="description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。  性能性能是衡量一个系统的关键因素，在设">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阿里面试总结与学习计划">
-<meta property="og:url" content="https://github.com/2018/11/29/20180109记录下/index.html">
+<meta property="og:title" content="MySql对象设计">
+<meta property="og:url" content="https://github.com/2018/11/29/mysq2/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="技术不够深入 分布式的框架其实我都有用过…但是一想是阿里的面试就怂了不敢说知道  学习计划 并发编程 网络通信编程 JAVA虚拟机 LINUX 数据库设计与调优 中间件架构与设计  现在开始会学习完一个周期写一篇日志总结回顾，在学习的过程中希望也能分享知识。   GN Al1en">
+<meta property="og:description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。  性能性能是衡量一个系统的关键因素，在设">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-28T15:50:52.386Z">
+<meta property="og:updated_time" content="2018-11-29T13:21:38.319Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阿里面试总结与学习计划">
-<meta name="twitter:description" content="技术不够深入 分布式的框架其实我都有用过…但是一想是阿里的面试就怂了不敢说知道  学习计划 并发编程 网络通信编程 JAVA虚拟机 LINUX 数据库设计与调优 中间件架构与设计  现在开始会学习完一个周期写一篇日志总结回顾，在学习的过程中希望也能分享知识。   GN Al1en">
+<meta name="twitter:title" content="MySql对象设计">
+<meta name="twitter:description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。  性能性能是衡量一个系统的关键因素，在设">
   
   
     <link rel="icon" href="/favicon.png">
@@ -142,40 +142,61 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-20180109记录下" class="article article-type-post " itemscope="" itemprop="blogPost">
+            <article id="post-mysq2" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      阿里面试总结与学习计划
+      MySql对象设计
     </h1>
   
 
         
-        <a href="/holyShit/2018/11/29/20180109记录下/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
+        <a href="/holyShit/2018/11/29/mysq2/" class="archive-article-date">
+  	<time datetime="2018-11-29T11:45:43.805Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li><a href="#">技术不够深入</a></li>
-<li><a href="#">分布式的框架其实我都有用过…但是一想是阿里的面试就怂了不敢说知道</a></li>
+        <h2 id="对象设计提纲"><a href="#对象设计提纲" class="headerlink" title="对象设计提纲"></a>对象设计提纲</h2><ul>
+<li><a href="#">设计原则说明</a></li>
+<li><a href="#">范式化与逆范式的选择</a></li>
+<li><a href="#">表容量设计和数据切分</a></li>
+<li><a href="#">表设计</a></li>
+<li><a href="#">字段设计</a></li>
 </ul>
-<h2 id="学习计划"><a href="#学习计划" class="headerlink" title="学习计划"></a>学习计划</h2><ul>
-<li><a href="#">并发编程</a></li>
-<li><a href="#">网络通信编程</a></li>
-<li><a href="#">JAVA虚拟机</a></li>
-<li><a href="#">LINUX</a></li>
-<li><a href="#">数据库设计与调优</a></li>
-<li><a href="#">中间件架构与设计</a></li>
+<h2 id="设计原则说明"><a href="#设计原则说明" class="headerlink" title="设计原则说明"></a>设计原则说明</h2><ul>
+<li><p><a href="#">完整性</a><br>1.数据库完整性是指数据库中数据的正确性和相容性<br>2.数据库完整性是由完整性约束来保证的<br>3.数据库完整性约束通过DBMS或者应用程序来实现<br>4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。</p>
+</li>
+<li><p><a href="#">性能</a><br>性能是衡量一个系统的关键因素，在设计阶段就在性能方面该多关注，尽量减少后期烦恼。<br>1.设置合理的字段类型和长度<br>2.选择高效的主键和索引<br>3.适度冗余，减少JOIN查询。多用短连接查询替代长SQL查询，因为短连接多次查询通过程序合并结果可适当减轻数据库压力。<br>4.精简表结构</p>
+</li>
+<li><a href="#">扩展性</a><br>在大规模系统中，除了性能，可扩展性也是设计的关键点，而数据库表扩展性主要包含表逻辑结构，功能字段的增加分表等。<br>1.一表一实体如果不同实体间有关联，可增加一个单独的表，从而不会影响以前的功能。<br>2.扩展字段在表数据较小的时候新增一个字段可以很快完成，但是在表很大时增加字段会比较困难。因此在设计时可以考虑选择预留扩展字段。<br>3.分表设计：也就是水平拆分。在设计阶段应该考虑数据的增长情况，并根据数据特性以及数据之间关系选择合适的切分策略。这里可以举一个例子<br>比如阿里的用户表，可分片1000片一片放1000万人，这样用户也可以均匀打散不会存在热点数据集中的情况。</li>
 </ul>
-<p>现在开始会学习完一个周期写一篇日志总结回顾，在学习的过程中希望也能分享知识。</p>
-<p> <a href="#"> GN Al1en</a></p>
+<h2 id="范式于逆范式选择"><a href="#范式于逆范式选择" class="headerlink" title="范式于逆范式选择"></a>范式于逆范式选择</h2><p>数据库范式化：是指消除冗余，有效组织数据，减少在数据操作期间潜在的不规则和提高数据一致性。在范式话数据库中，每个元素只会被存储一次，至少满足第三范式。<br>逆范式数据库中，信息是重复的或者保存在多个地方。某些情况下从性能角度触发，可以考虑。因为可以减少表关联的查询</p>
+<ul>
+<li><a href="#">非范式和逆范式</a><br>非范式是指上来就是干压根不考虑范式和数据管理需求，没有规则的建模。<br>逆范式是指在设计时按照范式进行，并且考虑数据完整性和一致性。之后根据性能和扩展需求在此基础上进行逆范式设计。<br>结论禁止一切非范式的行为。</li>
+<li><a href="#">范式的利弊</a><br>优点<br>范式化更新通常比逆范式快<br>当数据被很好范式化后，数据量很少，重复数据小，更新量也会变小。<br>范式化表通常较小，更容易装入内存性能因为会更好<br>缺点<br>在范式化结构上的非一般查询，一般都会需要至少一次一个关联</li>
+<li><a href="#">逆范式的利弊</a><br>逆范式的利弊<br>逆范式数据都在一个表中减少了关联同时也能运行更有效的索引策略，因此性能不错。至于为啥后面会说到索引失效。<br>当然逆范式在数据冗余，数据独立性，相关性以及提高数据一致性方面较差。</li>
+</ul>
+<h2 id="表容量设计和数据切分"><a href="#表容量设计和数据切分" class="headerlink" title="表容量设计和数据切分"></a>表容量设计和数据切分</h2><p>使用场景<br>随着数据库表中数据日记月累越来越多，数据库会越来越大，表记录也会达到千万甚至亿级别，数据库表的访问效率明显下降，导致<br>外层应用的访问效率非常差，访问时间急剧上升，用户体验下降。此时就必需使用数据切分来解决瓶颈。<br>数据切分就是值通过特定的条件，将存放在同一个数据库中的数据分散存放到多个数据库上面，以达到分散单台设备负载的效果。数据切分根据规则的类型<br>可以分为垂直拆分和水平拆分。</p>
+<ul>
+<li><a href="#">垂直拆分</a><br>垂直拆分就是要把表按模块划分到不同数据库或不同表中。这种切分在大型网站的演变过程中非常常见。当一个网站还很小的时候，只有少量的人来开发和维护，各模块<br>和表都在一起，当网站不断丰富和壮大，也会变成多个子系统来支撑，这时就有按照模块和功能把表划分出来的需求。<br>一个架构设计较好的应用系统，其总体功能肯定由多个功能模块组成，而每个功能模块所需要的数据对应数据库中的就是一张表或者多个表。在架构设计中，各个功能模块相互之间的交互点越统一，<br>越少，系统的耦合度就越低，系统各个模块的维护以及扩展性也就越好。这样的系统，实现数据的垂直拆分也就越容易。</li>
+<li><a href="#">垂直拆分优缺点</a><br>优点<br>1.数据库表的切分简单明了，切分规则明确<br>2.应用程序模块清晰明确，整合容易<br>3.数据维护方便，容易定位问题<br>缺点<br>1.部分表关联无法在数据库完成，需要程序进行<br>2.对于访问极其频繁数据量超大的表仍然存在瓶颈<br>3.事务处理相对复杂<br>4.切分到一定程度后，扩展性受到限制<br>5.过度切分可能导致系统过于复杂难以维护</li>
+<li><a href="#">水平拆分</a><br>水平拆分可以简单理解成按照数据行的切分<br>常用套路<br>1.数据范围比如1-100万一个表。100-200万一个表（注意数据特性选择，存在热点数据以及新增数据的考虑呀兄弟们）<br>2.时间顺序比如按照一年<br>3.地域范围每个或者多个地市一个库（这让我想到了美团饿了么，不同城市订餐还不一样。新疆和北京就没得比嘛）<br>4.按照计算公式切分简单的就是去摸（打错了是取模~）</li>
+<li><a href="#">水平拆分优缺点</a><br>优点<br>1.表关联可在数据库完成<br>2.不会存在某些超大型数据量和高负载的表<br>3.应用程序整体架构改动少<br>4.事务处理简单<br>5.只要切分规则定的好，扩展不受影响<br>缺点<br>1.切分规则需要考虑点由近到远比较复杂很难抽象（我就是菜鸡，心很痛）<br>2.后期维护度增加，人工定位数据难<br>3.切分不合理造成数据冷热不均匀，等于没弄<br>4.跨片查询操作简直能让人想上天<br>5.跨片事务我选择自杀</li>
+<li><a href="#">水平拆分与垂直拆分的综合</a><br>一般来说水平拆一下垂直拆一下就是一个轮回操作但是也有优缺点<br>优点<br>1.合理利用水平和垂直拆分的各自优势避免缺陷<br>2.让系统扩展性得到最大化提升<br>缺点<br>1.数据库架构会比较复杂，维护难度更大（没事这是dba的事了和开发没一毛钱关系）<br>2.应用架构会更复杂（没事开发人员比DBA多能扛能打）</li>
+</ul>
+<h2 id="表设计"><a href="#表设计" class="headerlink" title="表设计"></a>表设计</h2><p>1.必需要有PK<br>2.必需包含createy与modified日期字段<br>3.禁止使用复杂数据类型（数组）<br>4.需要join的字段，数据类型保持一致<br>5.需要定期删除过期数据<br>6.单表字段不要太多<br>7.mysql处理大表的性能测试（char表大于500万，int表大于1000万）瞬间断崖式爆炸，所以单表大小限制在16G。</p>
+<h2 id="字段设计"><a href="#字段设计" class="headerlink" title="字段设计"></a>字段设计</h2><ul>
+<li><a href="#">数字类型</a><br>1.自增必需是整形<br>2.整形字段只能用int或者bigint，且明确标识无符号unsigned，除非确实有负数。超过22亿才用bigint<br>3.定点小数用decimal</li>
+<li><a href="#">字符类型</a><br>1.varchar动态字符使用VARCHAR(N)其中N尽可能小。<br>2.char仅仅只在类似性别字段使用<br>3.text只有在数量会超过20000使用<br>4.禁止使用LOB<br>5.不建议用enum与set</li>
+<li><a href="#">日期类型</a><br>1.DATE精确到天<br>2.DATETIME精确到时分秒</li>
+<li><a href="#">NULL</a><br>字段建议使用not null属性，可用默认值代替。null在mysql中索引处理是特殊的会占用额外的存放空间。</li>
+</ul>
 
       
 
@@ -234,7 +255,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/11/29/20180109记录下/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/11/29/mysq2/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -248,15 +269,11 @@
   
 <nav id="article-nav">
   
-    <a href="/holyShit/2018/11/29/startBlog/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          一直想记录点什么
-        
-      </div>
-    </a>
   
+    <a href="/holyShit/2018/11/29/mysql/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MySql体系结构和存储引擎</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -293,7 +310,7 @@
 <script src="https://jjeejj.github.io/js/gitment.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "https://github.com/holyShit/2018/11/29/20180109记录下/",
+  id: "https://github.com/holyShit/2018/11/29/mysq2/",
   owner: 'A1len',
   repo: 'https://github.com/A1len/holyShit.git',
   oauth: {
