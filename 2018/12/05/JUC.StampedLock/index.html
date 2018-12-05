@@ -8,19 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>JUC.ReentrantLock | Al1en的博客</title>
+  <title>JUC.StampedLock | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="StampedLock提纲 StampedLock简介 原理剖析  StampedLock简介首先大方向看下StampedLock类图从图中可以看出这个锁貌似有点屌屌的有读锁写锁读写锁。这个锁看上去很厉害，其实这个锁不像其它锁那么安全使用，存在很高的风险性。听说该锁设计之初是为了作为工具类开发其它线程安全组件，用好了提升性能。没用好会发生死锁，CPU飙升耗死资源的情况，以及读写锁脏数据为什么出现死">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JUC.ReentrantLock">
+<meta property="og:title" content="JUC.StampedLock">
 <meta property="og:url" content="https://github.com/2018/12/05/JUC.StampedLock/index.html">
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="StampedLock提纲 StampedLock简介 原理剖析  StampedLock简介首先大方向看下StampedLock类图从图中可以看出这个锁貌似有点屌屌的有读锁写锁读写锁。这个锁看上去很厉害，其实这个锁不像其它锁那么安全使用，存在很高的风险性。听说该锁设计之初是为了作为工具类开发其它线程安全组件，用好了提升性能。没用好会发生死锁，CPU飙升耗死资源的情况，以及读写锁脏数据为什么出现死">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/StampedLock.png">
-<meta property="og:updated_time" content="2018-12-05T14:20:25.682Z">
+<meta property="og:updated_time" content="2018-12-05T14:31:41.953Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JUC.ReentrantLock">
+<meta name="twitter:title" content="JUC.StampedLock">
 <meta name="twitter:description" content="StampedLock提纲 StampedLock简介 原理剖析  StampedLock简介首先大方向看下StampedLock类图从图中可以看出这个锁貌似有点屌屌的有读锁写锁读写锁。这个锁看上去很厉害，其实这个锁不像其它锁那么安全使用，存在很高的风险性。听说该锁设计之初是为了作为工具类开发其它线程安全组件，用好了提升性能。没用好会发生死锁，CPU飙升耗死资源的情况，以及读写锁脏数据为什么出现死">
 <meta name="twitter:image" content="https://github.com/holyShit//img/StampedLock.png">
   
@@ -151,7 +151,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      JUC.ReentrantLock
+      JUC.StampedLock
     </h1>
   
 
