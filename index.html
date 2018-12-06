@@ -140,6 +140,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.ReentrantReadWriteLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">JUC.ReentrantReadWriteLock</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/" class="archive-article-date">
+  	<time datetime="2018-12-06T13:57:11.771Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="ReentrantReadWriteLock提纲"><a href="#ReentrantReadWriteLock提纲" class="headerlink" title="ReentrantReadWriteLock提纲"></a>ReentrantReadWriteLock提纲</h2><ul>
+<li><a href="#">ReentrantReadWriteLock简介</a></li>
+<li><a href="#">原理剖析</a></li>
+</ul>
+<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br>首先看一下类结构图<br><img src="/holyShit//img/ReentrantReadWriteLock.png" alt="avatar"><br>从类图中可以看出ReentrantReadWriteLock实现了以下锁<br>1.写锁（独占锁，可以存在非公平与公平两种锁方式）<br>2.读锁（共享锁，可以存在非公平与公平两种锁方式）<br>上述就是ReentrantReadWriteLock的大致描述</p>
+<h2 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h2><p>其实通过上面咱们应该会有以下几个疑问<br>1.内部如何维护的读写锁分离<br>2.写锁如何获取以及释放<br>3.读锁如何获取以及释放<br>4.当有写锁或者读锁存在，又有线程获取写锁或者读锁怎么处理。<br>带着上面四个疑问咱们开始看源码。</p>
+<ul>
+<li><p><a href="#">读写分离如何维护</a><br>ReentrantReadWriteLock很明显也是通过AQS实现，内部也是通过state维护锁状态。<br>看源码有下面这一段，高16位表示读锁，低16位表示写锁。读锁总数加重入数65535和写锁可重入最多次数是65535次。<br>这里真这么多次读锁state的值早超了int最大值。。。。不过影响不大。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHARED_SHIFT   = <span class="number">16</span>;</span><br><span class="line"><span class="comment">//读状态65536</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHARED_UNIT    = (<span class="number">1</span> &lt;&lt; SHARED_SHIFT);</span><br><span class="line"><span class="comment">//最大读65535</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_COUNT      = (<span class="number">1</span> &lt;&lt; SHARED_SHIFT) - <span class="number">1</span>;</span><br><span class="line"><span class="comment">//独占锁二进制15个1</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXCLUSIVE_MASK = (<span class="number">1</span> &lt;&lt; SHARED_SHIFT) - <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><a href="#">写锁获取与释放</a><br>写锁还是看重写tryAcquire方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Walkthrough:</span></span><br><span class="line"><span class="comment">     * 1. If read count nonzero or write count nonzero</span></span><br><span class="line"><span class="comment">     *    and owner is a different thread, fail.有读写存在而且不是当前线程</span></span><br><span class="line"><span class="comment">     * 2. If count would saturate, fail. (This can only</span></span><br><span class="line"><span class="comment">     *    happen if count is already nonzero.)超了次数</span></span><br><span class="line"><span class="comment">     * 3. Otherwise, this thread is eligible for lock if</span></span><br><span class="line"><span class="comment">     *    it is either a reentrant acquire or</span></span><br><span class="line"><span class="comment">     *    queue policy allows it. If so, update state</span></span><br><span class="line"><span class="comment">     *    and set owner.//拿锁或者进队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Thread current = Thread.currentThread();</span><br><span class="line">    <span class="keyword">int</span> c = getState();</span><br><span class="line">    <span class="keyword">int</span> w = exclusiveCount(c);</span><br><span class="line">    <span class="keyword">if</span> (c != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// (Note: if c != 0 and w == 0 then shared count != 0)</span></span><br><span class="line">        <span class="keyword">if</span> (w == <span class="number">0</span> || current != getExclusiveOwnerThread())</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (w + exclusiveCount(acquires) &gt; MAX_COUNT)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Maximum lock count exceeded"</span>);</span><br><span class="line">        <span class="comment">// Reentrant acquire</span></span><br><span class="line">        setState(c + acquires);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (writerShouldBlock() ||</span><br><span class="line">        !compareAndSetState(c, c + acquires))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    setExclusiveOwnerThread(current);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上述的英文注释写的很明白了三种情况不过多解释。<br>只说一下CAS这边存在的问题，如果已经有读锁存在则CAS失败进入队列否则成功拿到锁。这里就会很容易导致写锁饿死。。。因为进入队列了。<br>这里可以设置下公平锁不容易导致写锁饿死。。。这是我能想到的优化方案。<br>释放锁和以前的套路一样就是在state上面减少1到0了就释放。</p>
+<ul>
+<li><a href="#">读锁获取与释放</a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> unused)</span> </span>&#123;</span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">      * Walkthrough:</span></span><br><span class="line"><span class="comment">      * 1. If write lock held by another thread, fail.</span></span><br><span class="line"><span class="comment">      * 2. Otherwise, this thread is eligible for</span></span><br><span class="line"><span class="comment">      *    lock wrt state, so ask if it should block</span></span><br><span class="line"><span class="comment">      *    because of queue policy. If not, try</span></span><br><span class="line"><span class="comment">      *    to grant by CASing state and updating count.</span></span><br><span class="line"><span class="comment">      *    Note that step does not check for reentrant</span></span><br><span class="line"><span class="comment">      *    acquires, which is postponed to full version</span></span><br><span class="line"><span class="comment">      *    to avoid having to check hold count in</span></span><br><span class="line"><span class="comment">      *    the more typical non-reentrant case.</span></span><br><span class="line"><span class="comment">      * 3. If step 2 fails either because thread</span></span><br><span class="line"><span class="comment">      *    apparently not eligible or CAS fails or count</span></span><br><span class="line"><span class="comment">      *    saturated, chain to version with full retry loop.</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">     Thread current = Thread.currentThread();</span><br><span class="line">     <span class="keyword">int</span> c = getState();</span><br><span class="line">     <span class="keyword">if</span> (exclusiveCount(c) != <span class="number">0</span> &amp;&amp;</span><br><span class="line">         getExclusiveOwnerThread() != current)</span><br><span class="line">         <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">     <span class="keyword">int</span> r = sharedCount(c);</span><br><span class="line">     <span class="keyword">if</span> (!readerShouldBlock() &amp;&amp;</span><br><span class="line">         r &lt; MAX_COUNT &amp;&amp;</span><br><span class="line">         compareAndSetState(c, c + SHARED_UNIT)) &#123;</span><br><span class="line">         <span class="keyword">if</span> (r == <span class="number">0</span>) &#123;</span><br><span class="line">             firstReader = current;</span><br><span class="line">             firstReaderHoldCount = <span class="number">1</span>;</span><br><span class="line">         &#125; <span class="keyword">else</span> <span class="keyword">if</span> (firstReader == current) &#123;</span><br><span class="line">             firstReaderHoldCount++;</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">             HoldCounter rh = cachedHoldCounter;</span><br><span class="line">             <span class="keyword">if</span> (rh == <span class="keyword">null</span> || rh.tid != getThreadId(current))</span><br><span class="line">                 cachedHoldCounter = rh = readHolds.get();</span><br><span class="line">             <span class="keyword">else</span> <span class="keyword">if</span> (rh.count == <span class="number">0</span>)</span><br><span class="line">                 readHolds.set(rh);</span><br><span class="line">             rh.count++;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> fullTryAcquireShared(current);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>通过上面代码总结来说其实就是<br>1.有写锁存在则阻塞进入队列<br>2.多个线程拿读锁则CAS失败的进入fullTryAcquireShared继续CAS拿锁。<br>3.通过ThreadLocal记录每个线程重入次数</p>
+<p>释放锁代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span> unused)</span> </span>&#123;</span><br><span class="line">      Thread current = Thread.currentThread();</span><br><span class="line">      <span class="keyword">if</span> (firstReader == current) &#123;</span><br><span class="line">          <span class="comment">// assert firstReaderHoldCount &gt; 0;</span></span><br><span class="line">          <span class="keyword">if</span> (firstReaderHoldCount == <span class="number">1</span>)</span><br><span class="line">              firstReader = <span class="keyword">null</span>;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">              firstReaderHoldCount--;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          HoldCounter rh = cachedHoldCounter;</span><br><span class="line">          <span class="keyword">if</span> (rh == <span class="keyword">null</span> || rh.tid != getThreadId(current))</span><br><span class="line">              rh = readHolds.get();</span><br><span class="line">          <span class="keyword">int</span> count = rh.count;</span><br><span class="line">          <span class="keyword">if</span> (count &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">              readHolds.remove();</span><br><span class="line">              <span class="keyword">if</span> (count &lt;= <span class="number">0</span>)</span><br><span class="line">                  <span class="keyword">throw</span> unmatchedUnlockException();</span><br><span class="line">          &#125;</span><br><span class="line">          --rh.count;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">          <span class="keyword">int</span> c = getState();</span><br><span class="line">          <span class="keyword">int</span> nextc = c - SHARED_UNIT;</span><br><span class="line">          <span class="keyword">if</span> (compareAndSetState(c, nextc))</span><br><span class="line">              <span class="comment">// Releasing the read lock has no effect on readers,</span></span><br><span class="line">              <span class="comment">// but it may allow waiting writers to proceed if</span></span><br><span class="line">              <span class="comment">// both read and write locks are now free.</span></span><br><span class="line">              <span class="keyword">return</span> nextc == <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码很简单减少当前线程ThreadLocal中的值，然后减少state当0的时候释放锁。<br>到这咱们上面的问题就都解决完了。<br>而且到这咱们JAVA中的锁基本都写完了，后面继续写JUC下面的其它工具类。<br>ThreadLocal的使用后面再写一篇源码分析，线程池里面用这东西还是需要注意下的。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.StampedLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -825,78 +909,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/11/29/并发编程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-String StringBuilder StringBuffer" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">String是final类线程安全，简单拼接效率高于StringBuffer</a></li>
-<li><a href="#">StringBuffer线程安全,效率StringBuilder</a></li>
-<li><a href="#">StringBuilder线程安全，效率</a></li>
-</ul>
-<h2 id="线程安全编码测试"><a href="#线程安全编码测试" class="headerlink" title="线程安全编码测试"></a>线程安全编码测试</h2><p>测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">new</span> A(builder, buffer).start();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> StringBuilder builder;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> StringBuffer buffer;</span><br><span class="line"></span><br><span class="line">  A(StringBuilder builder, StringBuffer buffer) &#123;</span><br><span class="line">    <span class="keyword">this</span>.buffer = buffer;</span><br><span class="line">    <span class="keyword">this</span>.builder = builder;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">      builder.append(<span class="string">"c"</span>);</span><br><span class="line">      buffer.append(<span class="string">"c"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">"["</span> + Thread.currentThread().getName() + <span class="string">"]builder:"</span> + builder.length());</span><br><span class="line">    System.out.println(<span class="string">"["</span> + Thread.currentThread().getName() + <span class="string">"]buffer:"</span> + buffer.length());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><p>StringBuffer最终的length总是1000，但是StringBuilder的length总是少于1000。说明StringBuilder有被线程。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[Thread-<span class="number">4</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">0</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">3</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">5</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">1</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">2</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">1</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">5</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">3</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">0</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">4</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">2</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">7</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">8</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">6</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">9</span>]builder:<span class="number">736</span></span><br><span class="line">[Thread-<span class="number">9</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">6</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">8</span>]buffer:<span class="number">1000</span></span><br><span class="line">[Thread-<span class="number">7</span>]buffer:<span class="number">1000</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>在啥情况下String可以逆袭二哥StringBuffer了？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"hello"</span> + <span class="string">"my dear"</span> +<span class="string">"brother StringBuffer"</span>;</span><br><span class="line">StringBuffer Sb = <span class="keyword">new</span> StringBuilder(<span class="string">"hello"</span>).append(<span class="string">"my dear"</span>).append(<span class="string">"brother StringBuffer"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>这种简单字符串的情况String快于StringBuffer。<br>因为String str = “hello” + “my dear” +”brother StringBuffer”;<br>直接被翻译String str = “hello my dear brother StringBuffer”;</p>
-<p> <a href="#"> GN Al1en</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">展开全文 >></a>
         </p>
       
 
