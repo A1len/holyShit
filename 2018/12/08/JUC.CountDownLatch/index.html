@@ -8,15 +8,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Al1en的博客</title>
+  <title>JUC.CountDownLatch | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/index.html">
+  <meta name="description" content="CountDownLatch提纲 ReentrantLock简介 获取与释放锁 Condition讲解  ReentrantLock简介ReentrantLock是可重入的独占锁，同时只允许一个线程获取该锁，其它被阻塞的锁会放入AQS队列里面。首先看下ReentrantLock的类图从类图可以看出来ReentrantLock使用AQS实现，并且内部实现了公平锁与非公平锁，默认是非公平锁。其中Syn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JUC.CountDownLatch">
+<meta property="og:url" content="https://github.com/2018/12/08/JUC.CountDownLatch/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="CountDownLatch提纲 ReentrantLock简介 获取与释放锁 Condition讲解  ReentrantLock简介ReentrantLock是可重入的独占锁，同时只允许一个线程获取该锁，其它被阻塞的锁会放入AQS队列里面。首先看下ReentrantLock的类图从类图可以看出来ReentrantLock使用AQS实现，并且内部实现了公平锁与非公平锁，默认是非公平锁。其中Syn">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/holyShit//img/ReentrantLock_uml.png">
+<meta property="og:updated_time" content="2018-12-08T15:45:19.704Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="JUC.CountDownLatch">
+<meta name="twitter:description" content="CountDownLatch提纲 ReentrantLock简介 获取与释放锁 Condition讲解  ReentrantLock简介ReentrantLock是可重入的独占锁，同时只允许一个线程获取该锁，其它被阻塞的锁会放入AQS队列里面。首先看下ReentrantLock的类图从类图可以看出来ReentrantLock使用AQS实现，并且内部实现了公平锁与非公平锁，默认是非公平锁。其中Syn">
+<meta name="twitter:image" content="https://github.com/holyShit//img/ReentrantLock_uml.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,16 +144,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-JUC.CountDownLatch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+            <article id="post-JUC.CountDownLatch" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/08/JUC.CountDownLatch/">JUC.CountDownLatch</a>
+    <h1 class="article-title" itemprop="name">
+      JUC.CountDownLatch
     </h1>
   
 
@@ -189,16 +193,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/08/JUC.CountDownLatch/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/12/08/JUC.CountDownLatch/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JUC.ReentrantReadWriteLock</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -218,737 +281,30 @@
 
 
 
-
-  
-    <article id="post-JUC.ReentrantReadWriteLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">JUC.ReentrantReadWriteLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/" class="archive-article-date">
-  	<time datetime="2018-12-06T13:57:11.771Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="ReentrantReadWriteLock提纲"><a href="#ReentrantReadWriteLock提纲" class="headerlink" title="ReentrantReadWriteLock提纲"></a>ReentrantReadWriteLock提纲</h2><ul>
-<li><a href="#">ReentrantReadWriteLock简介</a></li>
-<li><a href="#">原理剖析</a></li>
-</ul>
-<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br>首先看一下类结构图<br><img src="/holyShit//img/ReentrantReadWriteLock.png" alt="avatar"><br>从类图中可以看出ReentrantReadWriteLock实现了以下锁<br>1.写锁（独占锁，可以存在非公平与公平两种锁方式）<br>2.读锁（共享锁，可以存在非公平与公平两种锁方式）<br>上述就是ReentrantReadWriteLock的大致描述</p>
-<h2 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h2><p>其实通过上面咱们应该会有以下几个疑问<br>1.内部如何维护的读写锁分离<br>2.写锁如何获取以及释放<br>3.读锁如何获取以及释放<br>4.当有写锁或者读锁存在，又有线程获取写锁或者读锁怎么处理。<br>带着上面四个疑问咱们开始看源码。</p>
-<ul>
-<li><p><a href="#">读写分离如何维护</a><br>ReentrantReadWriteLock很明显也是通过AQS实现，内部也是通过state维护锁状态。<br>看源码有下面这一段，高16位表示读锁，低16位表示写锁。读锁总数加重入数65535和写锁可重入最多次数是65535次。<br>这里真这么多次读锁state的值早超了int最大值。。。。不过影响不大。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHARED_SHIFT   = <span class="number">16</span>;</span><br><span class="line"><span class="comment">//读状态65536</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHARED_UNIT    = (<span class="number">1</span> &lt;&lt; SHARED_SHIFT);</span><br><span class="line"><span class="comment">//最大读65535</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_COUNT      = (<span class="number">1</span> &lt;&lt; SHARED_SHIFT) - <span class="number">1</span>;</span><br><span class="line"><span class="comment">//独占锁二进制15个1</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXCLUSIVE_MASK = (<span class="number">1</span> &lt;&lt; SHARED_SHIFT) - <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><a href="#">写锁获取与释放</a><br>写锁还是看重写tryAcquire方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Walkthrough:</span></span><br><span class="line"><span class="comment">     * 1. If read count nonzero or write count nonzero</span></span><br><span class="line"><span class="comment">     *    and owner is a different thread, fail.有读写存在而且不是当前线程</span></span><br><span class="line"><span class="comment">     * 2. If count would saturate, fail. (This can only</span></span><br><span class="line"><span class="comment">     *    happen if count is already nonzero.)超了次数</span></span><br><span class="line"><span class="comment">     * 3. Otherwise, this thread is eligible for lock if</span></span><br><span class="line"><span class="comment">     *    it is either a reentrant acquire or</span></span><br><span class="line"><span class="comment">     *    queue policy allows it. If so, update state</span></span><br><span class="line"><span class="comment">     *    and set owner.//拿锁或者进队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Thread current = Thread.currentThread();</span><br><span class="line">    <span class="keyword">int</span> c = getState();</span><br><span class="line">    <span class="keyword">int</span> w = exclusiveCount(c);</span><br><span class="line">    <span class="keyword">if</span> (c != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// (Note: if c != 0 and w == 0 then shared count != 0)</span></span><br><span class="line">        <span class="keyword">if</span> (w == <span class="number">0</span> || current != getExclusiveOwnerThread())</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (w + exclusiveCount(acquires) &gt; MAX_COUNT)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Maximum lock count exceeded"</span>);</span><br><span class="line">        <span class="comment">// Reentrant acquire</span></span><br><span class="line">        setState(c + acquires);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (writerShouldBlock() ||</span><br><span class="line">        !compareAndSetState(c, c + acquires))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    setExclusiveOwnerThread(current);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>上述的英文注释写的很明白了三种情况不过多解释。<br>只说一下CAS这边存在的问题，如果已经有读锁存在则CAS失败进入队列否则成功拿到锁。这里就会很容易导致写锁饿死。。。因为进入队列了。<br>这里可以设置下公平锁不容易导致写锁饿死。。。这是我能想到的优化方案。<br>释放锁和以前的套路一样就是在state上面减少1到0了就释放。</p>
-<ul>
-<li><a href="#">读锁获取与释放</a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> unused)</span> </span>&#123;</span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">      * Walkthrough:</span></span><br><span class="line"><span class="comment">      * 1. If write lock held by another thread, fail.</span></span><br><span class="line"><span class="comment">      * 2. Otherwise, this thread is eligible for</span></span><br><span class="line"><span class="comment">      *    lock wrt state, so ask if it should block</span></span><br><span class="line"><span class="comment">      *    because of queue policy. If not, try</span></span><br><span class="line"><span class="comment">      *    to grant by CASing state and updating count.</span></span><br><span class="line"><span class="comment">      *    Note that step does not check for reentrant</span></span><br><span class="line"><span class="comment">      *    acquires, which is postponed to full version</span></span><br><span class="line"><span class="comment">      *    to avoid having to check hold count in</span></span><br><span class="line"><span class="comment">      *    the more typical non-reentrant case.</span></span><br><span class="line"><span class="comment">      * 3. If step 2 fails either because thread</span></span><br><span class="line"><span class="comment">      *    apparently not eligible or CAS fails or count</span></span><br><span class="line"><span class="comment">      *    saturated, chain to version with full retry loop.</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">     Thread current = Thread.currentThread();</span><br><span class="line">     <span class="keyword">int</span> c = getState();</span><br><span class="line">     <span class="keyword">if</span> (exclusiveCount(c) != <span class="number">0</span> &amp;&amp;</span><br><span class="line">         getExclusiveOwnerThread() != current)</span><br><span class="line">         <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">     <span class="keyword">int</span> r = sharedCount(c);</span><br><span class="line">     <span class="keyword">if</span> (!readerShouldBlock() &amp;&amp;</span><br><span class="line">         r &lt; MAX_COUNT &amp;&amp;</span><br><span class="line">         compareAndSetState(c, c + SHARED_UNIT)) &#123;</span><br><span class="line">         <span class="keyword">if</span> (r == <span class="number">0</span>) &#123;</span><br><span class="line">             firstReader = current;</span><br><span class="line">             firstReaderHoldCount = <span class="number">1</span>;</span><br><span class="line">         &#125; <span class="keyword">else</span> <span class="keyword">if</span> (firstReader == current) &#123;</span><br><span class="line">             firstReaderHoldCount++;</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">             HoldCounter rh = cachedHoldCounter;</span><br><span class="line">             <span class="keyword">if</span> (rh == <span class="keyword">null</span> || rh.tid != getThreadId(current))</span><br><span class="line">                 cachedHoldCounter = rh = readHolds.get();</span><br><span class="line">             <span class="keyword">else</span> <span class="keyword">if</span> (rh.count == <span class="number">0</span>)</span><br><span class="line">                 readHolds.set(rh);</span><br><span class="line">             rh.count++;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> fullTryAcquireShared(current);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>通过上面代码总结来说其实就是<br>1.有写锁存在则阻塞进入队列<br>2.多个线程拿读锁则CAS失败的进入fullTryAcquireShared继续CAS拿锁。<br>3.通过ThreadLocal记录每个线程重入次数<br>释放锁代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span> unused)</span> </span>&#123;</span><br><span class="line">      Thread current = Thread.currentThread();</span><br><span class="line">      <span class="keyword">if</span> (firstReader == current) &#123;</span><br><span class="line">          <span class="comment">// assert firstReaderHoldCount &gt; 0;</span></span><br><span class="line">          <span class="keyword">if</span> (firstReaderHoldCount == <span class="number">1</span>)</span><br><span class="line">              firstReader = <span class="keyword">null</span>;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">              firstReaderHoldCount--;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          HoldCounter rh = cachedHoldCounter;</span><br><span class="line">          <span class="keyword">if</span> (rh == <span class="keyword">null</span> || rh.tid != getThreadId(current))</span><br><span class="line">              rh = readHolds.get();</span><br><span class="line">          <span class="keyword">int</span> count = rh.count;</span><br><span class="line">          <span class="keyword">if</span> (count &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">              readHolds.remove();</span><br><span class="line">              <span class="keyword">if</span> (count &lt;= <span class="number">0</span>)</span><br><span class="line">                  <span class="keyword">throw</span> unmatchedUnlockException();</span><br><span class="line">          &#125;</span><br><span class="line">          --rh.count;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">          <span class="keyword">int</span> c = getState();</span><br><span class="line">          <span class="keyword">int</span> nextc = c - SHARED_UNIT;</span><br><span class="line">          <span class="keyword">if</span> (compareAndSetState(c, nextc))</span><br><span class="line">              <span class="comment">// Releasing the read lock has no effect on readers,</span></span><br><span class="line">              <span class="comment">// but it may allow waiting writers to proceed if</span></span><br><span class="line">              <span class="comment">// both read and write locks are now free.</span></span><br><span class="line">              <span class="keyword">return</span> nextc == <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>代码很简单减少当前线程ThreadLocal中的值，然后减少state当0的时候释放锁。<br>到这咱们上面的问题就都解决完了。<br>而且到这咱们JAVA中的锁基本都写完了，后面继续写JUC下面的其它工具类。<br>ThreadLocal的使用后面再写一篇源码分析，线程池里面用这东西还是需要注意下的。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.StampedLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/05/JUC.StampedLock/">JUC.StampedLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/05/JUC.StampedLock/" class="archive-article-date">
-  	<time datetime="2018-12-05T13:25:16.395Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="StampedLock提纲"><a href="#StampedLock提纲" class="headerlink" title="StampedLock提纲"></a>StampedLock提纲</h2><ul>
-<li><a href="#">StampedLock简介</a></li>
-<li><a href="#">原理剖析</a></li>
-</ul>
-<h2 id="StampedLock简介"><a href="#StampedLock简介" class="headerlink" title="StampedLock简介"></a>StampedLock简介</h2><p>首先大方向看下StampedLock类图<br><img src="/holyShit//img/StampedLock.png" alt="avatar"><br>从图中可以看出这个锁貌似有点屌屌的有读锁写锁读写锁。这个锁看上去很厉害，其实这个锁不像其它锁那么安全使用，存在很高的风险性。<br>听说该锁设计之初是为了作为工具类开发其它线程安全组件，用好了提升性能。没用好会发生死锁，CPU飙升耗死资源的情况，以及读写锁脏数据<br>为什么出现死锁，如果记得我前一章所写的非可重入锁就知道了。这个大哥也是非可重入的，哈哈哈~<br>至于CPU飙升引用一文章地址* <a href="https://m.aliyun.com/yunqi/articles/20340" target="_blank" rel="noopener">https://m.aliyun.com/yunqi/articles/20340</a>，然后我再解释一下。因为文中老哥没有解释为啥。<br>当线程被中断的时候被park的线程会继续进入到循环中不断的获取锁到满足条件为止，导致CPU爆炸。<br>后面我有时间会详细写一篇关于这个问题的文章，以及相比较我引用文章更好理解的例子。<br>读写锁的脏数据是因为读的时候数据被修改了，不过可以通过貌似有个官方的代码模板的写法可以解决。<br>就是先使用乐观锁，然后再转为读锁，不让数据被修改了。<br>在下面我放上了实例代码。<br>上面介绍了这个锁以及使用风险，咱们继续说说使用场景。<br>读写锁可以应用在应用缓存方面，比如一方面写一方面缓存数据，并提供读取缓存。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">* <span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">*   <span class="keyword">private</span> <span class="keyword">double</span> x, y;</span><br><span class="line">*   <span class="keyword">private</span> <span class="keyword">final</span> StampedLock sl = <span class="keyword">new</span> StampedLock();</span><br><span class="line">*</span><br><span class="line">*   <span class="function"><span class="keyword">void</span> <span class="title">move</span><span class="params">(<span class="keyword">double</span> deltaX, <span class="keyword">double</span> deltaY)</span> </span>&#123; <span class="comment">// an exclusively locked method</span></span><br><span class="line">*     <span class="keyword">long</span> stamp = sl.writeLock();</span><br><span class="line">*     <span class="keyword">try</span> &#123;</span><br><span class="line">*       x += deltaX;</span><br><span class="line">*       y += deltaY;</span><br><span class="line">*     &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">*       sl.unlockWrite(stamp);</span><br><span class="line">*     &#125;</span><br><span class="line">*   &#125;</span><br><span class="line">*</span><br><span class="line">*   <span class="function"><span class="keyword">double</span> <span class="title">distanceFromOrigin</span><span class="params">()</span> </span>&#123; <span class="comment">// A read-only method</span></span><br><span class="line">*     <span class="keyword">long</span> stamp = sl.tryOptimisticRead();</span><br><span class="line">*     <span class="keyword">double</span> currentX = x, currentY = y;</span><br><span class="line">*     <span class="keyword">if</span> (!sl.validate(stamp)) &#123;</span><br><span class="line">*        stamp = sl.readLock();</span><br><span class="line">*        <span class="keyword">try</span> &#123;</span><br><span class="line">*          currentX = x;</span><br><span class="line">*          currentY = y;</span><br><span class="line">*        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">*           sl.unlockRead(stamp);</span><br><span class="line">*        &#125;</span><br><span class="line">*     &#125;</span><br><span class="line">*     <span class="keyword">return</span> Math.sqrt(currentX * currentX + currentY * currentY);</span><br><span class="line">*   &#125;</span><br><span class="line">*</span><br><span class="line">*   <span class="function"><span class="keyword">void</span> <span class="title">moveIfAtOrigin</span><span class="params">(<span class="keyword">double</span> newX, <span class="keyword">double</span> newY)</span> </span>&#123; <span class="comment">// upgrade</span></span><br><span class="line">*     <span class="comment">// Could instead start with optimistic, not read mode</span></span><br><span class="line">*     <span class="keyword">long</span> stamp = sl.readLock();</span><br><span class="line">*     <span class="keyword">try</span> &#123;</span><br><span class="line">*       <span class="keyword">while</span> (x == <span class="number">0.0</span> &amp;&amp; y == <span class="number">0.0</span>) &#123;</span><br><span class="line">*         <span class="keyword">long</span> ws = sl.tryConvertToWriteLock(stamp);</span><br><span class="line">*         <span class="keyword">if</span> (ws != <span class="number">0L</span>) &#123;</span><br><span class="line">*           stamp = ws;</span><br><span class="line">*           x = newX;</span><br><span class="line">*           y = newY;</span><br><span class="line">*           <span class="keyword">break</span>;</span><br><span class="line">*         &#125;</span><br><span class="line">*         <span class="keyword">else</span> &#123;</span><br><span class="line">*           sl.unlockRead(stamp);</span><br><span class="line">*           stamp = sl.writeLock();</span><br><span class="line">*         &#125;</span><br><span class="line">*       &#125;</span><br><span class="line">*     &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">*       sl.unlock(stamp);</span><br><span class="line">*     &#125;</span><br><span class="line">*   &#125;</span><br><span class="line">* &#125;&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h2><p>理论上来说StampedLock锁本质上还是基于CAS以及双向队列实现，换汤不换药。这里还是佩服一下 Doug Lea大师。大师对于数据结构的运用还是挺秀的源码都挺好看。</p>
-<ul>
-<li><a href="#">写锁</a><br>writeLock是一个独占锁某时只允许一个线程修改。当前没有读锁或者写锁的时候才可以获取，请求的时候会返回一个stamp标识该锁版本释放的时候需要传入。</li>
-<li><a href="#">读锁</a><br>readLock是一个共享锁，当前没有写锁的时候可以多个线程获取，如果有写锁存在则会造成阻塞。</li>
-<li><a href="#">读写锁</a><br>tryOptimisticRead并没有使用CAS修改锁的状态，仅仅通过位运算测试。如果当前没有线程持有写锁，则简单的返回要给非0的stamp信息。获取stamp后再具体操作数据前还需要调用validate<br>验证stamp是否已经不可用，也就是看是否tryOptmisticRead返回stamp期间是否有线程持有了写锁。<br>这一章我源代码看的不多，所以写不出什么深入的东西。后续我会持续更新这一章~</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/05/JUC.StampedLock/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.自定义锁" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/04/JUC.自定义锁/">JUC.自定义非可重入独占锁</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/04/JUC.自定义锁/" class="archive-article-date">
-  	<time datetime="2018-12-04T15:29:40.153Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="UnableReentrantLock提纲"><a href="#UnableReentrantLock提纲" class="headerlink" title="UnableReentrantLock提纲"></a>UnableReentrantLock提纲</h2><ul>
-<li><a href="#">可重入锁</a></li>
-<li><a href="#">非可重入锁实现</a></li>
-<li><a href="#">测试死锁</a></li>
-</ul>
-<h2 id="UnableReentrantLock简介"><a href="#UnableReentrantLock简介" class="headerlink" title="## UnableReentrantLock简介"></a>## UnableReentrantLock简介</h2><p>可重入锁，也叫做递归锁，指的是在同一线程内，外层函数获得锁之后，内层递归函数仍然可以获取到该锁。换一种说法：同一个线程再次进入同步代码时，可以使用自己已获取到的锁。<br>防止在同一线程中多次获取锁而导致死锁发生。</p>
-<h2 id="非可重入锁实现"><a href="#非可重入锁实现" class="headerlink" title="非可重入锁实现"></a>非可重入锁实现</h2><p>首先看一下类结构图<br><img src="/holyShit//img/unableReentrantLock.png" alt="avatar"><br>通过Sync继承AQS实现非可重入锁，state只能为1再次获取的时候失败。下面看下具体的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.AbstractQueuedSynchronizer;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> UnableReentrantLock</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> is a unable reentrant lock</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Allen</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2018/11/21 22:15</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnableReentrantLock</span> <span class="keyword">implements</span> <span class="title">Lock</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Sync</span> <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> getState() == <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">assert</span> acquires == <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">                setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">assert</span> releases == <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (getState() == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalMonitorStateException();</span><br><span class="line">            &#125;</span><br><span class="line">            setExclusiveOwnerThread(<span class="keyword">null</span>);</span><br><span class="line">            setState(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ConditionObject();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Sync sync = <span class="keyword">new</span> Sync();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        sync.acquire(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        sync.acquireInterruptibly(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sync.tryAcquire(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sync.tryAcquireNanos(<span class="number">1</span>, unit.toNanos(time));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        sync.release(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Condition <span class="title">newCondition</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sync.newCondition();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="测试死锁"><a href="#测试死锁" class="headerlink" title="测试死锁"></a>测试死锁</h2><p>要实现一个死锁其实是一件非常简单的事情，随便弄弄就死锁了。<br>1.互斥：某种资源一次只允许一个进程访问，即该资源一旦分配给某个进程，其他进程就不能再访问，直到该进程访问结束。<br>2.占有且等待：一个进程本身占有资源（一种或多种），同时还有资源未得到满足，正在等待其他进程释放该资源。<br>3.不可抢占：别人已经占有了某项资源，你不能因为自己也需要该资源，就去把别人的资源抢过来。<br>4.循环等待：存在一个进程链，使得每个进程都占有下一个进程所需的至少一种资源<br>实现上面规则即可触发条件召唤死锁。<br>看下我基于上面的非重入锁完美触发死锁的测试代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> MyLockTest</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> test deadLock</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Allen</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2018/11/21 11:01</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLockTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String lock;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UnableReentrantLock unableReentrantLock = <span class="keyword">new</span> UnableReentrantLock();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printAndSetLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        unableReentrantLock.lock();</span><br><span class="line">        System.out.println(lock);</span><br><span class="line">        setLock(<span class="string">"hello lock"</span>);</span><br><span class="line">        System.out.println(<span class="string">"completed set lock:"</span>+lock);</span><br><span class="line">        unableReentrantLock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLock</span><span class="params">(String lock)</span> </span>&#123;</span><br><span class="line">        unableReentrantLock.lock();</span><br><span class="line">        <span class="keyword">this</span>.lock = lock;</span><br><span class="line">        unableReentrantLock.unlock();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MyLockTest myLockTest = <span class="keyword">new</span> MyLockTest();</span><br><span class="line">        myLockTest.printAndSetLock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/04/JUC.自定义锁/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.ReentrantLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/04/JUC.ReentrantLock/">JUC.ReentrantLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/04/JUC.ReentrantLock/" class="archive-article-date">
-  	<time datetime="2018-12-04T12:01:05.142Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="ReentrantLock提纲"><a href="#ReentrantLock提纲" class="headerlink" title="ReentrantLock提纲"></a>ReentrantLock提纲</h2><ul>
-<li><a href="#">ReentrantLock简介</a></li>
-<li><a href="#">获取与释放锁</a></li>
-<li><a href="#">Condition讲解</a></li>
-</ul>
-<h2 id="ReentrantLock简介"><a href="#ReentrantLock简介" class="headerlink" title="ReentrantLock简介"></a>ReentrantLock简介</h2><p>ReentrantLock是可重入的独占锁，同时只允许一个线程获取该锁，其它被阻塞的锁会放入AQS队列里面。首先看下ReentrantLock的类图<br><img src="/holyShit//img/ReentrantLock_uml.png" alt="avatar"><br>从类图可以看出来ReentrantLock使用AQS实现，并且内部实现了公平锁与非公平锁，默认是非公平锁。<br>其中Sync继承AQS，它的子类NonfairSync和FairSync分别实现了获取锁的非公平和公平策略。<br>公平锁是指按照队列排队唤醒线程，非公平锁是指当释放锁有队列外的线程参与抢占可以不用参与队列。<br>所以一般来说非公平锁性能高于公平锁，因为不用唤醒线程。公平锁除非有特许业务场景需要控制线程调用情况有可能会用到。（反正我至今没遇到过）<br>接着往下说ReentrantLock，由于基于AQS实现所以也会用到state状态值表示锁情况。这里的state表示重入次数，默认情况下是0标识当前锁没有被任何线程持有。<br>当线程尝试获取锁的时候会使用CAS修改设置state的值为1如果成功则获取锁，然后记录锁的持有者是该线程，其余则放入AQS队列当中。<br>在该持锁线程第二次获取锁的时候state修改为2,这就是重入次数，每释放一次锁就减1当为0的时候就彻底释放了锁。</p>
-<h2 id="获取与释放锁"><a href="#获取与释放锁" class="headerlink" title="获取与释放锁"></a>获取与释放锁</h2><p>在说到获取与释放锁的时候我会结合源代码来说，比较简洁明了。<br>首先看下面一段模仿ArrayBlockingQueue的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> ConsumerAndProducer</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> ToDo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Allen</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2018/12/4 21:00</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerAndProducer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> ReentrantLock reentrantLock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Condition productCondition = reentrantLock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Condition consumeCondition = reentrantLock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Queue &lt;String&gt; queue = <span class="keyword">new</span> LinkedBlockingQueue &lt;String&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> QUEUE_SIZE = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Thread producer = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            reentrantLock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//队列满了等待</span></span><br><span class="line">                <span class="keyword">while</span> (queue.size() == QUEUE_SIZE) &#123;</span><br><span class="line">                    productCondition.await();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//添加元素</span></span><br><span class="line">                queue.add(<span class="string">"lock"</span>);</span><br><span class="line">                <span class="comment">//唤醒消费</span></span><br><span class="line">                consumeCondition.signalAll();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="comment">//释放锁</span></span><br><span class="line">                reentrantLock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        Thread consumer = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            reentrantLock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (<span class="number">0</span> == queue.size()) &#123;</span><br><span class="line">                    consumeCondition.await();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(queue.poll());</span><br><span class="line">                productCondition.signalAll();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                reentrantLock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        producer.start();</span><br><span class="line">        consumer.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><a href="#">获取锁</a><br>看上面的代码首先会调用lock方法获取锁，咱们看一眼源码发现委托给了Sync的lock方法，会根据ReentrantLock构造函数选择Sync的实现是NonfairSync还是FairSync<br>分别看下非公平和公平的实现，首先看非公平的方式如下代码<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="comment">//上来如果锁没被占用则直接占用简直不讲道理，如果锁被占用则走流程该进队列进队列</span></span><br><span class="line">      <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">          setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">          acquire(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>然后咱们再看一眼非公平锁的tryAcquire实现，这个代码也是挺暴躁的。真的丧心病狂的要抢占锁。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> nonfairTryAcquire(acquires);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">nonfairTryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">final</span> Thread current = Thread.currentThread();</span><br><span class="line">      <span class="keyword">int</span> c = getState();</span><br><span class="line">      <span class="comment">//state为0直接占锁</span></span><br><span class="line">      <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">              setExclusiveOwnerThread(current);</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//已经拿到锁，修改重入状态</span></span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">          <span class="keyword">int</span> nextc = c + acquires;</span><br><span class="line">          <span class="keyword">if</span> (nextc &lt; <span class="number">0</span>) <span class="comment">// overflow</span></span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Maximum lock count exceeded"</span>);</span><br><span class="line">          setState(nextc);</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//都不是走流程进AQS队列</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>非公平锁总则来说就是怎么拿锁块怎么来。下面说一下公平锁，先看代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//很文明上来走流程</span></span><br><span class="line">        acquire(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Thread current = Thread.currentThread();</span><br><span class="line">        <span class="keyword">int</span> c = getState();</span><br><span class="line">        <span class="comment">//锁没被占用先走一个队列判断hasQueuedPredecessors</span></span><br><span class="line">        <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">                compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">                setExclusiveOwnerThread(current);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">            <span class="keyword">int</span> nextc = c + acquires;</span><br><span class="line">            <span class="keyword">if</span> (nextc &lt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Maximum lock count exceeded"</span>);</span><br><span class="line">            setState(nextc);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//下面的h!=t队列不为空，然后如果且next不为空更厉害的是还等于当前线程则拿锁</span></span><br><span class="line">    <span class="comment">//h!=t且next不为空然后不等于当前线程，则进队列取next的线程出来。相当的公平呀。。。。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">hasQueuedPredecessors</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// The correctness of this depends on head being initialized</span></span><br><span class="line">    <span class="comment">// before tail and on head.next being accurate if the current</span></span><br><span class="line">    <span class="comment">// thread is first in queue.</span></span><br><span class="line">    Node t = tail; <span class="comment">// Read fields in reverse initialization order</span></span><br><span class="line">    Node h = head;</span><br><span class="line">    Node s;</span><br><span class="line">    <span class="keyword">return</span> h != t &amp;&amp;</span><br><span class="line">        ((s = h.next) == <span class="keyword">null</span> || s.thread != Thread.currentThread());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><a href="#">获取锁</a><br>释放锁如下面的代码其实没啥好看的就是state减少1，并且如果sate为0了释放锁的占有，当前锁的线程为null.<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">int</span> c = getState() - releases;</span><br><span class="line">         <span class="keyword">if</span> (Thread.currentThread() != getExclusiveOwnerThread())</span><br><span class="line">             <span class="keyword">throw</span> <span class="keyword">new</span> IllegalMonitorStateException();</span><br><span class="line">         <span class="keyword">boolean</span> free = <span class="keyword">false</span>;</span><br><span class="line">         <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">             free = <span class="keyword">true</span>;</span><br><span class="line">             setExclusiveOwnerThread(<span class="keyword">null</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         setState(c);</span><br><span class="line">         <span class="keyword">return</span> free;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Condition讲解"><a href="#Condition讲解" class="headerlink" title="Condition讲解"></a>Condition讲解</h2><p>其实在写AQS的时候有提到过这个东西，但是没有举例子详细说明。还是回到本文的第一段代码ConsumerAndProducer<br>这段代码是模范的ArrayBlockingQueue的代码，其中会有两个condition。每一个condition都是一个队列可以存放调用线程并且唤醒其中的线程。<br>这里的好处是啥了？比如consumeCondition里面有线程A然后productCondition里面有线程B和D。我唤醒的时候可以只唤醒A，而不会唤醒所有的线程。<br>而不会存在所有的线程都唤醒的尴尬局面，比如读和写咱们的线程可以灵活分开来管理是不是很cool。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/04/JUC.ReentrantLock/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.AQS" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/02/JUC.AQS/">JUC.AQS</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/02/JUC.AQS/" class="archive-article-date">
-  	<time datetime="2018-12-02T13:16:51.946Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="AQS提纲"><a href="#AQS提纲" class="headerlink" title="AQS提纲"></a>AQS提纲</h2><ul>
-<li><a href="#">AQS简介</a></li>
-<li><a href="#">依赖工具类LockSupport</a></li>
-<li><a href="#">获取与释放锁</a></li>
-<li><a href="#">ConditionObject</a></li>
-</ul>
-<h2 id="AQS简介"><a href="#AQS简介" class="headerlink" title="AQS简介"></a>AQS简介</h2><p>AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图<br><img src="/holyShit//img/aqs_uml.png" alt="avatar"><br>由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。<br>AQS提供资源独占和共享两种方式，两种方式通过内部的state信息描述线程状态实现独占以及共享。<br>Node节点内部的SHARED用来标记当前线程获取共享资源被阻塞挂起放入AQS队列。<br>EXCLUSIVE用来标记线程获取独占资源被挂起放入AQS队列。<br>waitStatus记录当前线程的等待状态，可以为CANCELLED被取消，SIGNAL线程需要被唤醒，CONDITION线程在条件队列里面等待，PROPAGATE释放共享资源需要通知其它线程节点。</p>
-<h2 id="依赖工具类LockSupport"><a href="#依赖工具类LockSupport" class="headerlink" title="依赖工具类LockSupport"></a>依赖工具类LockSupport</h2><p>LockSupport是一个工具类，它的主要作用是挂起和唤醒线程，该工具类是创建锁和其它同步类的基础。<br>LockSupport类是使用Unsafe类实现的，主要方法有park与unpark(Thread thread)，也提供定时的方法。<br>划重点啦，每个使用它的线程都会关联一个许可证，在默认情况下调用是不持有许可证的！<br>为什么说上面这一段因为当调用park方法的线程已经拿到了与LockSupport关联的许可证，则调用会马上返回不会阻塞。否则会被阻塞挂起，相比较CAS的阻塞要性能高一点。</p>
-<h2 id="获取与释放锁"><a href="#获取与释放锁" class="headerlink" title="获取与释放锁"></a>获取与释放锁</h2><ul>
-<li><a href="#">子类实现AQS方法</a><br>1.tryAcquire(int arg)尝试获取独占锁<br>2.tryRelease(int arg)释放独占锁<br>3.tryAcquireShared(int arg) 尝试获取共享锁<br>4.tryReleaseShared(int arg)释放共享锁</li>
-<li><p><a href="#">独占方式获取锁</a><br>当一个线程调用acquire(int arg)方法获取独占锁时，会先调用tryAcquire方法尝试获取资源设置state状态。<br>成功则返回否则将线程封装成Node节点设置EXCLUSIVE状态插入到AQS队列的尾部，并调用LockSupport.park(this)挂起自己。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><a href="#">独占方式释放锁</a><br>当一个线程调用release(int arg)方法会尝试使用tryRelease操作释放资源，并设置state状态，然后调用LockSupport.unpark(thread)方法激活AQS队列里面<br>当前释放节点的next节点并尝试调用tryAcquire，查看当前状态变量的state是否满足，满足激活否则挂起放入队列。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (tryRelease(arg)) &#123;</span><br><span class="line">        Node h = head;</span><br><span class="line">        <span class="keyword">if</span> (h != <span class="keyword">null</span> &amp;&amp; h.waitStatus != <span class="number">0</span>)</span><br><span class="line">            unparkSuccessor(h);<span class="comment">//具体CAS修改状态，LockSupport.unpark(s.thread)唤醒next线程Node节点。</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">acquireQueued</span><span class="params">(<span class="keyword">final</span> Node node, <span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">boolean</span> failed = <span class="keyword">true</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</span><br><span class="line">          <span class="keyword">for</span> (;;) &#123;<span class="comment">//死循环当被唤醒的时候执行获取琐，否则再次放入队列。</span></span><br><span class="line">              <span class="keyword">final</span> Node p = node.predecessor();</span><br><span class="line">              <span class="keyword">if</span> (p == head &amp;&amp; tryAcquire(arg)) &#123;</span><br><span class="line">                  setHead(node);</span><br><span class="line">                  p.next = <span class="keyword">null</span>; <span class="comment">// help GC</span></span><br><span class="line">                  failed = <span class="keyword">false</span>;</span><br><span class="line">                  <span class="keyword">return</span> interrupted;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;</span><br><span class="line">                  parkAndCheckInterrupt())</span><br><span class="line">                  interrupted = <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (failed)</span><br><span class="line">              cancelAcquire(node);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ConditionObject"><a href="#ConditionObject" class="headerlink" title="ConditionObject"></a>ConditionObject</h2><p>notify与wait是配合synchronized内置锁实现线程间同步的基础设施一样，条件变量的signal和await方法也是用来配合锁实现线程间同步的基础设施。<br>它们的不同在于synchronized同时只能与一个共享变量实现同步，而AQS可以对应多个条件变量。<br>比如生产者和消费者使用ConditionObject可以有两个condition<br>并且每个ConditionObject都是一个队列存入的是线程Node节点，至于为什么这么做后续在写ReentrantLock或者实现自定义的一个非重入锁的时候写。<br>我觉得更加便于理解，这一章只是大概描述有这么一个东西。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/02/JUC.AQS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysq3" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/01/mysq3/">MySql索引设计</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/01/mysq3/" class="archive-article-date">
-  	<time datetime="2018-12-01T04:15:24.245Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="索引设计提纲"><a href="#索引设计提纲" class="headerlink" title="索引设计提纲"></a>索引设计提纲</h2><ul>
-<li><a href="#">索引概述</a></li>
-<li><a href="#">索引类型</a></li>
-<li><a href="#">高性能索引策略</a></li>
-</ul>
-<h2 id="索引概述"><a href="#索引概述" class="headerlink" title="索引概述"></a>索引概述</h2><ul>
-<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。<br>优点：<br>1.提高检索速度；<br>2.帮助服务器避免排序和临时表<br>3.将随机IO变为顺序IO<br>缺点：<br>1.创建和维护索引需要耗费时间，耗费时间的数量随着数据量的增加而增加；<br>2.索引需要占用物理空间；<br>3.增加、删除和修改数据时，要动态的维护索引，造成数据的维护速度降低了<br>综上可以总结出来<br>1.索引适用于多读少事务的表<br>2.数据唯一性低的表并不合适<br>索引并不是最好的工具，总的来说只有查询性能提高大于索引带来的额外开销的时候才有效。<br>对于特大型的表，可以建立一个元数据信息表，用来查询需要用到的某些特性。</li>
-</ul>
-<h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><p>索引有很多种类型，不同的存储引擎支持和实现也可能不同。下面我们看下MySql支持的索引类型。</p>
-<ul>
-<li><a href="#">B-Tree</a><br>B-Tree通常意味着所有的值按顺序存储，并且叶子页到根的距离相同。下图展示了B-Tree索引的抽象表示。大致反映了InnoDB索引是如何工作的。<br><img src="/holyShit//img/b-tree.png" alt="avatar"><br>B-Tree可以加快访问数据的速度，因为存储引擎不再需要进行全表扫描取而代之的是从索引的跟节点。<br>可以使用B-Tree的查询类型<br>1.全值匹配<br>全值匹配指的是和索引中的所有列进行匹配<br>2.匹配最左前缀<br>即使用索引的第一列<br>3.匹配前缀<br>匹配某一列的值的开头某一部分<br>4.匹配范围值<br>字段范围内容值，或者精确某一列模糊匹配另外一列。<br>上面的前提都是从索引最左列开始！如果不明白可以再看看B-Tree树结构图</li>
-<li><a href="#">哈希索引</a><br>哈希索引是基于哈希表实现。只有精确匹配索引所有列的查询才有效。在MySql中只有Memory支持也是默认方式，不过mysql官方文档说是说InnoDB不支持哈希。<br>其实InnoDB是可以使用的不过是自适应的，不能人为干预是否在一张表中哈希索引。</li>
-<li><a href="#">空间索引</a><br>MyISAM支持空间索引，不过真没用过不敢多写。</li>
-<li><a href="#">全文索引</a><br>全文索引是一种特殊类型的索引，它查找的是文本中的关键词，而不是直接比较索引中的值。全文索引和其它几类索引的匹配方式完全不一样。</li>
-</ul>
-<h2 id="高性能索引策略"><a href="#高性能索引策略" class="headerlink" title="高性能索引策略"></a>高性能索引策略</h2><ul>
-<li><a href="#">独立的列</a><br>我们常看到查询不当的使用索引，或者使得MySql无法使用索引。如果查询中的列不是独立，则MySql就不会使用索引。<br>“独立索引”是指索引列不能是表达式的一部分，也不能是函数的参数。<br>如下面两句SQL则都是错误例子<br>SELECT id FROM test WHERE id+1=5;<br>SELECT … WHERE TO_DAYS(CURRENT_DATE)-TO_DAYS(date_col)&lt;=10;</li>
-<li><a href="#">前缀索引</a><br>有时候索引很长的字符列，这会让索引变得大且慢。通常可以索引开始的部分字符，这样可以大大节约索引空间，从而提高索引效率。<br>但这样也会降低索引的选择性。索引的选择性是指，不重复的索引值，索引的选择性越高查询效率越高。这里的诀窍就是选择合适的前缀长度以<br>保证较高的选择性。为了决定前缀的合适长度，需要找到最常见的值的列表，然后和最常见的列表进行比较。其中还得考虑未来数据的变化性，不能仅仅只是<br>靠查几条SQL就随便判断了。SQL如下所示<br>ALTER TABLE demo ADD key(city(7));</li>
-<li><a href="#">多列索引</a><br>很多人对多列索引的理解都不够。一个常见的错误就是，为每个列创建独立的索引，或者按照错误的顺序创建多列索引。<br>一般由于人们听到一些专家诸如“把WHERE条件里面的列都建立上索引”这些模糊的建议导致。<br><img src="/holyShit//img/mysql.png" alt="avatar"><br>如上图在EXPLAIN中出现了索引合并策略，实际上出现这种情况多半说明索引建立的很糟糕。<br>1.出现服务器对多个索引做相交操作的时候，通常意味着需要一个包含所有列相关的多列索引，而不是多个独立的单列索引。<br>2.多个索引做联合操作的时候消耗大量的CPU和内存资源<br>3.优化器不会把这些计算到查询成本，优化器只关心读取。使得查询的成本被低估，导致执行计划还不如直接走全表。</li>
-<li><a href="#">B-Treee索引选择合适的索引顺序</a><br>正确的顺序依赖于使用该索引的查询，并且同时需要考虑如何更好的满足排序和分组的需求。</li>
-<li><a href="#">聚簇索引</a><br>一般为InnoDB的主键，除此之外不能通过其它方式指定。如果没有主键则找一个非空唯一的列，如果没有这种列则会建立一个不可见的系统默认的主键row_id。<br>优点<br>1.可以把相关数据保存在一起。<br>2.访问速度更快<br>3.使用覆盖索引扫描的查询可以使用页节点中的主键值。<br>缺点<br>1.插入速度严重依赖于插入顺序<br>2.更新聚簇索引的代价高，因为会强制每个被更新的行移动到新的位置。并且还会面临页分裂，当插入到某个已满的页中时。<br>3.导致全表扫描变慢，当行比较稀疏或者页分裂导致数据存储不连续的情况。</li>
-<li><a href="#">覆盖索引</a><br>MySql可以利用索引返回select列表中的字段，而不必根据索引再次读取数据文件。向这样包含满足查询需要的数据的索引称为覆盖索引。<br>有时候写SQL的时候可以考虑先通过覆盖索引查出来数据再获取其它数据的方式，稍微提高性能。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/01/mysq3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysq2" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/mysq2/">MySql对象设计</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/mysq2/" class="archive-article-date">
-  	<time datetime="2018-11-29T11:45:43.805Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="对象设计提纲"><a href="#对象设计提纲" class="headerlink" title="对象设计提纲"></a>对象设计提纲</h2><ul>
-<li><a href="#">设计原则说明</a></li>
-<li><a href="#">范式化与逆范式的选择</a></li>
-<li><a href="#">表容量设计和数据切分</a></li>
-<li><a href="#">表设计</a></li>
-<li><a href="#">字段设计</a></li>
-</ul>
-<h2 id="设计原则说明"><a href="#设计原则说明" class="headerlink" title="设计原则说明"></a>设计原则说明</h2><ul>
-<li><p><a href="#">完整性</a><br>1.数据库完整性是指数据库中数据的正确性和相容性<br>2.数据库完整性是由完整性约束来保证的<br>3.数据库完整性约束通过DBMS或者应用程序来实现<br>4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。</p>
-</li>
-<li><p><a href="#">性能</a><br>性能是衡量一个系统的关键因素，在设计阶段就在性能方面该多关注，尽量减少后期烦恼。<br>1.设置合理的字段类型和长度<br>2.选择高效的主键和索引<br>3.适度冗余，减少JOIN查询。多用短连接查询替代长SQL查询，因为短连接多次查询通过程序合并结果可适当减轻数据库压力。<br>4.精简表结构</p>
-</li>
-<li><a href="#">扩展性</a><br>在大规模系统中，除了性能，可扩展性也是设计的关键点，而数据库表扩展性主要包含表逻辑结构，功能字段的增加分表等。<br>1.一表一实体如果不同实体间有关联，可增加一个单独的表，从而不会影响以前的功能。<br>2.扩展字段在表数据较小的时候新增一个字段可以很快完成，但是在表很大时增加字段会比较困难。因此在设计时可以考虑选择预留扩展字段。<br>3.分表设计：也就是水平拆分。在设计阶段应该考虑数据的增长情况，并根据数据特性以及数据之间关系选择合适的切分策略。这里可以举一个例子<br>比如阿里的用户表，可分片1000片一片放1000万人，这样用户也可以均匀打散不会存在热点数据集中的情况。</li>
-</ul>
-<h2 id="范式与逆范式选择"><a href="#范式与逆范式选择" class="headerlink" title="范式与逆范式选择"></a>范式与逆范式选择</h2><p>数据库范式化：是指消除冗余，有效组织数据，减少在数据操作期间潜在的不规则和提高数据一致性。在范式话数据库中，每个元素只会被存储一次，至少满足第三范式。<br>逆范式数据库中，信息是重复的或者保存在多个地方。某些情况下从性能角度触发，可以考虑。因为可以减少表关联的查询</p>
-<ul>
-<li><a href="#">非范式和逆范式</a><br>非范式是指上来就是干压根不考虑范式和数据管理需求，没有规则的建模。<br>逆范式是指在设计时按照范式进行，并且考虑数据完整性和一致性。之后根据性能和扩展需求在此基础上进行逆范式设计。<br>结论禁止一切非范式的行为。</li>
-<li><a href="#">范式的利弊</a><br>优点<br>范式化更新通常比逆范式快<br>当数据被很好范式化后，数据量很少，重复数据小，更新量也会变小。<br>范式化表通常较小，更容易装入内存性能因为会更好<br>缺点<br>在范式化结构上的非一般查询，一般都会需要至少一次一个关联</li>
-<li><a href="#">逆范式的利弊</a><br>逆范式的利弊<br>逆范式数据都在一个表中减少了关联同时也能运行更有效的索引策略，因此性能不错。至于为啥后面会说到索引失效。<br>当然逆范式在数据冗余，数据独立性，相关性以及提高数据一致性方面较差。</li>
-</ul>
-<h2 id="表容量设计和数据切分"><a href="#表容量设计和数据切分" class="headerlink" title="表容量设计和数据切分"></a>表容量设计和数据切分</h2><p>使用场景<br>随着数据库表中数据日记月累越来越多，数据库会越来越大，表记录也会达到千万甚至亿级别，数据库表的访问效率明显下降，导致<br>外层应用的访问效率非常差，访问时间急剧上升，用户体验下降。此时就必需使用数据切分来解决瓶颈。<br>数据切分就是值通过特定的条件，将存放在同一个数据库中的数据分散存放到多个数据库上面，以达到分散单台设备负载的效果。数据切分根据规则的类型<br>可以分为垂直拆分和水平拆分。</p>
-<ul>
-<li><a href="#">垂直拆分</a><br>垂直拆分就是要把表按模块划分到不同数据库或不同表中。这种切分在大型网站的演变过程中非常常见。当一个网站还很小的时候，只有少量的人来开发和维护，各模块<br>和表都在一起，当网站不断丰富和壮大，也会变成多个子系统来支撑，这时就有按照模块和功能把表划分出来的需求。<br>一个架构设计较好的应用系统，其总体功能肯定由多个功能模块组成，而每个功能模块所需要的数据对应数据库中的就是一张表或者多个表。在架构设计中，各个功能模块相互之间的交互点越统一，<br>越少，系统的耦合度就越低，系统各个模块的维护以及扩展性也就越好。这样的系统，实现数据的垂直拆分也就越容易。</li>
-<li><a href="#">垂直拆分优缺点</a><br>优点<br>1.数据库表的切分简单明了，切分规则明确<br>2.应用程序模块清晰明确，整合容易<br>3.数据维护方便，容易定位问题<br>缺点<br>1.部分表关联无法在数据库完成，需要程序进行<br>2.对于访问极其频繁数据量超大的表仍然存在瓶颈<br>3.事务处理相对复杂<br>4.切分到一定程度后，扩展性受到限制<br>5.过度切分可能导致系统过于复杂难以维护</li>
-<li><a href="#">水平拆分</a><br>水平拆分可以简单理解成按照数据行的切分<br>常用套路<br>1.数据范围比如1-100万一个表。100-200万一个表（注意数据特性选择，存在热点数据以及新增数据的考虑呀兄弟们）<br>2.时间顺序比如按照一年<br>3.地域范围每个或者多个地市一个库（这让我想到了美团饿了么，不同城市订餐还不一样。新疆和北京就没得比嘛）<br>4.按照计算公式切分简单的就是去摸（打错了是取模~）</li>
-<li><a href="#">水平拆分优缺点</a><br>优点<br>1.表关联可在数据库完成<br>2.不会存在某些超大型数据量和高负载的表<br>3.应用程序整体架构改动少<br>4.事务处理简单<br>5.只要切分规则定的好，扩展不受影响<br>缺点<br>1.切分规则需要考虑点由近到远比较复杂很难抽象（我就是菜鸡，心很痛）<br>2.后期维护度增加，人工定位数据难<br>3.切分不合理造成数据冷热不均匀，等于没弄<br>4.跨片查询操作简直能让人想上天<br>5.跨片事务我选择自杀</li>
-<li><a href="#">水平拆分与垂直拆分的综合</a><br>一般来说水平拆一下垂直拆一下就是一个轮回操作但是也有优缺点<br>优点<br>1.合理利用水平和垂直拆分的各自优势避免缺陷<br>2.让系统扩展性得到最大化提升<br>缺点<br>1.数据库架构会比较复杂，维护难度更大（没事这是dba的事了和开发没一毛钱关系）<br>2.应用架构会更复杂（没事开发人员比DBA多能扛能打）</li>
-</ul>
-<h2 id="表设计"><a href="#表设计" class="headerlink" title="表设计"></a>表设计</h2><p>1.必需要有PK<br>2.必需包含create与modified日期字段<br>3.禁止使用复杂数据类型（数组）<br>4.需要join的字段，数据类型保持一致<br>5.需要定期删除过期数据<br>6.单表字段不要太多<br>7.mysql处理大表的性能测试（int表大于500万，char表大于1000万）瞬间断崖式爆炸，所以单表大小限制在16G。</p>
-<h2 id="字段设计"><a href="#字段设计" class="headerlink" title="字段设计"></a>字段设计</h2><ul>
-<li><a href="#">数字类型</a><br>1.自增必需是整形<br>2.整形字段只能用int或者bigint，且明确标识无符号unsigned，除非确实有负数。超过22亿才用bigint<br>3.定点小数用decimal</li>
-<li><a href="#">字符类型</a><br>1.varchar动态字符使用VARCHAR(N)其中N尽可能小。<br>2.char仅仅只在类似性别字段使用<br>3.text只有在数量会超过20000使用<br>4.禁止使用LOB<br>5.不建议用enum与set</li>
-<li><a href="#">日期类型</a><br>1.DATE精确到天<br>2.DATETIME精确到时分秒</li>
-<li><a href="#">NULL</a><br>字段建议使用not null属性，可用默认值代替。null在mysql中索引处理是特殊的会占用额外的存放空间。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/mysq2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/mysql/">MySql体系结构和存储引擎</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/mysql/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:29:27.425Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">关键字 关于mysql 体系结构 插件式存储引擎</a></li>
-</ul>
-<h2 id="关于mysql"><a href="#关于mysql" class="headerlink" title="关于mysql"></a>关于mysql</h2><ul>
-<li><a href="#">1995年成立于瑞典并发布第一个版本</a></li>
-<li><a href="#">2008年2月被Sun收购</a></li>
-<li><a href="#">2010年1月被Oracle收购</a></li>
-<li><a href="#">2010年12月发布5.5版本</a></li>
-<li><a href="#">2012年2月发布7.2</a></li>
-<li><a href="#">2013念2月发布5.6</a></li>
-<li><a href="#">2015年10月发布5.7</a></li>
-<li><a href="#">2018年发布8.0</a></li>
-</ul>
-<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p><img src="/holyShit//img/01.jpg" alt="avatar"><br>1.连接池组件<br>2.管理服务和工具组件<br>3.SQL接口组件<br>4.查询分析器组件<br>5.优化器组件<br>6.缓存组件<br>7.插件式存储引擎<br>8.物理文件</p>
-<h2 id="插件式存储引擎"><a href="#插件式存储引擎" class="headerlink" title="插件式存储引擎"></a>插件式存储引擎</h2><p><img src="/holyShit//img/02.png" alt="avatar"><br>上图为特性清单，主要特性有如下几点<br>1.存储容量限制<br>2.事务支持<br>3.锁的粒度<br>4.MVCC支持<br>5.支持的索引<br>6.备份和复制<br>其中主要使用的有如下五种<br>1.MyISAM这种存储引擎是MYSQL最早提供的。它提供高速存储和检索，以及全文搜索的能力。<br>2.InnoDB提供了事务，行级锁和外键约束的功能。是Mysql5.6的默认存储引擎。<br>3.ARCHIVE仅支持select和insert语句，而且不支持索引。常用于日志记录和聚合分析。<br>4.Memory类似于H2的内存数据库，如果数据库重启或者崩溃数据丢失。适用于存储临时数据的临时表。<br>5.TOkuDB大数据存储引擎。</p>
-<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>具体的存储引擎详细内容推荐看《高性能MySQL》<br>后面章节具体说一些小套路，解决工作问题应该够了。<br> <a href="#"> GN Al1en</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/mysql/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-单例双重检测问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">关键字synchronized volatile</a></li>
-</ul>
-<h2 id="重排序问题导致双重检验出错"><a href="#重排序问题导致双重检验出错" class="headerlink" title="重排序问题导致双重检验出错"></a>重排序问题导致双重检验出错</h2><p>废话不多说上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>  </span>&#123;			</span><br><span class="line">	<span class="keyword">private</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">				instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance;</span><br><span class="line">  &#125;				</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="概念说明"><a href="#概念说明" class="headerlink" title="概念说明"></a>概念说明</h2><p>1.synchronized 原子性 可见性 有序性，synchronized通过锁住对象实现并发。说白了就是排队一个一个来，这怎么不能保证原子 可见，已经有序了？<br>2.volatile 可见性以及禁止重排序。<br>根据happens-before原则如下：<br>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。如果一个线程先去写一个变量，然后一个线程去进行读取，那么写入操作肯定会先行发生于读操作。<br>这里要说明一点别被误导了以及加了volatile就可以实现原子性！<br>当并发计数出现的时候都有读写操作。都是一起读一起写。只是读的时候获取的是同一个值而已。</p>
-<h2 id="内存模型简说"><a href="#内存模型简说" class="headerlink" title="内存模型简说"></a>内存模型简说</h2><p>1.计算机内存模型是分为主内存 缓存 CPU<br>2.JMM及java内存模型分为 主内存 工作内存</p>
-<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>现在明白了关键字的概念以及内存模型的概念。下面可以开始说到重点内容了。<br>多线程执行的时候各自都会有一份工作内存，共享变量也会从主内存中拷贝到工作内存当中去。<br>上面的代码存在的问题是<br>看似简单的一段赋值语句：instance = new Singleton();，其实JVM内部已经转换为多条指令：</p>
-<p>memory = allocate(); //1：分配对象的内存空间</p>
-<p>ctorInstance(memory); //2：初始化对象</p>
-<p>instance = memory; //3：设置instance指向刚分配的内存地址</p>
-<p>但是经过重排序后如下：</p>
-<p>memory = allocate(); //1：分配对象的内存空间</p>
-<p>instance = memory; //3：设置instance指向刚分配的内存地址，此时对象还没被初始化</p>
-<p>ctorInstance(memory); //2：初始化对象<br>可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面，在线程A初始化完成这段内存之前，线程B虽然进不去同步代码块，但是在同步代码块之前的判断就会发现instance不为空，此时线程B获得instance对象进行使用就可能发生错误。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;加上<span class="keyword">volatile</span>禁止重排序。</span><br></pre></td></tr></table></figure></p>
-<p>后续有时间会详细写关于内存模型的文章</p>
-<p> <a href="#"> GN Al1en</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/单例双重检测问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/holyShit/page/2/">2</a><a class="extend next" rel="next" href="/holyShit/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "https://github.com/holyShit/2018/12/08/JUC.CountDownLatch/",
+  owner: 'A1len',
+  repo: 'https://github.com/A1len/holyShit.git',
+  oauth: {
+    client_id: 'ede9cd775d4f1bbf9677',
+    client_secret: 'fe90c4071ce9d393095e8dd12c5b817274f7620c',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -971,8 +327,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
