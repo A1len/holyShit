@@ -140,6 +140,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.CyclicBarrier" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/09/JUC.CyclicBarrier/">JUC.CyclicBarrier</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/09/JUC.CyclicBarrier/" class="archive-article-date">
+  	<time datetime="2018-12-09T08:18:06.597Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CyclicBarrier提纲"><a href="#CyclicBarrier提纲" class="headerlink" title="CyclicBarrier提纲"></a>CyclicBarrier提纲</h2><ul>
+<li><a href="#">CyclicBarrier简介</a></li>
+<li><a href="#">CyclicBarrier源码解析</a></li>
+</ul>
+<h2 id="CyclicBarrier简介"><a href="#CyclicBarrier简介" class="headerlink" title="CyclicBarrier简介"></a>CyclicBarrier简介</h2><p>如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>那么CyclicBarrier就是多个线程之间互相等待。<br>具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继续开始。<br>这里出现了两个阶段的任务执行，如果使用CountDownLatch完全没法实现。<br>但是根据存在即合理的原则，CountDownLatch也有它的好处。<br>简单任务多个线程执行结束没有后续处理只需要一个或多个等待线程处理还是用CountDownLatch吧。毕竟不用放入阻塞队列占用线程了。该干嘛干嘛去<br>具体怎么用还是根据实际业务场景分析来使用没有绝对的方案。</p>
+<h2 id="CyclicBarrier源码解析"><a href="#CyclicBarrier源码解析" class="headerlink" title="CyclicBarrier源码解析"></a>CyclicBarrier源码解析</h2><p>CyclicBarrier内部使用的是ReentrantLock加Condition实现，通过构造函数初始化parties成员个数。<br>下面看具体的源码比较通俗易懂。</p>
+<ul>
+<li><p><a href="#">线程等待</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化parties线程个数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(parties, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//初始化CyclicBarrier之后一般会在每个线程的执行函数里面调用await方法，里面具体通过dowait执行。</span></span><br><span class="line"><span class="comment">//dowait可以分为两个阶段。首先第一阶段都放入阻塞队列，第二阶段全部到齐唤醒所有线程。</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dowait</span><span class="params">(<span class="keyword">boolean</span> timed, <span class="keyword">long</span> nanos)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> InterruptedException, BrokenBarrierException,</span></span><br><span class="line"><span class="function">           TimeoutException </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">    lock.lock();<span class="comment">//加锁因为要修改count</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> Generation g = generation;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (g.broken)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> BrokenBarrierException();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (Thread.interrupted()) &#123;</span><br><span class="line">            breakBarrier();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> index = --count;</span><br><span class="line">        <span class="keyword">if</span> (index == <span class="number">0</span>) &#123;  <span class="comment">// tripped当count为0的时候代表所有线程抵达，进入唤醒阶段。</span></span><br><span class="line">            <span class="keyword">boolean</span> ranAction = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">final</span> Runnable command = barrierCommand;</span><br><span class="line">                <span class="keyword">if</span> (command != <span class="keyword">null</span>)</span><br><span class="line">                    command.run();</span><br><span class="line">                ranAction = <span class="keyword">true</span>;</span><br><span class="line">                nextGeneration();<span class="comment">//重置CyclicBarrier</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!ranAction)</span><br><span class="line">                    breakBarrier();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 一个死循环，提前到达的线程进入然后通过lockSupport阻塞住。</span></span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (!timed)</span><br><span class="line">                    trip.await();</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (nanos &gt; <span class="number">0L</span>)</span><br><span class="line">                    nanos = trip.awaitNanos(nanos);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException ie) &#123;</span><br><span class="line">                <span class="keyword">if</span> (g == generation &amp;&amp; ! g.broken) &#123;</span><br><span class="line">                    breakBarrier();</span><br><span class="line">                    <span class="keyword">throw</span> ie;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// We're about to finish waiting even if we had not</span></span><br><span class="line">                    <span class="comment">// been interrupted, so this interrupt is deemed to</span></span><br><span class="line">                    <span class="comment">// "belong" to subsequent execution.</span></span><br><span class="line">                    Thread.currentThread().interrupt();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (g.broken)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> BrokenBarrierException();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (g != generation)<span class="comment">//被最后一个线程唤醒的时候generation已近不相等了，退出死循环。</span></span><br><span class="line">                <span class="keyword">return</span> index;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (timed &amp;&amp; nanos &lt;= <span class="number">0L</span>) &#123;</span><br><span class="line">                breakBarrier();</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> TimeoutException();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();<span class="comment">//释放锁让其它被阻塞的线程也执行同样的方法释放。</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">nextGeneration</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// signal completion of last generation</span></span><br><span class="line">    trip.signalAll();<span class="comment">//唤醒所有线程</span></span><br><span class="line">    <span class="comment">// set up next generation</span></span><br><span class="line">    count = parties;<span class="comment">//重置CyclicBarrier</span></span><br><span class="line">    generation = <span class="keyword">new</span> Generation();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><a href="#">示例</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.BrokenBarrierException;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CyclicBarrier;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@ClassName</span> CyclicBarrierTest</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span> ToDo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> Allen</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2018/12/9 16:39</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        CyclicBarrier cyclicBarrier = <span class="keyword">new</span> CyclicBarrier(<span class="number">2</span>, <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"阶段完成"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"A抵达"</span>);</span><br><span class="line">                cyclicBarrier.await();</span><br><span class="line">                System.out.println(<span class="string">"A继续到终点"</span>);</span><br><span class="line">                cyclicBarrier.await();</span><br><span class="line">                System.out.println(<span class="string">"A结束"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (BrokenBarrierException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="string">"B抵达"</span>);</span><br><span class="line">                cyclicBarrier.await();</span><br><span class="line">                System.out.println(<span class="string">"B继续到终点"</span>);</span><br><span class="line">                cyclicBarrier.await();</span><br><span class="line">                System.out.println(<span class="string">"B结束"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (BrokenBarrierException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 运行结果如下面所示：</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* A抵达</span></span><br><span class="line"><span class="comment">* B抵达</span></span><br><span class="line"><span class="comment">* 阶段完成</span></span><br><span class="line"><span class="comment">* B继续到终点</span></span><br><span class="line"><span class="comment">* A继续到终点</span></span><br><span class="line"><span class="comment">* 阶段完成</span></span><br><span class="line"><span class="comment">* A结束</span></span><br><span class="line"><span class="comment">* B结束</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>总结一下在需要线程等待某事件发生或者有多阶段执行的情况下使用CyclicBarrier是一个不错的选择。<br>但是也存在一个问题，那就是CyclicBarrier的parties线程数没法重置。<br>不过一般影响不大，有没有解决方案？答案当然是有的JDK的大佬们啥都替想好了。后面再说，或者自己百度一下。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.CyclicBarrier/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.CountDownLatch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -835,84 +912,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/11/29/mysql/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-单例双重检测问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">关键字synchronized volatile</a></li>
-</ul>
-<h2 id="重排序问题导致双重检验出错"><a href="#重排序问题导致双重检验出错" class="headerlink" title="重排序问题导致双重检验出错"></a>重排序问题导致双重检验出错</h2><p>废话不多说上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>  </span>&#123;			</span><br><span class="line">	<span class="keyword">private</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">				instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance;</span><br><span class="line">  &#125;				</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="概念说明"><a href="#概念说明" class="headerlink" title="概念说明"></a>概念说明</h2><p>1.synchronized 原子性 可见性 有序性，synchronized通过锁住对象实现并发。说白了就是排队一个一个来，这怎么不能保证原子 可见，已经有序了？<br>2.volatile 可见性以及禁止重排序。<br>根据happens-before原则如下：<br>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。如果一个线程先去写一个变量，然后一个线程去进行读取，那么写入操作肯定会先行发生于读操作。<br>这里要说明一点别被误导了以及加了volatile就可以实现原子性！<br>当并发计数出现的时候都有读写操作。都是一起读一起写。只是读的时候获取的是同一个值而已。</p>
-<h2 id="内存模型简说"><a href="#内存模型简说" class="headerlink" title="内存模型简说"></a>内存模型简说</h2><p>1.计算机内存模型是分为主内存 缓存 CPU<br>2.JMM及java内存模型分为 主内存 工作内存</p>
-<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>现在明白了关键字的概念以及内存模型的概念。下面可以开始说到重点内容了。<br>多线程执行的时候各自都会有一份工作内存，共享变量也会从主内存中拷贝到工作内存当中去。<br>上面的代码存在的问题是<br>看似简单的一段赋值语句：instance = new Singleton();，其实JVM内部已经转换为多条指令：</p>
-<p>memory = allocate(); //1：分配对象的内存空间</p>
-<p>ctorInstance(memory); //2：初始化对象</p>
-<p>instance = memory; //3：设置instance指向刚分配的内存地址</p>
-<p>但是经过重排序后如下：</p>
-<p>memory = allocate(); //1：分配对象的内存空间</p>
-<p>instance = memory; //3：设置instance指向刚分配的内存地址，此时对象还没被初始化</p>
-<p>ctorInstance(memory); //2：初始化对象<br>可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面，在线程A初始化完成这段内存之前，线程B虽然进不去同步代码块，但是在同步代码块之前的判断就会发现instance不为空，此时线程B获得instance对象进行使用就可能发生错误。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> Singleton instance = <span class="keyword">null</span>;加上<span class="keyword">volatile</span>禁止重排序。</span><br></pre></td></tr></table></figure></p>
-<p>后续有时间会详细写关于内存模型的文章</p>
-<p> <a href="#"> GN Al1en</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/单例双重检测问题/">展开全文 >></a>
         </p>
       
 
