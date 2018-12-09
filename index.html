@@ -140,6 +140,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.Semaphore" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/09/JUC.Semaphore/">JUC.Semaphore</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/09/JUC.Semaphore/" class="archive-article-date">
+  	<time datetime="2018-12-09T12:47:49.103Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Semaphore提纲"><a href="#Semaphore提纲" class="headerlink" title="Semaphore提纲"></a>Semaphore提纲</h2><ul>
+<li><a href="#">Semaphore简介</a></li>
+<li><a href="#">Semaphore源码解析</a></li>
+</ul>
+<h2 id="Semaphore简介"><a href="#Semaphore简介" class="headerlink" title="Semaphore简介"></a>Semaphore简介</h2><p>一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。<br>所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。<br>综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿CountDownLatch或者CyclicBarrier都不是问题。<br>或者搞一个限流啥的都不成问题。<br>因为原理都是一样<br>抽象出来其实还是AQS的精髓，多线程访问资源，仅满足特定条件线程可继续执行其余都排队阻塞。</p>
+<h2 id="CyclicBarrier源码解析"><a href="#CyclicBarrier源码解析" class="headerlink" title="CyclicBarrier源码解析"></a>CyclicBarrier源码解析</h2><p>CyclicBarrier要不看一下类图？<br><img src="/holyShit//img/Semaphore.png" alt="avatar"><br>写这个JUC我其实挺烦的每天都写一些重复的东西。。。。。<br>还是那么老套路AQS不想解释类图了，直接说内部实现以及重写了些啥。<br>Semaphore内部维护一个计数器，tryAcquireShared就减少state，tryReleaseShared就增加state。<br>其余的还是老套路进队列等待唤醒</p>
+<ul>
+<li><p><a href="#">手撕源码acquire</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化permits许可个数，别以为一定就要大于0。就不能初始化为0，然后再release几次把permits加上去？</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>&#123;</span><br><span class="line">    sync = <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//接着看一下tryAcquireShared</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nonfairTryAcquireShared(acquires);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">int</span> <span class="title">nonfairTryAcquireShared</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">int</span> available = getState();<span class="comment">//获取AQS中state也就是permits</span></span><br><span class="line">            <span class="keyword">int</span> remaining = available - acquires;<span class="comment">//减少值</span></span><br><span class="line">            <span class="comment">//remaining小于0直接进队列，大于0则CAS替换值然后返回</span></span><br><span class="line">            <span class="keyword">if</span> (remaining &lt; <span class="number">0</span> ||</span><br><span class="line">                compareAndSetState(available, remaining))</span><br><span class="line">                <span class="keyword">return</span> remaining;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><a href="#">手撕源码release</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">int</span> current = getState();</span><br><span class="line">        <span class="keyword">int</span> next = current + releases;<span class="comment">//增加permits值</span></span><br><span class="line">        <span class="keyword">if</span> (next &lt; current) <span class="comment">// overflow</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Maximum permit count exceeded"</span>);</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetState(current, next))<span class="comment">//CAS替换state值。</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//执行成功返回true继续到AQS唤醒因为没有许可被阻塞的线程。</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Semaphore只要想明白就是一个水桶里面放了许可，干任何事情都要从里面拿一个令牌，做完往里面添加一个，<br>没有许可的都去排队。然后具体你要用它做什么，随你开心就好了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.Semaphore/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.CyclicBarrier" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -834,84 +911,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/11/29/mysq2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/mysql/">MySql体系结构和存储引擎</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/mysql/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:29:27.425Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">关键字 关于mysql 体系结构 插件式存储引擎</a></li>
-</ul>
-<h2 id="关于mysql"><a href="#关于mysql" class="headerlink" title="关于mysql"></a>关于mysql</h2><ul>
-<li><a href="#">1995年成立于瑞典并发布第一个版本</a></li>
-<li><a href="#">2008年2月被Sun收购</a></li>
-<li><a href="#">2010年1月被Oracle收购</a></li>
-<li><a href="#">2010年12月发布5.5版本</a></li>
-<li><a href="#">2012年2月发布7.2</a></li>
-<li><a href="#">2013念2月发布5.6</a></li>
-<li><a href="#">2015年10月发布5.7</a></li>
-<li><a href="#">2018年发布8.0</a></li>
-</ul>
-<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p><img src="/holyShit//img/01.jpg" alt="avatar"><br>1.连接池组件<br>2.管理服务和工具组件<br>3.SQL接口组件<br>4.查询分析器组件<br>5.优化器组件<br>6.缓存组件<br>7.插件式存储引擎<br>8.物理文件</p>
-<h2 id="插件式存储引擎"><a href="#插件式存储引擎" class="headerlink" title="插件式存储引擎"></a>插件式存储引擎</h2><p><img src="/holyShit//img/02.png" alt="avatar"><br>上图为特性清单，主要特性有如下几点<br>1.存储容量限制<br>2.事务支持<br>3.锁的粒度<br>4.MVCC支持<br>5.支持的索引<br>6.备份和复制<br>其中主要使用的有如下五种<br>1.MyISAM这种存储引擎是MYSQL最早提供的。它提供高速存储和检索，以及全文搜索的能力。<br>2.InnoDB提供了事务，行级锁和外键约束的功能。是Mysql5.6的默认存储引擎。<br>3.ARCHIVE仅支持select和insert语句，而且不支持索引。常用于日志记录和聚合分析。<br>4.Memory类似于H2的内存数据库，如果数据库重启或者崩溃数据丢失。适用于存储临时数据的临时表。<br>5.TOkuDB大数据存储引擎。</p>
-<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><p>具体的存储引擎详细内容推荐看《高性能MySQL》<br>后面章节具体说一些小套路，解决工作问题应该够了。<br> <a href="#"> GN Al1en</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/mysql/">展开全文 >></a>
         </p>
       
 
