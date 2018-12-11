@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives: 2018/12 | Al1en的博客</title>
+  <title>JUC.ConcurrentHashMap与HashMap | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/2018/12/index.html">
+  <meta name="description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JUC.ConcurrentHashMap与HashMap">
+<meta property="og:url" content="https://github.com/2018/12/11/JUC.Map/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-11T13:45:56.358Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="JUC.ConcurrentHashMap与HashMap">
+<meta name="twitter:description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,295 +142,156 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-JUC.Map" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      JUC.ConcurrentHashMap与HashMap
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/11/JUC.Map/" class="archive-article-date">
+
+        
+        <a href="/holyShit/2018/12/11/JUC.Map/" class="archive-article-date">
   	<time datetime="2018-12-11T13:26:08.803Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/11/JUC.Map/">JUC.ConcurrentHashMap与HashMap</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="提纲"><a href="#提纲" class="headerlink" title="提纲"></a>提纲</h2><ul>
+<li><a href="#">1.7HashMap</a></li>
+<li><a href="#">1.8HashMap</a></li>
+<li><a href="#">1.7ConcurrentHashMap</a></li>
+<li><a href="#">1.8ConcurrentHashMap</a></li>
+</ul>
+<p>这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。<br>为什么要写这一块的东西？<br>首先比较1.7与1.8代码的差异能学习到优秀的设计思想。<br>其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这代码就不感兴趣？就不想看看？<br>从中可以学到什么？<br>1.数据结构，算法。如何使用时间复杂度判断一个算法好坏。<br>2.并发编程<br>3.对于复杂代码的拆解学习方法（讲真1.8的ConcurrentHashMap真的有点复杂。。。尼玛又不是6000行hello world都是大师的精华代码）<br>4.甚至其中还有到了内存伪共享的处理。。。细节处理给跪了。</p>
+<h2 id="1-7HashMap"><a href="#1-7HashMap" class="headerlink" title="1.7HashMap"></a>1.7HashMap</h2>
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/12/11/JUC.Map/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/10/JUC.CAS/" class="archive-article-date">
-  	<time datetime="2018-12-10T13:02:51.978Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-10</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2018/12/10/JUC.CAS/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JUC.CAS及原子类源码</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/10/JUC.CAS/">JUC.CAS及原子类源码</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/09/JUC.Semaphore/" class="archive-article-date">
-  	<time datetime="2018-12-09T12:47:49.103Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/09/JUC.Semaphore/">JUC.Semaphore</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/09/JUC.CyclicBarrier/" class="archive-article-date">
-  	<time datetime="2018-12-09T08:18:06.597Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/09/JUC.CyclicBarrier/">JUC.CyclicBarrier</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/08/JUC.CountDownLatch/" class="archive-article-date">
-  	<time datetime="2018-12-08T15:44:12.066Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/08/JUC.CountDownLatch/">JUC.CountDownLatch</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/" class="archive-article-date">
-  	<time datetime="2018-12-06T13:57:11.771Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">JUC.ReentrantReadWriteLock</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/05/JUC.StampedLock/" class="archive-article-date">
-  	<time datetime="2018-12-05T13:25:16.395Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/05/JUC.StampedLock/">JUC.StampedLock</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/04/JUC.自定义锁/" class="archive-article-date">
-  	<time datetime="2018-12-04T15:29:40.153Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/04/JUC.自定义锁/">JUC.自定义非可重入独占锁</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/04/JUC.ReentrantLock/" class="archive-article-date">
-  	<time datetime="2018-12-04T12:01:05.142Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/04/JUC.ReentrantLock/">JUC.ReentrantLock</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/02/JUC.AQS/" class="archive-article-date">
-  	<time datetime="2018-12-02T13:16:51.946Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/02/JUC.AQS/">JUC.AQS</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/holyShit/archives/2018/12/page/2/">2</a><a class="extend next" rel="next" href="/holyShit/archives/2018/12/page/2/">Next &raquo;</a>
-    </nav>
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "https://github.com/holyShit/2018/12/11/JUC.Map/",
+  owner: 'A1len',
+  repo: 'https://github.com/A1len/holyShit.git',
+  oauth: {
+    client_id: 'ede9cd775d4f1bbf9677',
+    client_secret: 'fe90c4071ce9d393095e8dd12c5b817274f7620c',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -450,8 +315,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
