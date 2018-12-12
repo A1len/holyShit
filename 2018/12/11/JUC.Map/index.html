@@ -18,7 +18,7 @@
 <meta property="og:description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/1.7HashMap.png">
-<meta property="og:updated_time" content="2018-12-12T11:32:00.793Z">
+<meta property="og:updated_time" content="2018-12-12T11:45:44.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.ConcurrentHashMap与HashMap">
 <meta name="twitter:description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
@@ -187,6 +187,7 @@
 </li>
 </ul>
 <p>在上面的注释中已经把流程写清楚了。</p>
+<h2 id="1-8HashMap"><a href="#1-8HashMap" class="headerlink" title="1.8HashMap"></a>1.8HashMap</h2><p>相比较1.7有如下两点的改动<br>1.1.7使用头部插入链表entity性能更好但是容易死循环，1.8使用链表与红黑树使用尾部插入。<br>2.1.7扩容每次都重新计算hash，1.8使用1.7计算hash的公式规律可以快速直接算出来。</p>
 
       
 

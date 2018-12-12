@@ -183,6 +183,7 @@
 </li>
 </ul>
 <p>在上面的注释中已经把流程写清楚了。</p>
+<h2 id="1-8HashMap"><a href="#1-8HashMap" class="headerlink" title="1.8HashMap"></a>1.8HashMap</h2><p>相比较1.7有如下两点的改动<br>1.1.7使用头部插入链表entity性能更好但是容易死循环，1.8使用链表与红黑树使用尾部插入。<br>2.1.7扩容每次都重新计算hash，1.8使用1.7计算hash的公式规律可以快速直接算出来。</p>
 
       
 
