@@ -18,7 +18,7 @@
 <meta property="og:description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/1.7HashMap.png">
-<meta property="og:updated_time" content="2018-12-11T15:52:22.576Z">
+<meta property="og:updated_time" content="2018-12-12T11:32:00.793Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.ConcurrentHashMap与HashMap">
 <meta name="twitter:description" content="提纲 1.7HashMap 1.8HashMap 1.7ConcurrentHashMap 1.8ConcurrentHashMap  这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。为什么要写这一块的东西？首先比较1.7与1.8代码的差异能学习到优秀的设计思想。其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这">
@@ -186,7 +186,7 @@
 <li><a href="#">get源码分析</a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//1.为null的key特殊处理</span></span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> getForNullKey();</span><br><span class="line">    <span class="comment">//2.获取hash值</span></span><br><span class="line">    <span class="keyword">int</span> hash = hash(key.hashCode());</span><br><span class="line">    <span class="comment">//3.获取数组下标的链表，然后遍历链表。</span></span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];</span><br><span class="line">         e != <span class="keyword">null</span>;</span><br><span class="line">         e = e.next) &#123;</span><br><span class="line">        Object k;</span><br><span class="line">        <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</span><br><span class="line">            <span class="keyword">return</span> e.value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>在上面的注释中已经把流程写清楚了。<br>不过我这里有一个想法，为啥没用双链表？用了双链表其实遍历可以从中间开一下然后遍历速度会快一点，也许大师是不想增加代码复杂度。</p>
+<p>在上面的注释中已经把流程写清楚了。</p>
 
       
 
