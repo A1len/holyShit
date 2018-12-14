@@ -19,7 +19,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/b-tree.png">
 <meta property="og:image" content="https://github.com/holyShit//img/mysql.png">
-<meta property="og:updated_time" content="2018-12-14T11:23:17.626Z">
+<meta property="og:updated_time" content="2018-12-14T11:55:02.200Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql索引设计">
 <meta name="twitter:description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。">
@@ -171,9 +171,10 @@
 <li><a href="#">高性能索引策略</a></li>
 </ul>
 <h2 id="索引概述"><a href="#索引概述" class="headerlink" title="索引概述"></a>索引概述</h2><ul>
-<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。<a id="more"></a>
-优点：<br>1.提高检索速度；<br>2.帮助服务器避免排序和临时表<br>3.将随机IO变为顺序IO<br>缺点：<br>1.创建和维护索引需要耗费时间，耗费时间的数量随着数据量的增加而增加；<br>2.索引需要占用物理空间；<br>3.增加、删除和修改数据时，要动态的维护索引，造成数据的维护速度降低了<br>综上可以总结出来<br>1.索引适用于多读少事务的表<br>2.数据唯一性低的表并不合适<br>索引并不是最好的工具，总的来说只有查询性能提高大于索引带来的额外开销的时候才有效。<br>对于特大型的表，可以建立一个元数据信息表，用来查询需要用到的某些特性。</li>
+<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。</li>
 </ul>
+<a id="more"></a>
+<p>优点：<br>1.提高检索速度；<br>2.帮助服务器避免排序和临时表<br>3.将随机IO变为顺序IO<br>缺点：<br>1.创建和维护索引需要耗费时间，耗费时间的数量随着数据量的增加而增加；<br>2.索引需要占用物理空间；<br>3.增加、删除和修改数据时，要动态的维护索引，造成数据的维护速度降低了<br>综上可以总结出来<br>1.索引适用于多读少事务的表<br>2.数据唯一性低的表并不合适<br>索引并不是最好的工具，总的来说只有查询性能提高大于索引带来的额外开销的时候才有效。<br>对于特大型的表，可以建立一个元数据信息表，用来查询需要用到的某些特性。</p>
 <h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><p>索引有很多种类型，不同的存储引擎支持和实现也可能不同。下面我们看下MySql支持的索引类型。</p>
 <ul>
 <li><a href="#">B-Tree</a><br>B-Tree通常意味着所有的值按顺序存储，并且叶子页到根的距离相同。下图展示了B-Tree索引的抽象表示。大致反映了InnoDB索引是如何工作的。<br><img src="/holyShit//img/b-tree.png" alt="avatar"><br>B-Tree可以加快访问数据的速度，因为存储引擎不再需要进行全表扫描取而代之的是从索引的跟节点。<br>可以使用B-Tree的查询类型<br>1.全值匹配<br>全值匹配指的是和索引中的所有列进行匹配<br>2.匹配最左前缀<br>即使用索引的第一列<br>3.匹配前缀<br>匹配某一列的值的开头某一部分<br>4.匹配范围值<br>字段范围内容值，或者精确某一列模糊匹配另外一列。<br>上面的前提都是从索引最左列开始！如果不明白可以再看看B-Tree树结构图</li>
@@ -313,10 +314,10 @@
 var gitment = new Gitment({
   id: "https://github.com/holyShit/2018/12/01/mysq3/",
   owner: 'A1len',
-  repo: 'https://github.com/A1len/holyShit.git',
+  repo: 'https://github.com/A1len/comment.git',
   oauth: {
-    client_id: 'ede9cd775d4f1bbf9677',
-    client_secret: 'fe90c4071ce9d393095e8dd12c5b817274f7620c',
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
   },
 })
 gitment.render('gitment-ctn')
