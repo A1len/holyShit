@@ -18,7 +18,7 @@
 <meta property="og:description" content="CountDownLatch提纲 ReentrantLock简介 CountDownLatch源码解析  CountDownLatch简介CountDownLatch让一个或者多个线程等待其它线程完成操作。实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。首先使用线程池的好处是线程复用，理论上可以减少线程创建时间">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/CountDownLatch.png">
-<meta property="og:updated_time" content="2018-12-08T16:43:44.678Z">
+<meta property="og:updated_time" content="2018-12-14T11:21:48.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.CountDownLatch">
 <meta name="twitter:description" content="CountDownLatch提纲 ReentrantLock简介 CountDownLatch源码解析  CountDownLatch简介CountDownLatch让一个或者多个线程等待其它线程完成操作。实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。首先使用线程池的好处是线程复用，理论上可以减少线程创建时间">
@@ -168,7 +168,7 @@
 <li><a href="#">ReentrantLock简介</a></li>
 <li><a href="#">CountDownLatch源码解析</a></li>
 </ul>
-<h2 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h2><p>CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。<br>首先使用线程池的好处是线程复用，理论上可以减少线程创建时间。其次起到控制程序中线程数并掌控程序全局的做作用。<br>所以一般情况下就只能使用CountDownLatch了，而且相比join来说也更灵活。<br><img src="/holyShit//img/CountDownLatch.png" alt="avatar"><br>从类图可以看出来代码结构非常简单，继承AQS实现Sync内部类。通过重写AQS的共享获取以及释放锁的方法实现。</p>
+<h2 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h2><p>CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。<br>首先使用线程池的好处是线程复用，理论上可以减少线程创建时间。其次起到控制程序中线程数并掌控程序全局的做作用。<br>所以一般情况下就只能使用CountDownLatch了，而且相比join来说也更灵活。<br><a id="more"></a><br><img src="/holyShit//img/CountDownLatch.png" alt="avatar"><br>从类图可以看出来代码结构非常简单，继承AQS实现Sync内部类。通过重写AQS的共享获取以及释放锁的方法实现。</p>
 <h2 id="CountDownLatch源码解析"><a href="#CountDownLatch源码解析" class="headerlink" title="CountDownLatch源码解析"></a>CountDownLatch源码解析</h2><p>直接看源码更直观一点</p>
 <ul>
 <li><p><a href="#">线程等待</a></p>

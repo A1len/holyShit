@@ -10,19 +10,19 @@
   <link rel="dns-prefetch" href="https://github.com">
   <title>MySql索引设计 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。优点：1.提高检索速度；2.帮助服务器避免排序和临时表3.将随机IO变为顺序IO缺点：1.创建和维护索引需要耗费时间，耗费时间的数量随着">
+  <meta name="description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySql索引设计">
 <meta property="og:url" content="https://github.com/2018/12/01/mysq3/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。优点：1.提高检索速度；2.帮助服务器避免排序和临时表3.将随机IO变为顺序IO缺点：1.创建和维护索引需要耗费时间，耗费时间的数量随着">
+<meta property="og:description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/b-tree.png">
 <meta property="og:image" content="https://github.com/holyShit//img/mysql.png">
-<meta property="og:updated_time" content="2018-12-01T12:04:23.182Z">
+<meta property="og:updated_time" content="2018-12-14T11:23:17.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql索引设计">
-<meta name="twitter:description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。优点：1.提高检索速度；2.帮助服务器避免排序和临时表3.将随机IO变为顺序IO缺点：1.创建和维护索引需要耗费时间，耗费时间的数量随着">
+<meta name="twitter:description" content="索引设计提纲 索引概述 索引类型 高性能索引策略  索引概述 什么是索引索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。">
 <meta name="twitter:image" content="https://github.com/holyShit//img/b-tree.png">
   
   
@@ -171,7 +171,8 @@
 <li><a href="#">高性能索引策略</a></li>
 </ul>
 <h2 id="索引概述"><a href="#索引概述" class="headerlink" title="索引概述"></a>索引概述</h2><ul>
-<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。<br>优点：<br>1.提高检索速度；<br>2.帮助服务器避免排序和临时表<br>3.将随机IO变为顺序IO<br>缺点：<br>1.创建和维护索引需要耗费时间，耗费时间的数量随着数据量的增加而增加；<br>2.索引需要占用物理空间；<br>3.增加、删除和修改数据时，要动态的维护索引，造成数据的维护速度降低了<br>综上可以总结出来<br>1.索引适用于多读少事务的表<br>2.数据唯一性低的表并不合适<br>索引并不是最好的工具，总的来说只有查询性能提高大于索引带来的额外开销的时候才有效。<br>对于特大型的表，可以建立一个元数据信息表，用来查询需要用到的某些特性。</li>
+<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。<a id="more"></a>
+优点：<br>1.提高检索速度；<br>2.帮助服务器避免排序和临时表<br>3.将随机IO变为顺序IO<br>缺点：<br>1.创建和维护索引需要耗费时间，耗费时间的数量随着数据量的增加而增加；<br>2.索引需要占用物理空间；<br>3.增加、删除和修改数据时，要动态的维护索引，造成数据的维护速度降低了<br>综上可以总结出来<br>1.索引适用于多读少事务的表<br>2.数据唯一性低的表并不合适<br>索引并不是最好的工具，总的来说只有查询性能提高大于索引带来的额外开销的时候才有效。<br>对于特大型的表，可以建立一个元数据信息表，用来查询需要用到的某些特性。</li>
 </ul>
 <h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h2><p>索引有很多种类型，不同的存储引擎支持和实现也可能不同。下面我们看下MySql支持的索引类型。</p>
 <ul>

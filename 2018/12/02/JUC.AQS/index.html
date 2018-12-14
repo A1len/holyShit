@@ -10,18 +10,18 @@
   <link rel="dns-prefetch" href="https://github.com">
   <title>JUC.AQS | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。AQS提供资源">
+  <meta name="description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC.AQS">
 <meta property="og:url" content="https://github.com/2018/12/02/JUC.AQS/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。AQS提供资源">
+<meta property="og:description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/aqs_uml.png">
-<meta property="og:updated_time" content="2018-12-03T14:39:46.408Z">
+<meta property="og:updated_time" content="2018-12-14T11:22:05.479Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.AQS">
-<meta name="twitter:description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。AQS提供资源">
+<meta name="twitter:description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图">
 <meta name="twitter:image" content="https://github.com/holyShit//img/aqs_uml.png">
   
   
@@ -170,7 +170,7 @@
 <li><a href="#">获取与释放锁</a></li>
 <li><a href="#">ConditionObject</a></li>
 </ul>
-<h2 id="AQS简介"><a href="#AQS简介" class="headerlink" title="AQS简介"></a>AQS简介</h2><p>AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图<br><img src="/holyShit//img/aqs_uml.png" alt="avatar"><br>由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。<br>AQS提供资源独占和共享两种方式，两种方式通过内部的state信息描述线程状态实现独占以及共享。<br>Node节点内部的SHARED用来标记当前线程获取共享资源被阻塞挂起放入AQS队列。<br>EXCLUSIVE用来标记线程获取独占资源被挂起放入AQS队列。<br>waitStatus记录当前线程的等待状态，可以为CANCELLED被取消，SIGNAL线程需要被唤醒，CONDITION线程在条件队列里面等待，PROPAGATE释放共享资源需要通知其它线程节点。</p>
+<h2 id="AQS简介"><a href="#AQS简介" class="headerlink" title="AQS简介"></a>AQS简介</h2><p>AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图<br><a id="more"></a><br><img src="/holyShit//img/aqs_uml.png" alt="avatar"><br>由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。<br>AQS提供资源独占和共享两种方式，两种方式通过内部的state信息描述线程状态实现独占以及共享。<br>Node节点内部的SHARED用来标记当前线程获取共享资源被阻塞挂起放入AQS队列。<br>EXCLUSIVE用来标记线程获取独占资源被挂起放入AQS队列。<br>waitStatus记录当前线程的等待状态，可以为CANCELLED被取消，SIGNAL线程需要被唤醒，CONDITION线程在条件队列里面等待，PROPAGATE释放共享资源需要通知其它线程节点。</p>
 <h2 id="依赖工具类LockSupport"><a href="#依赖工具类LockSupport" class="headerlink" title="依赖工具类LockSupport"></a>依赖工具类LockSupport</h2><p>LockSupport是一个工具类，它的主要作用是挂起和唤醒线程，该工具类是创建锁和其它同步类的基础。<br>LockSupport类是使用Unsafe类实现的，主要方法有park与unpark(Thread thread)，也提供定时的方法。<br>划重点啦，每个使用它的线程都会关联一个许可证，在默认情况下调用是不持有许可证的！<br>为什么说上面这一段因为当调用park方法的线程已经拿到了与LockSupport关联的许可证，则调用会马上返回不会阻塞。否则会被阻塞挂起，相比较CAS的阻塞要性能高一点。</p>
 <h2 id="获取与释放锁"><a href="#获取与释放锁" class="headerlink" title="获取与释放锁"></a>获取与释放锁</h2><ul>
 <li><a href="#">子类实现AQS方法</a><br>1.tryAcquire(int arg)尝试获取独占锁<br>2.tryRelease(int arg)释放独占锁<br>3.tryAcquireShared(int arg) 尝试获取共享锁<br>4.tryReleaseShared(int arg)释放共享锁</li>

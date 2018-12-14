@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="CyclicBarrier提纲 CyclicBarrier简介 CyclicBarrier源码解析  CyclicBarrier简介如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。那么CyclicBarrier就是多个线程之间互相等待。具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-09T08:46:10.612Z">
+<meta property="og:updated_time" content="2018-12-14T11:22:22.226Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.CyclicBarrier">
 <meta name="twitter:description" content="CyclicBarrier提纲 CyclicBarrier简介 CyclicBarrier源码解析  CyclicBarrier简介如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。那么CyclicBarrier就是多个线程之间互相等待。具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继">
@@ -166,7 +166,7 @@
 <li><a href="#">CyclicBarrier简介</a></li>
 <li><a href="#">CyclicBarrier源码解析</a></li>
 </ul>
-<h2 id="CyclicBarrier简介"><a href="#CyclicBarrier简介" class="headerlink" title="CyclicBarrier简介"></a>CyclicBarrier简介</h2><p>如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>那么CyclicBarrier就是多个线程之间互相等待。<br>具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继续开始。<br>这里出现了两个阶段的任务执行，如果使用CountDownLatch完全没法实现。<br>但是根据存在即合理的原则，CountDownLatch也有它的好处。<br>简单任务多个线程执行结束没有后续处理只需要一个或多个等待线程处理还是用CountDownLatch吧。毕竟不用放入阻塞队列占用线程了。该干嘛干嘛去<br>具体怎么用还是根据实际业务场景分析来使用没有绝对的方案。</p>
+<h2 id="CyclicBarrier简介"><a href="#CyclicBarrier简介" class="headerlink" title="CyclicBarrier简介"></a>CyclicBarrier简介</h2><p>如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>那么CyclicBarrier就是多个线程之间互相等待。<br>具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继续开始。<br>这里出现了两个阶段的任务执行，如果使用CountDownLatch完全没法实现。<br>但是根据存在即合理的原则，CountDownLatch也有它的好处。<br>简单任务多个线程执行结束没有后续处理只需要一个或多个等待线程处理还是用CountDownLatch吧。毕竟不用放入阻塞队列占用线程了。该干嘛干嘛去<br>具体怎么用还是根据实际业务场景分析来使用没有绝对的方案。<br><a id="more"></a></p>
 <h2 id="CyclicBarrier源码解析"><a href="#CyclicBarrier源码解析" class="headerlink" title="CyclicBarrier源码解析"></a>CyclicBarrier源码解析</h2><p>CyclicBarrier内部使用的是ReentrantLock加Condition实现，通过构造函数初始化parties成员个数。<br>下面看具体的源码比较通俗易懂。</p>
 <ul>
 <li><p><a href="#">线程等待</a></p>

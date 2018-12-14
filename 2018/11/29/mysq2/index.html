@@ -10,17 +10,17 @@
   <link rel="dns-prefetch" href="https://github.com">
   <title>MySql对象设计 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。  性能性能是衡量一个系统的关键因素，在设">
+  <meta name="description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySql对象设计">
 <meta property="og:url" content="https://github.com/2018/11/29/mysq2/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。  性能性能是衡量一个系统的关键因素，在设">
+<meta property="og:description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-05T15:46:49.072Z">
+<meta property="og:updated_time" content="2018-12-14T11:23:10.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql对象设计">
-<meta name="twitter:description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。  性能性能是衡量一个系统的关键因素，在设">
+<meta name="twitter:description" content="对象设计提纲 设计原则说明 范式化与逆范式的选择 表容量设计和数据切分 表设计 字段设计  设计原则说明 完整性1.数据库完整性是指数据库中数据的正确性和相容性2.数据库完整性是由完整性约束来保证的3.数据库完整性约束通过DBMS或者应用程序来实现4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -171,6 +171,7 @@
 </ul>
 <h2 id="设计原则说明"><a href="#设计原则说明" class="headerlink" title="设计原则说明"></a>设计原则说明</h2><ul>
 <li><p><a href="#">完整性</a><br>1.数据库完整性是指数据库中数据的正确性和相容性<br>2.数据库完整性是由完整性约束来保证的<br>3.数据库完整性约束通过DBMS或者应用程序来实现<br>4.博主内部系统全用程序来实现完整性，禁止使用外键和触发器。因为外键影响数据库的事务操作性能，触发器难以维护。</p>
+<a id="more"></a>
 </li>
 <li><p><a href="#">性能</a><br>性能是衡量一个系统的关键因素，在设计阶段就在性能方面该多关注，尽量减少后期烦恼。<br>1.设置合理的字段类型和长度<br>2.选择高效的主键和索引<br>3.适度冗余，减少JOIN查询。多用短连接查询替代长SQL查询，因为短连接多次查询通过程序合并结果可适当减轻数据库压力。<br>4.精简表结构</p>
 </li>

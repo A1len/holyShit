@@ -18,7 +18,7 @@
 <meta property="og:description" content="ReentrantReadWriteLock提纲 ReentrantReadWriteLock简介 原理剖析  ReentrantReadWriteLock简介ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。但是也存在一个问题那就">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/ReentrantReadWriteLock.png">
-<meta property="og:updated_time" content="2018-12-06T15:44:28.247Z">
+<meta property="og:updated_time" content="2018-12-14T11:22:40.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.ReentrantReadWriteLock">
 <meta name="twitter:description" content="ReentrantReadWriteLock提纲 ReentrantReadWriteLock简介 原理剖析  ReentrantReadWriteLock简介ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。但是也存在一个问题那就">
@@ -168,7 +168,7 @@
 <li><a href="#">ReentrantReadWriteLock简介</a></li>
 <li><a href="#">原理剖析</a></li>
 </ul>
-<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br>首先看一下类结构图<br><img src="/holyShit//img/ReentrantReadWriteLock.png" alt="avatar"><br>从类图中可以看出ReentrantReadWriteLock实现了以下锁<br>1.写锁（独占锁，可以存在非公平与公平两种锁方式）<br>2.读锁（共享锁，可以存在非公平与公平两种锁方式）<br>上述就是ReentrantReadWriteLock的大致描述</p>
+<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br><a id="more"></a><br>首先看一下类结构图<br><img src="/holyShit//img/ReentrantReadWriteLock.png" alt="avatar"><br>从类图中可以看出ReentrantReadWriteLock实现了以下锁<br>1.写锁（独占锁，可以存在非公平与公平两种锁方式）<br>2.读锁（共享锁，可以存在非公平与公平两种锁方式）<br>上述就是ReentrantReadWriteLock的大致描述</p>
 <h2 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h2><p>其实通过上面咱们应该会有以下几个疑问<br>1.内部如何维护的读写锁分离<br>2.写锁如何获取以及释放<br>3.读锁如何获取以及释放<br>4.当有写锁或者读锁存在，又有线程获取写锁或者读锁怎么处理。<br>带着上面四个疑问咱们开始看源码。</p>
 <ul>
 <li><p><a href="#">读写分离如何维护</a><br>ReentrantReadWriteLock很明显也是通过AQS实现，内部也是通过state维护锁状态。<br>看源码有下面这一段，高16位表示读锁，低16位表示写锁。读锁总数加重入数65535和写锁可重入最多次数是65535次。<br>这里真这么多次读锁state的值早超了int最大值。。。。不过影响不大。</p>
