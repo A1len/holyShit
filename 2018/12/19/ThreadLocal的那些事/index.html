@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives | Al1en的博客</title>
+  <title>ThreadLocal的那些事 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/page/2/index.html">
+  <meta name="description" content="ThreadLocal提纲 ThreadLocal简介 ThreadLocal源码解析 ThreadLocal与InheritableThreadLocal的坑  最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。但是这部分内容其实水很深，怕没写好所以又在看书回顾。所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreadLocal的那些事">
+<meta property="og:url" content="https://github.com/2018/12/19/ThreadLocal的那些事/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="ThreadLocal提纲 ThreadLocal简介 ThreadLocal源码解析 ThreadLocal与InheritableThreadLocal的坑  最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。但是这部分内容其实水很深，怕没写好所以又在看书回顾。所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-19T16:28:38.564Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="ThreadLocal的那些事">
+<meta name="twitter:description" content="ThreadLocal提纲 ThreadLocal简介 ThreadLocal源码解析 ThreadLocal与InheritableThreadLocal的坑  最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。但是这部分内容其实水很深，怕没写好所以又在看书回顾。所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,268 +142,167 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-ThreadLocal的那些事" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ThreadLocal的那些事
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/19/ThreadLocal的那些事/" class="archive-article-date">
+  	<time datetime="2018-12-19T15:32:30.861Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="ThreadLocal提纲"><a href="#ThreadLocal提纲" class="headerlink" title="ThreadLocal提纲"></a>ThreadLocal提纲</h2><ul>
+<li><a href="#">ThreadLocal简介</a></li>
+<li><a href="#">ThreadLocal源码解析</a></li>
+<li><a href="#">ThreadLocal与InheritableThreadLocal的坑</a></li>
+</ul>
+<p>最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。<br>但是这部分内容其实水很深，怕没写好所以又在看书回顾。<br>所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块了。</p>
+<h2 id="ThreadLocal简介"><a href="#ThreadLocal简介" class="headerlink" title="ThreadLocal简介"></a>ThreadLocal简介</h2><p>ThreadLocal线程上下文，怎么说了就是每个线程都有一份自己的map.里面存放着当前线程存入的key value。<br>InheritableThreadLocal是父线程会将数据拷贝一份给子线程的ThreadLocal(这里有两个坑后面说)<br><a id="more"></a></p>
+<h2 id="ThreadLocal源码解析"><a href="#ThreadLocal源码解析" class="headerlink" title="ThreadLocal源码解析"></a>ThreadLocal源码解析</h2><p>ThreadLocal的源码还是非常简单的，看的时候记得配合Thread一起看。下面咱们看下源码</p>
+<ul>
+<li><a href="#">set源码</a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();<span class="comment">//获取当前线程</span></span><br><span class="line">    ThreadLocalMap map = getMap(t);<span class="comment">//获取线程内部map</span></span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">        map.set(<span class="keyword">this</span>, value);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        createMap(t, value);<span class="comment">//为null新建一个map</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t.threadLocals;<span class="comment">//获取map</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">	t.threadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);<span class="comment">//新建一个map</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>看是不是很简单其实就是一个线程独享的一份map数据嘛，唯一的这个map用了一个WeakReference关联ThreadLocal，当GC的时候能回收就回收掉数据。<br>但是也会存在一个坑，因为value的数据不会清空只是key为null了。不过内部也实现了清空value的方法expungeStaleEntry。</p>
+<ul>
+<li><a href="#">get源码</a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t);<span class="comment">//获取map</span></span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>) &#123;</span><br><span class="line">        ThreadLocalMap.Entry e = map.getEntry(<span class="keyword">this</span>);<span class="comment">//拿值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">            T result = (T)e.value;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> setInitialValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="ThreadLocal与InheritableThreadLocal的坑"><a href="#ThreadLocal与InheritableThreadLocal的坑" class="headerlink" title="ThreadLocal与InheritableThreadLocal的坑"></a>ThreadLocal与InheritableThreadLocal的坑</h2><p>ThreadLocal的坑<br>1.内存泄漏，虽然key会清空但是value不会。所以用完了记得remove<br>2.线程池会线程复用，导致数据脏读。如果没有set方法的时候，用完记得remove。<br>InheritableThreadLocal是在new Thread的时候会拷贝一份数据到子线程中。<br>所以很容易推理出下面几个问题<br>1.线程池的使用，导致数据只能拷贝一次。因为你也就只新建一次Thread，这个东西很多书上把它吹上天。<br>有时候我是选择拒绝的。<br>2.父线程修改了数据，子线程是看不到的。因为子线程就是一份复制的数据。<br>所以如果你真的要用，一定是父线程初始化完数据之后再也不会改变数据的情况下使用。<br>拷贝的方法在Thread的构造方法里面，有兴趣看一下。这个东西不实用，所以不打算多写。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (parent.inheritableThreadLocals != <span class="keyword">null</span>)</span><br><span class="line">         <span class="keyword">this</span>.inheritableThreadLocals =</span><br><span class="line">             ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/04/JUC.ReentrantLock/" class="archive-article-date">
-  	<time datetime="2018-12-04T12:01:05.142Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/04/JUC.ReentrantLock/">JUC.ReentrantLock</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/12/19/ThreadLocal的那些事/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/02/JUC.AQS/" class="archive-article-date">
-  	<time datetime="2018-12-02T13:16:51.946Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-02</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2018/12/15/JUC.LRBTree/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">红黑树原理</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/02/JUC.AQS/">JUC.AQS</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/01/mysq3/" class="archive-article-date">
-  	<time datetime="2018-12-01T04:15:24.245Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/01/mysq3/">MySql索引设计</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/mysq2/" class="archive-article-date">
-  	<time datetime="2018-11-29T11:45:43.805Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/mysq2/">MySql对象设计</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/mysql/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:29:27.425Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/mysql/">MySql体系结构和存储引擎</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/并发编程/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.137Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/并发编程/">并发编程线程通信（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/startBlog/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/startBlog/">一直想记录点什么</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/holyShit/archives/">&laquo; Prev</a><a class="page-number" href="/holyShit/archives/">1</a><span class="page-number current">2</span>
-    </nav>
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'ThreadLocal的那些事',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -423,8 +326,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
