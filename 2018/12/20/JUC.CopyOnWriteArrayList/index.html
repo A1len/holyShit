@@ -10,18 +10,18 @@
   <link rel="dns-prefetch" href="https://github.com">
   <title>JUC.CopyOnWriteArrayList | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="CopyOnWriteArrayList提纲 CopyOnWriteArrayList简介 CopyOnWriteArrayList源码解读">
+  <meta name="description" content="CopyOnWriteArrayList提纲 CopyOnWriteArrayList简介 CopyOnWriteArrayList源码解读  CopyOnWriteArrayList简介CopyOnWriteArrayList是一个适用于都多写少的线程安全集合类，但是也需要明白的是读写分离的集合都会存在弱一致性。说人话就是会有脏读的情况出现呀。不过总体来说是一个不错的工具类，今天孤尽老师说到有人">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC.CopyOnWriteArrayList">
 <meta property="og:url" content="https://github.com/2018/12/20/JUC.CopyOnWriteArrayList/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="CopyOnWriteArrayList提纲 CopyOnWriteArrayList简介 CopyOnWriteArrayList源码解读">
+<meta property="og:description" content="CopyOnWriteArrayList提纲 CopyOnWriteArrayList简介 CopyOnWriteArrayList源码解读  CopyOnWriteArrayList简介CopyOnWriteArrayList是一个适用于都多写少的线程安全集合类，但是也需要明白的是读写分离的集合都会存在弱一致性。说人话就是会有脏读的情况出现呀。不过总体来说是一个不错的工具类，今天孤尽老师说到有人">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/CopyOnWriteArrayList.png">
-<meta property="og:updated_time" content="2018-12-20T15:11:04.383Z">
+<meta property="og:updated_time" content="2018-12-20T15:12:32.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.CopyOnWriteArrayList">
-<meta name="twitter:description" content="CopyOnWriteArrayList提纲 CopyOnWriteArrayList简介 CopyOnWriteArrayList源码解读">
+<meta name="twitter:description" content="CopyOnWriteArrayList提纲 CopyOnWriteArrayList简介 CopyOnWriteArrayList源码解读  CopyOnWriteArrayList简介CopyOnWriteArrayList是一个适用于都多写少的线程安全集合类，但是也需要明白的是读写分离的集合都会存在弱一致性。说人话就是会有脏读的情况出现呀。不过总体来说是一个不错的工具类，今天孤尽老师说到有人">
 <meta name="twitter:image" content="https://github.com/holyShit//img/CopyOnWriteArrayList.png">
   
   
@@ -168,8 +168,7 @@
 <li><a href="#">CopyOnWriteArrayList简介</a></li>
 <li><a href="#">CopyOnWriteArrayList源码解读</a></li>
 </ul>
-<a id="more"></a>
-<h2 id="CopyOnWriteArrayList简介"><a href="#CopyOnWriteArrayList简介" class="headerlink" title="CopyOnWriteArrayList简介"></a>CopyOnWriteArrayList简介</h2><p>CopyOnWriteArrayList是一个适用于都多写少的线程安全集合类，但是也需要明白的是读写分离的集合都会存在弱一致性。说人话就是会有脏读的情况出现呀。<br>不过总体来说是一个不错的工具类，今天孤尽老师说到有人用这个类来当写多读少的用。<br>我其实想了一下为什么这哥们会这么玩。应该是有两种情况<br>1.真不明白原理<br>2.因为不会用的别方式实现线程安全的集合，然后该集合又正好实现了线程安全的写。所以就用了。。。。当万精油用咯<br><!-- more --></p>
+<h2 id="CopyOnWriteArrayList简介"><a href="#CopyOnWriteArrayList简介" class="headerlink" title="CopyOnWriteArrayList简介"></a>CopyOnWriteArrayList简介</h2><p>CopyOnWriteArrayList是一个适用于都多写少的线程安全集合类，但是也需要明白的是读写分离的集合都会存在弱一致性。说人话就是会有脏读的情况出现呀。<br>不过总体来说是一个不错的工具类，今天孤尽老师说到有人用这个类来当写多读少的用。<br>我其实想了一下为什么这哥们会这么玩。应该是有两种情况<br>1.真不明白原理<br>2.因为不会用的别方式实现线程安全的集合，然后该集合又正好实现了线程安全的写。所以就用了。。。。当万精油用咯<br><a id="more"></a></p>
 <h2 id="CopyOnWriteArrayList源码解读"><a href="#CopyOnWriteArrayList源码解读" class="headerlink" title="CopyOnWriteArrayList源码解读"></a>CopyOnWriteArrayList源码解读</h2><p>先看下类图<br><img src="/holyShit//img/CopyOnWriteArrayList.png" alt="avatar"><br>很简单的常规操作，数据结构是数组。内部实现一个迭代器，然后搞一个COWSublist用来获取集合某一部分数据，在ArrayList里面sublist有的坑这里照样有。<br>我猜想sublist方法为什么不拷贝一份快照，而是直接用原来的集合然后做一个比较是否改变。<br>看了一下ArrayList的注释有下面这段话</p>
 <ul>
 <li><p>This method eliminates the need for explicit range operations (of</p></li>
