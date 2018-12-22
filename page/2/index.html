@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.StampedLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/05/JUC.StampedLock/">JUC.StampedLock</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/05/JUC.StampedLock/" class="archive-article-date">
+  	<time datetime="2018-12-05T13:25:16.395Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="StampedLock提纲"><a href="#StampedLock提纲" class="headerlink" title="StampedLock提纲"></a>StampedLock提纲</h2><ul>
+<li><a href="#">StampedLock简介</a></li>
+<li><a href="#">原理剖析</a></li>
+</ul>
+<h2 id="StampedLock简介"><a href="#StampedLock简介" class="headerlink" title="StampedLock简介"></a>StampedLock简介</h2><p>首先大方向看下StampedLock类图<br><img src="/holyShit//img/StampedLock.png" alt="avatar"><br>从图中可以看出这个锁貌似有点屌屌的有读锁写锁读写锁。这个锁看上去很厉害，其实这个锁不像其它锁那么安全使用，存在很高的风险性。<br>听说该锁设计之初是为了作为工具类开发其它线程安全组件，用好了提升性能。没用好会发生死锁，CPU飙升耗死资源的情况，以及读写锁脏数据<br>为什么出现死锁，如果记得我前一章所写的非可重入锁就知道了。这个大哥也是非可重入的，哈哈哈~<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/05/JUC.StampedLock/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/05/JUC.StampedLock/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.自定义锁" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -781,73 +850,9 @@
 
 
   
-    <article id="post-startBlog" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/startBlog/">一直想记录点什么</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/startBlog/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这几天生病一直在想是不是该记录点什么。<br>病了就天天想，会不会就这么走了。<br>《冰与火之歌》里，史塔克家族家训“凛冬将至”的逼格何在？<br>最终达成了谜一般的结论，它跟“中华民族到了最危险的时候”的意境是一样的…<br>其实不无道理。起风了，唯努力生存。<br>希望每个人都能在这个时节照顾好自己。</p>
-<p> <a href="#"> Winter creeps on</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/startBlog/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/holyShit/">&laquo; Prev</a><a class="page-number" href="/holyShit/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/holyShit/">&laquo; Prev</a><a class="page-number" href="/holyShit/">1</a><span class="page-number current">2</span><a class="page-number" href="/holyShit/page/3/">3</a><a class="extend next" rel="next" href="/holyShit/page/3/">Next &raquo;</a>
     </nav>
   
 
