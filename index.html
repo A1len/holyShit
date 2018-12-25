@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java.Memory.Model" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/26/Java.Memory.Model/">Java.Memory.Model</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/26/Java.Memory.Model/" class="archive-article-date">
+  	<time datetime="2018-12-25T16:29:00.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="JMM提纲"><a href="#JMM提纲" class="headerlink" title="JMM提纲"></a>JMM提纲</h2><ul>
+<li><a href="#">JMM简介</a></li>
+<li><a href="#">JMM随便瞎说</a></li>
+</ul>
+<h2 id="JMM简介"><a href="#JMM简介" class="headerlink" title="JMM简介"></a>JMM简介</h2><p>在Java存储器模型指定的Java虚拟机的计算机的存储器(RAM)。Java虚拟机是计算机模型，这个模型当然包含内存模型-JMM。<br>理解JMM模型非常重要（如果你想正确行为的并发程序设计。在Java存储器模型指定如何和何时不同的线程可能会看到值写入变量的其他线程共享以及如何共享变量。<br>原始Java内存模型的不足，因此在Java内存模型进行了修正Java1.5。此版本的Java内存模型是以Java8。<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/26/Java.Memory.Model/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/26/Java.Memory.Model/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.微服务" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -730,75 +799,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/08/JUC.CountDownLatch/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.ReentrantReadWriteLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">JUC.ReentrantReadWriteLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/" class="archive-article-date">
-  	<time datetime="2018-12-06T13:57:11.771Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="ReentrantReadWriteLock提纲"><a href="#ReentrantReadWriteLock提纲" class="headerlink" title="ReentrantReadWriteLock提纲"></a>ReentrantReadWriteLock提纲</h2><ul>
-<li><a href="#">ReentrantReadWriteLock简介</a></li>
-<li><a href="#">原理剖析</a></li>
-</ul>
-<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">展开全文 >></a>
         </p>
       
 

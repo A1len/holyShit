@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.ReentrantReadWriteLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">JUC.ReentrantReadWriteLock</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/" class="archive-article-date">
+  	<time datetime="2018-12-06T13:57:11.771Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="ReentrantReadWriteLock提纲"><a href="#ReentrantReadWriteLock提纲" class="headerlink" title="ReentrantReadWriteLock提纲"></a>ReentrantReadWriteLock提纲</h2><ul>
+<li><a href="#">ReentrantReadWriteLock简介</a></li>
+<li><a href="#">原理剖析</a></li>
+</ul>
+<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/06/JUC.ReentrantReadWriteLock/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.StampedLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -751,76 +820,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/11/29/并发编程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-String StringBuilder StringBuffer" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">String是final类线程安全，简单拼接效率高于StringBuffer</a></li>
-<li><a href="#">StringBuffer线程安全,效率StringBuilder</a></li>
-<li><a href="#">StringBuilder线程安全，效率</a></li>
-</ul>
-<h2 id="线程安全编码测试"><a href="#线程安全编码测试" class="headerlink" title="线程安全编码测试"></a>线程安全编码测试</h2><p>测试StringBuilder和StringBuffer的线程安全性，那就分别new一个StringBuilder和StringBuffer作为共享变量，传递到多个线程进行操作<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">展开全文 >></a>
         </p>
       
 
