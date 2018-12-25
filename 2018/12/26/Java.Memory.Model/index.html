@@ -19,7 +19,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/JMM.png">
 <meta property="og:image" content="https://github.com/holyShit//img/Heap.png">
-<meta property="og:updated_time" content="2018-12-25T17:17:01.557Z">
+<meta property="og:updated_time" content="2018-12-25T17:18:29.511Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java.Memory.Model">
 <meta name="twitter:description" content="JMM提纲 JMM简介 JMM随便瞎说  JMM简介在Java存储器模型指定的Java虚拟机的计算机的存储器(RAM)。Java虚拟机是计算机模型，这个模型当然包含内存模型-JMM。理解JMM模型非常重要（如果你想正确行为的并发程序设计。在Java存储器模型指定如何和何时不同的线程可能会看到值写入变量的其他线程共享以及如何共享变量。原始Java内存模型的不足，因此在Java内存模型进行了修正Jav">
@@ -169,7 +169,7 @@
 <li><a href="#">JMM简介</a></li>
 <li><a href="#">JMM随便瞎说</a></li>
 </ul>
-<h2 id="JMM简介"><a href="#JMM简介" class="headerlink" title="JMM简介"></a>JMM简介</h2><p>在Java存储器模型指定的Java虚拟机的计算机的存储器(RAM)。Java虚拟机是计算机模型，这个模型当然包含内存模型-JMM。<br>理解JMM模型非常重要（如果你想正确行为的并发程序设计。在Java存储器模型指定如何和何时不同的线程可能会看到值写入变量的其他线程共享以及如何共享变量。<br>原始Java内存模型的不足，因此在Java内存模型进行了修正Java1.5。此版本的Java内存模型是以Java8。<br><a id="more"></a><br><img src="/holyShit//img/JMM.png" alt="avatar"><br>我和你说上面这张图非常的牛逼，如果能理解上面图中的每一个细节过程。那么JMM应该就算是了解了。<br>上面图我简单先说一下<br>首先编译javac然后进入到java虚拟机这一块先不管后面展开来说<br>接着是类加载分为加载 校验 准备 解析 初始化 使用 卸载。<br>也就是绿色的那一块三大过程 加载 连接 初始化，其中没有体现使用和卸载<br>加载用的双亲委派模型展示，但是tomcat OSGI 这些都是破坏双亲委派模型的。为什么要破坏？<br>很简单因为需要类隔离，实现模块化开发。<br>说直接点就是同一个名字的class我有N个版本要用，双亲委派实现不了。<br>模块化开发我现在还没在项目中用到，因为感觉用微服务拆解的差不多了。<br>而且我们这边不差这点服务器资源的浪费，主要还是因为也用了docker资源浪费也不多。<br>红色部分是内存模型<br>非为主要下面几块<br>1.栈（线程独享）<br>2.堆<br>3.方法区<br>4.计数器（线程独享）<br>5.本地方法栈（线程独享）<br>后面具体开一篇写类加载和这几块内存区具体干嘛,提一下这里只有计数器不会出现OOM。<br>为什么程序计数器不会出现？<br>线程创建的时候一同创建程序计数器，以后程序计数器只会修改偏移地址不会变大变小。so 压根不会出现OOM。<br>咱们有一个设置线程栈大小的参数，默认大小是1M。<br>随意可以认为一个线程默认大小就是1M，但可以肯定是绝对是大于1M的。因为再加上计数器占用的内存大小，不过一般可以忽略不计。</p>
+<h2 id="JMM简介"><a href="#JMM简介" class="headerlink" title="JMM简介"></a>JMM简介</h2><p>在Java存储器模型指定的Java虚拟机的计算机的存储器(RAM)。Java虚拟机是计算机模型，这个模型当然包含内存模型-JMM。<br>理解JMM模型非常重要（如果你想正确行为的并发程序设计。在Java存储器模型指定如何和何时不同的线程可能会看到值写入变量的其他线程共享以及如何共享变量。<br>原始Java内存模型的不足，因此在Java内存模型进行了修正Java1.5。此版本的Java内存模型是以Java8。<br><a id="more"></a><br><img src="/holyShit//img/JMM.png" alt="avatar"><br>我和你说上面这张图非常的牛逼，如果能理解上面图中的每一个细节过程。那么JMM应该就算是了解了。<br>上面图我简单先说一下<br>首先编译javac然后进入到java虚拟机这一块先不管后面展开来说<br>接着是类加载分为加载 校验 准备 解析 初始化 使用 卸载。<br>也就是绿色的那一块三大过程 加载 连接 初始化，其中没有体现使用和卸载<br>加载用的双亲委派模型展示，但是tomcat OSGI 这些都是破坏双亲委派模型的。为什么要破坏？<br>很简单因为需要类隔离，实现模块化开发。<br>说直接点就是同一个名字的class我有N个版本要用，双亲委派实现不了。<br>模块化开发我现在还没在项目中用到，因为感觉用微服务拆解的差不多了。<br>而且我们这边不差这点服务器资源的浪费，主要还是因为也用了docker资源浪费也不多。<br>红色部分是内存模型<br>非为主要下面几块<br>1.栈（线程独享）<br>2.堆<br>3.方法区<br>4.计数器（线程独享）<br>5.本地方法栈（线程独享）<br>后面具体开一篇写类加载和这几块内存区具体干嘛,提一下这里只有计数器不会出现OOM。<br>为什么程序计数器不会出现？<br>线程创建的时候一同创建程序计数器，以后程序计数器只会修改偏移地址不会变大变小。so 压根不会出现OOM。<br>咱们有一个设置线程栈大小的参数，默认大小是1M。<br>所以可以认为一个线程默认大小就是1M，但可以肯定是绝对是大于1M的。因为再加上计数器占用的内存大小，不过一般可以忽略不计。</p>
 <h2 id="JMM随便瞎说"><a href="#JMM随便瞎说" class="headerlink" title="JMM随便瞎说"></a>JMM随便瞎说</h2><p>看下面一张图<br><img src="/holyShit//img/Heap.png" alt="avatar"><br>这是堆的一张内存分布图，也是垃圾回收的地方。<br>这块地方也是调整系统性能的主要地方，尽量减少Full GC<br>从上面这一张图可以展开垃圾回收来说，后面具体说。</p>
 
       
