@@ -8,21 +8,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>JUC.AQS | Al1en的博客</title>
+  <title>JMM详解 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图">
+  <meta name="description" content="JMM提纲 JMM组成">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JUC.AQS">
-<meta property="og:url" content="https://github.com/2018/12/26/java-memory-model/index.html">
+<meta property="og:title" content="JMM详解">
+<meta property="og:url" content="https://github.com/2018/12/26/JMM详解/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图">
+<meta property="og:description" content="JMM提纲 JMM组成">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://github.com/holyShit//img/aqs_uml.png">
-<meta property="og:updated_time" content="2018-12-26T14:21:02.901Z">
+<meta property="og:image" content="https://github.com/holyShit//img/NonHeap.png">
+<meta property="og:image" content="https://github.com/holyShit//img/Stack-Memory.png">
+<meta property="og:image" content="https://github.com/holyShit//img/Heap.png">
+<meta property="og:updated_time" content="2018-12-26T16:18:35.491Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JUC.AQS">
-<meta name="twitter:description" content="AQS提纲 AQS简介 依赖工具类LockSupport 获取与释放锁 ConditionObject  AQS简介AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图">
-<meta name="twitter:image" content="https://github.com/holyShit//img/aqs_uml.png">
+<meta name="twitter:title" content="JMM详解">
+<meta name="twitter:description" content="JMM提纲 JMM组成">
+<meta name="twitter:image" content="https://github.com/holyShit//img/NonHeap.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -144,45 +146,45 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-java-memory-model" class="article article-type-post " itemscope="" itemprop="blogPost">
+            <article id="post-JMM详解" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      JUC.AQS
+      JMM详解
     </h1>
   
 
         
-        <a href="/holyShit/2018/12/26/java-memory-model/" class="archive-article-date">
-  	<time datetime="2018-12-26T14:21:02.901Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
+        <a href="/holyShit/2018/12/26/JMM详解/" class="archive-article-date">
+  	<time datetime="2018-12-26T14:20:43.501Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="AQS提纲"><a href="#AQS提纲" class="headerlink" title="AQS提纲"></a>AQS提纲</h2><ul>
-<li><a href="#">AQS简介</a></li>
-<li><a href="#">依赖工具类LockSupport</a></li>
-<li><a href="#">获取与释放锁</a></li>
-<li><a href="#">ConditionObject</a></li>
+        <h2 id="JMM提纲"><a href="#JMM提纲" class="headerlink" title="JMM提纲"></a>JMM提纲</h2><ul>
+<li><a href="#">JMM组成</a></li>
 </ul>
-<h2 id="AQS简介"><a href="#AQS简介" class="headerlink" title="AQS简介"></a>AQS简介</h2><p>AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图<br><a id="more"></a><br><img src="/holyShit//img/aqs_uml.png" alt="avatar"><br>由该图可以看出来AQS是一个FIFO的双向队列，其内部通过Node节点head和tail记录队列的首尾元素。<br>AQS提供资源独占和共享两种方式，两种方式通过内部的state信息描述线程状态实现独占以及共享。<br>Node节点内部的SHARED用来标记当前线程获取共享资源被阻塞挂起放入AQS队列。<br>EXCLUSIVE用来标记线程获取独占资源被挂起放入AQS队列。<br>waitStatus记录当前线程的等待状态，可以为CANCELLED被取消，SIGNAL线程需要被唤醒，CONDITION线程在条件队列里面等待，PROPAGATE释放共享资源需要通知其它线程节点。</p>
-<h2 id="依赖工具类LockSupport"><a href="#依赖工具类LockSupport" class="headerlink" title="依赖工具类LockSupport"></a>依赖工具类LockSupport</h2><p>LockSupport是一个工具类，它的主要作用是挂起和唤醒线程，该工具类是创建锁和其它同步类的基础。<br>LockSupport类是使用Unsafe类实现的，主要方法有park与unpark(Thread thread)，也提供定时的方法。<br>划重点啦，每个使用它的线程都会关联一个许可证，在默认情况下调用是不持有许可证的！<br>为什么说上面这一段因为当调用park方法的线程已经拿到了与LockSupport关联的许可证，则调用会马上返回不会阻塞。否则会被阻塞挂起，相比较CAS的阻塞要性能高一点。</p>
-<h2 id="获取与释放锁"><a href="#获取与释放锁" class="headerlink" title="获取与释放锁"></a>获取与释放锁</h2><ul>
-<li><a href="#">子类实现AQS方法</a><br>1.tryAcquire(int arg)尝试获取独占锁<br>2.tryRelease(int arg)释放独占锁<br>3.tryAcquireShared(int arg) 尝试获取共享锁<br>4.tryReleaseShared(int arg)释放共享锁</li>
-<li><p><a href="#">独占方式获取锁</a><br>当一个线程调用acquire(int arg)方法获取独占锁时，会先调用tryAcquire方法尝试获取资源设置state状态。<br>成功则返回否则将线程封装成Node节点设置EXCLUSIVE状态插入到AQS队列的尾部，并调用LockSupport.park(this)挂起自己。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><a href="#">独占方式释放锁</a><br>当一个线程调用release(int arg)方法会尝试使用tryRelease操作释放资源，并设置state状态，然后调用LockSupport.unpark(thread)方法激活AQS队列里面<br>当前释放节点的next节点并尝试调用tryAcquire，查看当前状态变量的state是否满足，满足激活否则挂起放入队列。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (tryRelease(arg)) &#123;</span><br><span class="line">        Node h = head;</span><br><span class="line">        <span class="keyword">if</span> (h != <span class="keyword">null</span> &amp;&amp; h.waitStatus != <span class="number">0</span>)</span><br><span class="line">            unparkSuccessor(h);<span class="comment">//具体CAS修改状态，LockSupport.unpark(s.thread)唤醒next线程Node节点。</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="JMM组成"><a href="#JMM组成" class="headerlink" title="JMM组成"></a>JMM组成</h2><p>问到JMM一般的认知情况下会出现下面两种情况<br>1.没错内存模型就是堆栈<br>2.知道堆栈 方法区 计数器<br>由上可以知道堆栈其实比较重要也比较深入人心，下面继续说内存模型<br>按大方向可以分为两种<br>1.堆<br>2.非堆<br>看下面一张图<br><img src="/holyShit//img/NonHeap.png" alt="avatar"><br>再细分一下就是下面五种<br>1.栈<br>2.本地方法栈<br>3.方法区<br>4.计数器<br>5.堆<br>前面四种属于非堆内存，明白这个挺重要。咱们在设置JVM的最大内存Xmx的时候其实设置的是堆内存，32位的操作系统进程的内存大小是有限制的<br>这里就会出现一个坑<br>因为堆太大，但是进程内存就那么一点。所以可想而知能分给栈和方法区的内存就没多少会导致OOM。<br>64位的操作系统没有这个问题</p>
+<ul>
+<li><a href="#">栈</a><br>栈是LIFO的一个数据结构模型用来存储局部变量表 操作数栈 动态链接 方法出口等信息<br>并且是和线程的生命周期相同，线程独享<br>咱们看下面一段代码的执行过程就能很清晰的知道栈的过程。<br>分析这种抽象的东西还是得靠代码和调试工具，才能摸着内存。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Memory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123; <span class="comment">// Line 1</span></span><br><span class="line">		<span class="keyword">int</span> i=<span class="number">1</span>; <span class="comment">// Line 2</span></span><br><span class="line">		Object obj = <span class="keyword">new</span> Object(); <span class="comment">// Line 3</span></span><br><span class="line">		Memory mem = <span class="keyword">new</span> Memory(); <span class="comment">// Line 4</span></span><br><span class="line">		mem.foo(obj); <span class="comment">// Line 5</span></span><br><span class="line">	&#125; <span class="comment">// Line 9</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(Object param)</span> </span>&#123; <span class="comment">// Line 6</span></span><br><span class="line">		String str = param.toString(); <span class="comment">//// Line 7</span></span><br><span class="line">		System.out.println(str);</span><br><span class="line">	&#125; <span class="comment">// Line 8</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">acquireQueued</span><span class="params">(<span class="keyword">final</span> Node node, <span class="keyword">int</span> arg)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">boolean</span> failed = <span class="keyword">true</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</span><br><span class="line">          <span class="keyword">for</span> (;;) &#123;<span class="comment">//死循环当被唤醒的时候执行获取琐，否则再次放入队列。</span></span><br><span class="line">              <span class="keyword">final</span> Node p = node.predecessor();</span><br><span class="line">              <span class="keyword">if</span> (p == head &amp;&amp; tryAcquire(arg)) &#123;</span><br><span class="line">                  setHead(node);</span><br><span class="line">                  p.next = <span class="keyword">null</span>; <span class="comment">// help GC</span></span><br><span class="line">                  failed = <span class="keyword">false</span>;</span><br><span class="line">                  <span class="keyword">return</span> interrupted;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;</span><br><span class="line">                  parkAndCheckInterrupt())</span><br><span class="line">                  interrupted = <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (failed)</span><br><span class="line">              cancelAcquire(node);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ConditionObject"><a href="#ConditionObject" class="headerlink" title="ConditionObject"></a>ConditionObject</h2><p>notify与wait是配合synchronized内置锁实现线程间同步的基础设施一样，条件变量的signal和await方法也是用来配合锁实现线程间同步的基础设施。<br>它们的不同在于synchronized同时只能与一个共享变量实现同步，而AQS可以对应多个条件变量。<br>比如生产者和消费者使用ConditionObject可以有两个condition<br>并且每个ConditionObject都是一个队列存入的是线程Node节点，至于为什么这么做后续在写ReentrantLock或者实现自定义的一个非重入锁的时候写。<br>我觉得更加便于理解，这一章只是大概描述有这么一个东西。</p>
+<p><img src="/holyShit//img/Stack-Memory.png" alt="avatar"><br>咱们具体分析一下代码过程<br>1.当程序执行的时候执行main()方法压入栈底<br>2.创建局部变量i=1放入main方法的方法栈帧中<br>3.在堆中新建一个Object对象，栈里面存放引用refrence<br>4.同第三部一样<br>5.新建一个foo()方法的栈帧<br>6.因为Java按值传递所以新建一个新的param引用<br>7.在堆上面新建一个字符串对象，并在栈上新建一个引用<br>8foo()执行结束<br>9.main()执行结束，销毁堆栈。如果是线程复用，线程没销毁那么就是全部出栈结束。不会销毁堆栈~<br>再说说栈的oom这一块存在两种异常<br>1.StackOverflow(一般递归容易出现导致栈深度超过虚拟机规定值，瞬间爆炸)<br>2.OutOfMemoryError（内存不够）<br>正常来说一般栈的大小默认为1M但是咱们一般设置为256k。因为过大浪费内存空间，导致没法新建更多线程<br>而且一般虚拟机都存在栈动态扩展功能，有两种实现方式<br>1.双向链表 segmented stack<br>2.拷贝复制 stack copy<br>好了栈基本就没啥可以说的了</p>
+<ul>
+<li><p><a href="#">计数器</a><br>线程独享，唯一一个没有OOM的地方，至于为什么上一篇解释过。<br>计数器主要用来记住当前线程执行的指令位置</p>
+</li>
+<li><p><a href="#">堆</a><br>线程共享<br>java堆基本所有的对象实例都存放在这个里面，也是垃圾回收器管理的主要区域。<br>分为四个区域<br>1.Eden<br>2.from survivor<br>3.to survivor<br>4.old<br>前三个是新生代第四个为老年代<br>再细分一下就是TLAB每个线程占用一小块区域，为了更方便垃圾回收以及更快分配内存。这块后面再说<br>咱们还是看一张图<br><img src="/holyShit//img/Heap.png" alt="avatar"><br>咱们可以通过Xmx和Xms设置最大和起始堆内存大小，一般设置为一样的减少不必要的垃圾回收和性能消耗<br>但是这个的前提是对于程序要使用到多大的内存有一个深入的了解，否则就会失去内存扩展性也浪费资源。</p>
+</li>
+<li><p><a href="#">方法区</a><br>线程共享<br>用来存储类信息 常量 静态变量 即时编译器编译后的代码<br>看到上面存储的应该就可以想到了热部署什么的为什么会经常OOM了吧<br>还有项目启动的时候报一个OOM什么的这都是常规操作，闭着眼睛都知道哪里出问题了。<br>在方法区中还有一个常量池<br>说白了就是存放常量的比如说字符串呀，例如String 的 intern()方法。</p>
+</li>
+</ul>
+<p>最后了还有一个直接内存这么一个东西并不属于JMM的一部分，而是通过native方法直接获取外部内存<br>所以考虑内存的时候要把它也算进去，否则会导致OOM的莫名其妙出现。</p>
 
       
 
@@ -241,7 +243,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/12/26/java-memory-model/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2018/12/26/JMM详解/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -256,8 +258,8 @@
 <nav id="article-nav">
   
   
-    <a href="/holyShit/2018/12/26/Java.Memory.Model - 副本/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JMM详解</div>
+    <a href="/holyShit/2018/12/26/Java.Memory.Model/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java.Memory.Model</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -296,7 +298,7 @@
 <script src="https://jjeejj.github.io/js/gitment.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'JUC.AQS',
+  id: 'JMM详解',
   owner: 'A1len',
   repo: 'comment',
   oauth: {
