@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.CyclicBarrier" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/09/JUC.CyclicBarrier/">JUC.CyclicBarrier</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/09/JUC.CyclicBarrier/" class="archive-article-date">
+  	<time datetime="2018-12-09T08:18:06.597Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CyclicBarrier提纲"><a href="#CyclicBarrier提纲" class="headerlink" title="CyclicBarrier提纲"></a>CyclicBarrier提纲</h2><ul>
+<li><a href="#">CyclicBarrier简介</a></li>
+<li><a href="#">CyclicBarrier源码解析</a></li>
+</ul>
+<h2 id="CyclicBarrier简介"><a href="#CyclicBarrier简介" class="headerlink" title="CyclicBarrier简介"></a>CyclicBarrier简介</h2><p>如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>那么CyclicBarrier就是多个线程之间互相等待。<br>具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继续开始。<br>这里出现了两个阶段的任务执行，如果使用CountDownLatch完全没法实现。<br>但是根据存在即合理的原则，CountDownLatch也有它的好处。<br>简单任务多个线程执行结束没有后续处理只需要一个或多个等待线程处理还是用CountDownLatch吧。毕竟不用放入阻塞队列占用线程了。该干嘛干嘛去<br>具体怎么用还是根据实际业务场景分析来使用没有绝对的方案。<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.CyclicBarrier/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.CyclicBarrier/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.CountDownLatch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -781,74 +850,6 @@
 
 
   
-    <article id="post-单例双重检测问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">关键字synchronized volatile</a></li>
-</ul>
-<h2 id="重排序问题导致双重检验出错"><a href="#重排序问题导致双重检验出错" class="headerlink" title="重排序问题导致双重检验出错"></a>重排序问题导致双重检验出错</h2><p>废话不多说上代码<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/11/29/单例双重检测问题/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/单例双重检测问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/holyShit/">&laquo; Prev</a><a class="page-number" href="/holyShit/">1</a><span class="page-number current">2</span><a class="page-number" href="/holyShit/page/3/">3</a><a class="extend next" rel="next" href="/holyShit/page/3/">Next &raquo;</a>
@@ -863,7 +864,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2018 Al1en
+    		&copy; 2019 Al1en
     	</div>
       	<div class="footer-right">
       		

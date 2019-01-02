@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives: 2018/12 | Al1en的博客</title>
+  <title>Java.Garbage.Collection | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/2018/12/index.html">
+  <meta name="description" content="Java.Garbage.Collection提纲 垃圾回收算法 垃圾回收器  Garbage.Collection简介首先咱们必须名明白为什么需要学习以及深入研究垃圾回收。其次咱们得学会合理使用各种垃圾回收器。第一个问题为什么要学习，有如下几个原因1.解决各种生产故障2.写出高性能代码（和写代码没联系？您别搞笑！明白每个对象怎么回收，才能真正掌控程序。否则只是闭着眼睛堆积木而已，随时就倒了）3.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java.Garbage.Collection">
+<meta property="og:url" content="https://github.com/2019/01/02/Java.Garbage.Collection/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="Java.Garbage.Collection提纲 垃圾回收算法 垃圾回收器  Garbage.Collection简介首先咱们必须名明白为什么需要学习以及深入研究垃圾回收。其次咱们得学会合理使用各种垃圾回收器。第一个问题为什么要学习，有如下几个原因1.解决各种生产故障2.写出高性能代码（和写代码没联系？您别搞笑！明白每个对象怎么回收，才能真正掌控程序。否则只是闭着眼睛堆积木而已，随时就倒了）3.">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-02T15:21:21.566Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="Java.Garbage.Collection">
+<meta name="twitter:description" content="Java.Garbage.Collection提纲 垃圾回收算法 垃圾回收器  Garbage.Collection简介首先咱们必须名明白为什么需要学习以及深入研究垃圾回收。其次咱们得学会合理使用各种垃圾回收器。第一个问题为什么要学习，有如下几个原因1.解决各种生产故障2.写出高性能代码（和写代码没联系？您别搞笑！明白每个对象怎么回收，才能真正掌控程序。否则只是闭着眼睛堆积木而已，随时就倒了）3.">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,295 +142,162 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Java.Garbage.Collection" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java.Garbage.Collection
+    </h1>
+  
+
+        
+        <a href="/holyShit/2019/01/02/Java.Garbage.Collection/" class="archive-article-date">
+  	<time datetime="2019-01-02T13:07:28.380Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-02</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Java-Garbage-Collection提纲"><a href="#Java-Garbage-Collection提纲" class="headerlink" title="Java.Garbage.Collection提纲"></a>Java.Garbage.Collection提纲</h2><ul>
+<li><a href="#">垃圾回收算法</a></li>
+<li><a href="#">垃圾回收器</a></li>
+</ul>
+<h2 id="Garbage-Collection简介"><a href="#Garbage-Collection简介" class="headerlink" title="Garbage.Collection简介"></a>Garbage.Collection简介</h2><p>首先咱们必须名明白为什么需要学习以及深入研究垃圾回收。<br>其次咱们得学会合理使用各种垃圾回收器。<br>第一个问题为什么要学习，有如下几个原因<br>1.解决各种生产故障<br>2.写出高性能代码（和写代码没联系？您别搞笑！明白每个对象怎么回收，才能真正掌控程序。否则只是闭着眼睛堆积木而已，随时就倒了）<br>3.有成就感，向架构师更进一步<br>第二个问题<br>1.会合理使用垃圾回收器程序才能从单车变跑车<br>2.节省没必要的资源浪费（积少成多）<br><a id="more"></a></p>
+<h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><p>其实我刚学习JAVA的时候也知道有垃圾回收这个东西，但从来没看过。是工作了快两年了才开始想着系统学习一下，知耻而后勇。。。都是泪<br>前两年我的印象里垃圾回收就是标记对象用一次标记一次，每失去一次引用标记减少一次，当标记为0的时候对象回收。<br>但是尼玛现在的回收器没有一个是这么玩，坑爹的博客和某些从哪个角落来的边角料知识。<br>好了下面开始系统说</p>
+<p>第一个问题怎么判断一个对象该被回收？<br>通过可达性分析算法<br>选取一个对象当作GC Root节点向下遍历获取所有的引用链。当触发垃圾回收的时候，引用链下面有节点无法抵达GC Root了说明这些对象可以回收。<br>那么好了第二个问题来了</p>
+<p>该选择什么对象当作GC Root?<br>咱们前面是不是学习过JMM，里面有提到过一个东西叫做栈。<br>程序的执行都在栈里面建立引用与执行指令的排列，这就很清楚了。当一个对象和栈没有任何关联的时候是否意味着没人需要使用到了？<br>所以可以选择如下对象作为GC Root<br>1.虚拟机栈中栈帧中的引用对象<br>2.方法区中类静态属性引用对象<br>3.方法区中常量引用对象<br>4.Native栈中引用对象</p>
+<p>到这咱明白了怎么判断一个对象死亡，咱们继续聊怎么回收它们的算法。有如下几种<br>1.标记清除（会造成内存碎片，导致大对象进不来）<br>2.标记整理（耗时较长）<br>3.拷贝复制（导致可用内存减少）<br>上面三种都有各自的弊端所以牛逼的大哥出现了，结合上面三位的基础出现了<br>4.分代收集算法<br>这个算法就牛逼了，通过将内存分成各种块。使用上面不同的三种回收算法实现各种垃圾回收期。可以达到一种比较均衡理想的运行状态。</p>
+<p>咱们知道了对象啥时候可回收用什么方式回收。但是又有一个问题来了<br>我不可能一边回收一边产生垃圾吧。所以需要标记一个位置让线程都停下来（当然现在是有不用stop the world 的方式回收的后面说）<br>所以大佬们想到了一个安全点，也就是线程都跑到这个点就停下来进行垃圾回收<br>回收点的定义可以有如下<br>1.方法调用<br>2.循环跳转<br>3.异常跳转<br>4.创建对象的时候<br>这个怎么计算出来？<br>通过栈与计数器里面存放的引用信息以及指令执行位置，并且类加载的时候咱们是知道偏移量的<br>就可以准确获取安全点，安全点多了会造成记录信息过多而造成不要的消耗，太少会造成垃圾回收等待时间过长。</p>
+<p>这里还有一个安全区的概念也就是线程处于sleep或者blocked的状态，这尼玛就坑爹了永远不会进入安全点了。<br>垃圾回收也不可能一直等待吧<br>所以会直接不管它而进行GC，但是该线程突然需要运行则需要等待GC结束</p>
+<p>好了真个垃圾回收的生命周期基本就说完了<br>总结一下就是下面几个步骤<br>1.类加载记录引用偏移量<br>2.运行的时候通过栈与计数器获取计算安全点，并记录GC ROOT<br>3.内存不足触发GC的时候通过所以线程抵达安全点或者安全区，遍历GC Root中失去引用的对象进行回收。（并不是第一次失去引用就会被回收）</p>
+<h2 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h2><p>垃圾回收器我下面只是简单的说一说，以后有时间多补充实际生产中的使用方式。<br>先上几个链接<br><a href="https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html" target="_blank" rel="noopener">Oracle垃圾回收基础</a><br><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html" target="_blank" rel="noopener">G1垃圾回收器</a><br>今天先到这，明天继续~</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/26/JMM详解/" class="archive-article-date">
-  	<time datetime="2018-12-26T14:20:43.501Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/26/JMM详解/">JMM详解</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/01/02/Java.Garbage.Collection/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/26/Java.Memory.Model/" class="archive-article-date">
-  	<time datetime="2018-12-25T16:29:00.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2018/12/26/JMM详解/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JMM详解</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/26/Java.Memory.Model/">Java.Memory.Model</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/23/JUC.微服务/" class="archive-article-date">
-  	<time datetime="2018-12-22T17:08:58.418Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/23/JUC.微服务/">微服务与模块化</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/" class="archive-article-date">
-  	<time datetime="2018-12-20T14:17:42.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/">JUC.CopyOnWriteArrayList</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/19/ThreadLocal的那些事/" class="archive-article-date">
-  	<time datetime="2018-12-19T15:32:30.861Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/19/ThreadLocal的那些事/">ThreadLocal的那些事</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/15/JUC.LRBTree/" class="archive-article-date">
-  	<time datetime="2018-12-15T12:09:23.987Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/15/JUC.LRBTree/">红黑树原理</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/11/JUC.Map/" class="archive-article-date">
-  	<time datetime="2018-12-11T13:26:08.803Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/11/JUC.Map/">JUC.ConcurrentHashMap与HashMap</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/10/JUC.CAS/" class="archive-article-date">
-  	<time datetime="2018-12-10T13:02:51.978Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/10/JUC.CAS/">JUC.CAS及原子类源码</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/09/JUC.Semaphore/" class="archive-article-date">
-  	<time datetime="2018-12-09T12:47:49.103Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/09/JUC.Semaphore/">JUC.Semaphore</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/09/JUC.CyclicBarrier/" class="archive-article-date">
-  	<time datetime="2018-12-09T08:18:06.597Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/09/JUC.CyclicBarrier/">JUC.CyclicBarrier</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/holyShit/archives/2018/12/page/2/">2</a><a class="extend next" rel="next" href="/holyShit/archives/2018/12/page/2/">Next &raquo;</a>
-    </nav>
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Java.Garbage.Collection',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -450,8 +321,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
