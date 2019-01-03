@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="Java.Garbage.Collection提纲 垃圾回收算法 垃圾回收器  Garbage.Collection简介首先咱们必须名明白为什么需要学习以及深入研究垃圾回收。其次咱们得学会合理使用各种垃圾回收器。第一个问题为什么要学习，有如下几个原因1.解决各种生产故障2.写出高性能代码（和写代码没联系？您别搞笑！明白每个对象怎么回收，才能真正掌控程序。否则只是闭着眼睛堆积木而已，随时就倒了）3.">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-02T15:21:21.566Z">
+<meta property="og:updated_time" content="2019-01-03T15:36:01.123Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java.Garbage.Collection">
 <meta name="twitter:description" content="Java.Garbage.Collection提纲 垃圾回收算法 垃圾回收器  Garbage.Collection简介首先咱们必须名明白为什么需要学习以及深入研究垃圾回收。其次咱们得学会合理使用各种垃圾回收器。第一个问题为什么要学习，有如下几个原因1.解决各种生产故障2.写出高性能代码（和写代码没联系？您别搞笑！明白每个对象怎么回收，才能真正掌控程序。否则只是闭着眼睛堆积木而已，随时就倒了）3.">
@@ -174,7 +174,28 @@
 <p>咱们知道了对象啥时候可回收用什么方式回收。但是又有一个问题来了<br>我不可能一边回收一边产生垃圾吧。所以需要标记一个位置让线程都停下来（当然现在是有不用stop the world 的方式回收的后面说）<br>所以大佬们想到了一个安全点，也就是线程都跑到这个点就停下来进行垃圾回收<br>回收点的定义可以有如下<br>1.方法调用<br>2.循环跳转<br>3.异常跳转<br>4.创建对象的时候<br>这个怎么计算出来？<br>通过栈与计数器里面存放的引用信息以及指令执行位置，并且类加载的时候咱们是知道偏移量的<br>就可以准确获取安全点，安全点多了会造成记录信息过多而造成不要的消耗，太少会造成垃圾回收等待时间过长。</p>
 <p>这里还有一个安全区的概念也就是线程处于sleep或者blocked的状态，这尼玛就坑爹了永远不会进入安全点了。<br>垃圾回收也不可能一直等待吧<br>所以会直接不管它而进行GC，但是该线程突然需要运行则需要等待GC结束</p>
 <p>好了真个垃圾回收的生命周期基本就说完了<br>总结一下就是下面几个步骤<br>1.类加载记录引用偏移量<br>2.运行的时候通过栈与计数器获取计算安全点，并记录GC ROOT<br>3.内存不足触发GC的时候通过所以线程抵达安全点或者安全区，遍历GC Root中失去引用的对象进行回收。（并不是第一次失去引用就会被回收）</p>
-<h2 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h2><p>垃圾回收器我下面只是简单的说一说，以后有时间多补充实际生产中的使用方式。<br>先上几个链接<br><a href="https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html" target="_blank" rel="noopener">Oracle垃圾回收基础</a><br><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html" target="_blank" rel="noopener">G1垃圾回收器</a><br>今天先到这，明天继续~</p>
+<h2 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h2><p>垃圾回收器我下面只是简单的说一说，以后有时间多补充实际生产中的使用方式。<br>先上几个链接<br><a href="https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html" target="_blank" rel="noopener">Oracle垃圾回收基础</a><br><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html" target="_blank" rel="noopener">G1垃圾回收器</a><br>今天先到这，明天继续~<br>首先列举一下到JAVA11总共有多少垃圾回收器<br>1.Serial<br>2.Serial Old<br>3.ParNew<br>4.Parallel Old<br>5.Parallel Scavenge<br>6.CMS<br>7.G1<br>8.ZGC</p>
+<ul>
+<li><p><a href="#">Serial</a><br>单线程采用复制算法回收新生代的内存，不适合web项目。<br>书上会说对于单核client的应用来说该回收器合适，其实该回收器早已不适用现在的设备。</p>
+</li>
+<li><p><a href="#">Serial Old</a><br>单线程采用标记整理算法回收老年代，同样不适用web项目。<br>标记整理耗时长，处理慢。<br>不过也有其优点，那就是不会导致内存碎块话导致大对象无法放到内存中。</p>
+</li>
+<li><p><a href="#">parNew</a><br>多线程采用复制算法回收新生代</p>
+</li>
+</ul>
+<ul>
+<li><p><a href="#">Parallel Old</a><br>多线程标记整理老年代回收配合Parallel Scavenge使用，可以提高吞吐量。<br>吞吐量是可以上来，但是并不意味着处理就快。嘿嘿~~</p>
+</li>
+<li><p><a href="#">Parallel Scavenge</a><br>俗称吞吐量GC，同样是多线程复制算法的新生代回收器<br>但是它可以设置GC时长或者吞吐量大小来控制吞吐量</p>
+</li>
+</ul>
+<ul>
+<li><a href="#">CMS</a><br>这个回收器挺有意思。上面的回收器都会STW，但是它虽然也会但是目标却是减少STW时间<br>分为四个阶段执行<br>1.初始标记<br>2.并发标记<br>3.重新标记<br>4.并发清除</li>
+</ul>
+<p>13两个阶段依然需要停顿<br>2的过程是GC Root 遍历的过程，但是不会STW。所以会需要重新标记修正回收对象结果集<br>4就是执行垃圾回收，这里有一个很重要的参数CMSInitiatingOccupancyFraction用来设置CMS垃圾回收启动阈值<br>因为CMS垃圾回收的时候是不STW的所以老年代需要预留一定的内存空间给应用使用就是通过该阈值<br>设置过小，垃圾回收频繁<br>设置过大，导致浮动垃圾过多预留空间不够而产生Full GC<br>一般设置为80，现在1.7默认是92从1.6版本开始<br>然后由于使用标记清除的算法，会导致大对象无法进入内存触发Full GC<br>所以又提供了一个参数CMSFullGCsBeforeCompaction来设置多少次不带整理的Full GC之后进行一次整理<br>还有一个参数UseCMSCompactAtFullCollection就是当需要Full GC的时候先进行一次整理<br>如果想研究一下可以通过写一个程序使用jvisualvm.exe观察新生代老年代内存转移的过程。<br>以及触发Full GC的耗时和频率这样学习才比较正确。<br>为啥老年代Full GC慢有以下几个原因<br>1.需要回收方法区，设计到类卸载提交比较多<br>2.由于老年代存储的对象都会比较大或者生命周期长不适用复制算法，使用的整理算法速度较慢<br>3.老年代容量大</p>
+<ul>
+<li><a href="#">G1</a><br>G1垃圾回收器的思路是将老年代划分为多个区域，每个区域可以独立回收<br>思路有点类似于1.7的ConcurrentHashMap划分为多个区域，每个区域加一把锁。</li>
+</ul>
 
       
 
