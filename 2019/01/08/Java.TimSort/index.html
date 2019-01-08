@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives | Al1en的博客</title>
+  <title>Java.TimSort | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/page/3/index.html">
+  <meta name="description" content="Java.TimSort提纲记录一个问题有时间查查资料下面这段代码里面有一个有意思的阈值MIN_MERGE。从时间复杂度说不明白的，挺有意思。12345678910111213141516171819202122232425262728293031323334353637383940414243444546static &amp;lt;T&amp;gt; void sort(T[] a, int lo, int">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java.TimSort">
+<meta property="og:url" content="https://github.com/2019/01/08/Java.TimSort/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="Java.TimSort提纲记录一个问题有时间查查资料下面这段代码里面有一个有意思的阈值MIN_MERGE。从时间复杂度说不明白的，挺有意思。12345678910111213141516171819202122232425262728293031323334353637383940414243444546static &amp;lt;T&amp;gt; void sort(T[] a, int lo, int">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-08T14:06:45.294Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="Java.TimSort">
+<meta name="twitter:description" content="Java.TimSort提纲记录一个问题有时间查查资料下面这段代码里面有一个有意思的阈值MIN_MERGE。从时间复杂度说不明白的，挺有意思。12345678910111213141516171819202122232425262728293031323334353637383940414243444546static &amp;lt;T&amp;gt; void sort(T[] a, int lo, int">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,160 +142,150 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Java.TimSort" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java.TimSort
+    </h1>
+  
+
+        
+        <a href="/holyShit/2019/01/08/Java.TimSort/" class="archive-article-date">
+  	<time datetime="2019-01-08T14:03:17.830Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Java-TimSort提纲"><a href="#Java-TimSort提纲" class="headerlink" title="Java.TimSort提纲"></a>Java.TimSort提纲</h2><p>记录一个问题有时间查查资料<br>下面这段代码里面有一个有意思的阈值MIN_MERGE。从时间复杂度说不明白的，挺有意思。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(T[] a, <span class="keyword">int</span> lo, <span class="keyword">int</span> hi, Comparator&lt;? <span class="keyword">super</span> T&gt; c,</span></span></span><br><span class="line"><span class="function"><span class="params">                     T[] work, <span class="keyword">int</span> workBase, <span class="keyword">int</span> workLen)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">assert</span> c != <span class="keyword">null</span> &amp;&amp; a != <span class="keyword">null</span> &amp;&amp; lo &gt;= <span class="number">0</span> &amp;&amp; lo &lt;= hi &amp;&amp; hi &lt;= a.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> nRemaining  = hi - lo;</span><br><span class="line">    <span class="keyword">if</span> (nRemaining &lt; <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span>;  <span class="comment">// Arrays of size 0 and 1 are always sorted</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// If array is small, do a "mini-TimSort" with no merges</span></span><br><span class="line">    <span class="keyword">if</span> (nRemaining &lt; MIN_MERGE) &#123;</span><br><span class="line">        <span class="keyword">int</span> initRunLen = countRunAndMakeAscending(a, lo, hi, c);</span><br><span class="line">        binarySort(a, lo, hi, lo + initRunLen, c);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * March over the array once, left to right, finding natural runs,</span></span><br><span class="line"><span class="comment">     * extending short natural runs to minRun elements, and merging runs</span></span><br><span class="line"><span class="comment">     * to maintain stack invariant.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    TimSort&lt;T&gt; ts = <span class="keyword">new</span> TimSort&lt;&gt;(a, c, work, workBase, workLen);</span><br><span class="line">    <span class="keyword">int</span> minRun = minRunLength(nRemaining);</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">// Identify next run</span></span><br><span class="line">        <span class="keyword">int</span> runLen = countRunAndMakeAscending(a, lo, hi, c);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If run is short, extend to min(minRun, nRemaining)</span></span><br><span class="line">        <span class="keyword">if</span> (runLen &lt; minRun) &#123;</span><br><span class="line">            <span class="keyword">int</span> force = nRemaining &lt;= minRun ? nRemaining : minRun;</span><br><span class="line">            binarySort(a, lo, lo + force, lo + runLen, c);</span><br><span class="line">            runLen = force;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Push run onto pending-run stack, and maybe merge</span></span><br><span class="line">        ts.pushRun(lo, runLen);</span><br><span class="line">        ts.mergeCollapse();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Advance to find next run</span></span><br><span class="line">        lo += runLen;</span><br><span class="line">        nRemaining -= runLen;</span><br><span class="line">    &#125; <span class="keyword">while</span> (nRemaining != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Merge all remaining runs to complete sort</span></span><br><span class="line">    <span class="keyword">assert</span> lo == hi;</span><br><span class="line">    ts.mergeForceCollapse();</span><br><span class="line">    <span class="keyword">assert</span> ts.stackSize == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/mysql/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:29:27.425Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/mysql/">MySql体系结构和存储引擎</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/01/08/Java.TimSort/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/单例双重检测问题/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.138Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2019/01/02/Java.Garbage.Collection/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java.Garbage.Collection</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/单例双重检测问题/">单例DCK问题（一）</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/并发编程/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.137Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/并发编程/">并发编程线程通信（一）</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/String StringBuilder StringBuffer/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/String StringBuilder StringBuffer/">String,StringBuffer与StringBuilder的区别|线程安全与线程不安全</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/11/29/startBlog/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:16:25.125Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/11/29/startBlog/">一直想记录点什么</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/holyShit/archives/page/2/">&laquo; Prev</a><a class="page-number" href="/holyShit/archives/">1</a><a class="page-number" href="/holyShit/archives/page/2/">2</a><span class="page-number current">3</span>
-    </nav>
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Java.TimSort',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -315,8 +309,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

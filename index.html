@@ -140,6 +140,69 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java.TimSort" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2019/01/08/Java.TimSort/">Java.TimSort</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2019/01/08/Java.TimSort/" class="archive-article-date">
+  	<time datetime="2019-01-08T14:03:17.830Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Java-TimSort提纲"><a href="#Java-TimSort提纲" class="headerlink" title="Java.TimSort提纲"></a>Java.TimSort提纲</h2><p>记录一个问题有时间查查资料<br>下面这段代码里面有一个有意思的阈值MIN_MERGE。从时间复杂度说不明白的，挺有意思。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(T[] a, <span class="keyword">int</span> lo, <span class="keyword">int</span> hi, Comparator&lt;? <span class="keyword">super</span> T&gt; c,</span></span></span><br><span class="line"><span class="function"><span class="params">                     T[] work, <span class="keyword">int</span> workBase, <span class="keyword">int</span> workLen)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">assert</span> c != <span class="keyword">null</span> &amp;&amp; a != <span class="keyword">null</span> &amp;&amp; lo &gt;= <span class="number">0</span> &amp;&amp; lo &lt;= hi &amp;&amp; hi &lt;= a.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> nRemaining  = hi - lo;</span><br><span class="line">    <span class="keyword">if</span> (nRemaining &lt; <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span>;  <span class="comment">// Arrays of size 0 and 1 are always sorted</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// If array is small, do a "mini-TimSort" with no merges</span></span><br><span class="line">    <span class="keyword">if</span> (nRemaining &lt; MIN_MERGE) &#123;</span><br><span class="line">        <span class="keyword">int</span> initRunLen = countRunAndMakeAscending(a, lo, hi, c);</span><br><span class="line">        binarySort(a, lo, hi, lo + initRunLen, c);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * March over the array once, left to right, finding natural runs,</span></span><br><span class="line"><span class="comment">     * extending short natural runs to minRun elements, and merging runs</span></span><br><span class="line"><span class="comment">     * to maintain stack invariant.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    TimSort&lt;T&gt; ts = <span class="keyword">new</span> TimSort&lt;&gt;(a, c, work, workBase, workLen);</span><br><span class="line">    <span class="keyword">int</span> minRun = minRunLength(nRemaining);</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">// Identify next run</span></span><br><span class="line">        <span class="keyword">int</span> runLen = countRunAndMakeAscending(a, lo, hi, c);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If run is short, extend to min(minRun, nRemaining)</span></span><br><span class="line">        <span class="keyword">if</span> (runLen &lt; minRun) &#123;</span><br><span class="line">            <span class="keyword">int</span> force = nRemaining &lt;= minRun ? nRemaining : minRun;</span><br><span class="line">            binarySort(a, lo, lo + force, lo + runLen, c);</span><br><span class="line">            runLen = force;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Push run onto pending-run stack, and maybe merge</span></span><br><span class="line">        ts.pushRun(lo, runLen);</span><br><span class="line">        ts.mergeCollapse();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Advance to find next run</span></span><br><span class="line">        lo += runLen;</span><br><span class="line">        nRemaining -= runLen;</span><br><span class="line">    &#125; <span class="keyword">while</span> (nRemaining != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Merge all remaining runs to complete sort</span></span><br><span class="line">    <span class="keyword">assert</span> lo == hi;</span><br><span class="line">    ts.mergeForceCollapse();</span><br><span class="line">    <span class="keyword">assert</span> ts.stackSize == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2019/01/08/Java.TimSort/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Java.Garbage.Collection" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -728,75 +791,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/10/JUC.CAS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.Semaphore" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/09/JUC.Semaphore/">JUC.Semaphore</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/09/JUC.Semaphore/" class="archive-article-date">
-  	<time datetime="2018-12-09T12:47:49.103Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Semaphore提纲"><a href="#Semaphore提纲" class="headerlink" title="Semaphore提纲"></a>Semaphore提纲</h2><ul>
-<li><a href="#">Semaphore简介</a></li>
-<li><a href="#">Semaphore源码解析</a></li>
-</ul>
-<h2 id="Semaphore简介"><a href="#Semaphore简介" class="headerlink" title="Semaphore简介"></a>Semaphore简介</h2><p>一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。<br>所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。<br>综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿CountDownLatch或者CyclicBarrier都不是问题。<br>或者搞一个限流啥的都不成问题。<br>因为原理都是一样<br>抽象出来其实还是AQS的精髓，多线程访问资源，仅满足特定条件线程可继续执行其余都排队阻塞。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.Semaphore/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.Semaphore/">展开全文 >></a>
         </p>
       
 

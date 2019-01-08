@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.Semaphore" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/09/JUC.Semaphore/">JUC.Semaphore</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/09/JUC.Semaphore/" class="archive-article-date">
+  	<time datetime="2018-12-09T12:47:49.103Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Semaphore提纲"><a href="#Semaphore提纲" class="headerlink" title="Semaphore提纲"></a>Semaphore提纲</h2><ul>
+<li><a href="#">Semaphore简介</a></li>
+<li><a href="#">Semaphore源码解析</a></li>
+</ul>
+<h2 id="Semaphore简介"><a href="#Semaphore简介" class="headerlink" title="Semaphore简介"></a>Semaphore简介</h2><p>一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。<br>所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。<br>综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿CountDownLatch或者CyclicBarrier都不是问题。<br>或者搞一个限流啥的都不成问题。<br>因为原理都是一样<br>抽象出来其实还是AQS的精髓，多线程访问资源，仅满足特定条件线程可继续执行其余都排队阻塞。<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.Semaphore/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/09/JUC.Semaphore/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.CyclicBarrier" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -744,83 +813,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/11/29/mysq2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysql" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/11/29/mysql/">MySql体系结构和存储引擎</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/11/29/mysql/" class="archive-article-date">
-  	<time datetime="2018-11-28T18:29:27.425Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="#">关键字 关于mysql 体系结构 插件式存储引擎</a></li>
-</ul>
-<h2 id="关于mysql"><a href="#关于mysql" class="headerlink" title="关于mysql"></a>关于mysql</h2><ul>
-<li><a href="#">1995年成立于瑞典并发布第一个版本</a></li>
-<li><a href="#">2008年2月被Sun收购</a></li>
-<li><a href="#">2010年1月被Oracle收购</a></li>
-<li><a href="#">2010年12月发布5.5版本</a></li>
-<li><a href="#">2012年2月发布7.2</a></li>
-<li><a href="#">2013念2月发布5.6</a></li>
-<li><a href="#">2015年10月发布5.7</a></li>
-<li><a href="#">2018年发布8.0</a></li>
-</ul>
-        
-          <a class="article-more-a" href="/holyShit/2018/11/29/mysql/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/11/29/mysql/">展开全文 >></a>
         </p>
       
 
