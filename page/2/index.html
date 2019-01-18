@@ -140,6 +140,77 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.Map" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/11/JUC.Map/">JUC.ConcurrentHashMap与HashMap</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/11/JUC.Map/" class="archive-article-date">
+  	<time datetime="2018-12-11T13:26:08.803Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="提纲"><a href="#提纲" class="headerlink" title="提纲"></a>提纲</h2><ul>
+<li><a href="#">1.7HashMap</a></li>
+<li><a href="#">1.8HashMap</a></li>
+<li><a href="#">1.7ConcurrentHashMap</a></li>
+<li><a href="#">1.8ConcurrentHashMap</a></li>
+</ul>
+<p>这一章东西比较多分开来写可以写四篇，所以不是一个晚上可以写完。我决定尽快在这两天写完。<br>这一章的内容推荐可以看看《码出高效》深入浅出，提高思维深入，摸着良心说。<br>对于代码中涉及到的复杂数据结构不会过多的深入进去写，因为东西太多。后面找个时间单独写数据结构。<br>为什么要写这一块的东西？<br>首先比较1.7与1.8代码的差异能学习到优秀的设计思想。<br>其次Doug Lea大师写的代码我真不信有很多人能打爆他，这么优秀的代码有什么理由不学习？难道对这代码就不感兴趣？就不想看看？<br>从中可以学到什么？<br>1.数据结构，算法。如何使用时间复杂度判断一个算法好坏。<br>2.并发编程<br>3.对于复杂代码的拆解学习方法（讲真1.8的ConcurrentHashMap真的有点复杂。。。尼玛又不是6000行hello world都是大师的精华代码）<br>4.甚至其中还有到了内存伪共享的处理。。。细节处理给跪了。<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/11/JUC.Map/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/11/JUC.Map/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.CAS" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -736,78 +807,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/02/JUC.AQS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-mysq3" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/01/mysq3/">MySql索引设计</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/01/mysq3/" class="archive-article-date">
-  	<time datetime="2018-12-01T04:15:24.245Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="索引设计提纲"><a href="#索引设计提纲" class="headerlink" title="索引设计提纲"></a>索引设计提纲</h2><ul>
-<li><a href="#">索引概述</a></li>
-<li><a href="#">索引类型</a></li>
-<li><a href="#">高性能索引策略</a></li>
-</ul>
-<h2 id="索引概述"><a href="#索引概述" class="headerlink" title="索引概述"></a>索引概述</h2><ul>
-<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。</li>
-</ul>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/01/mysq3/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/01/mysq3/">展开全文 >></a>
         </p>
       
 

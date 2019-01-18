@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives | Al1en的博客</title>
+  <title>SpringBoot2.StartProcess | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/index.html">
+  <meta name="description" content="StartProcess提纲 启动流程过程 具体源码分析  SpringBoot如果要说是SpringFrameWork的封装那么也不全是，个人认为从思想上来说是两个东西。SpringBoot主要具备如下特性1.自动装配2.内置tomcat等web容器3.与devops天然集成，这也可以认为是微服务的特点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot2.StartProcess">
+<meta property="og:url" content="https://github.com/2019/01/18/SpringBoot2.StartProcess/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="StartProcess提纲 启动流程过程 具体源码分析  SpringBoot如果要说是SpringFrameWork的封装那么也不全是，个人认为从思想上来说是两个东西。SpringBoot主要具备如下特性1.自动装配2.内置tomcat等web容器3.与devops天然集成，这也可以认为是微服务的特点。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-18T15:22:04.747Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="SpringBoot2.StartProcess">
+<meta name="twitter:description" content="StartProcess提纲 启动流程过程 具体源码分析  SpringBoot如果要说是SpringFrameWork的封装那么也不全是，个人认为从思想上来说是两个东西。SpringBoot主要具备如下特性1.自动装配2.内置tomcat等web容器3.与devops天然集成，这也可以认为是微服务的特点。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,305 +142,166 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-SpringBoot2.StartProcess" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      SpringBoot2.StartProcess
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/18/SpringBoot2.StartProcess/" class="archive-article-date">
+
+        
+        <a href="/holyShit/2019/01/18/SpringBoot2.StartProcess/" class="archive-article-date">
   	<time datetime="2019-01-18T14:32:37.406Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-18</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/18/SpringBoot2.StartProcess/">SpringBoot2.StartProcess</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
+        
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/15/SpringBoot/" class="archive-article-date">
-  	<time datetime="2019-01-15T15:00:28.214Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/15/SpringBoot/">SpringBoot大纲</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/08/Java.TimSort/" class="archive-article-date">
-  	<time datetime="2019-01-08T14:03:17.830Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/08/Java.TimSort/">Java.TimSort</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/02/Java.Garbage.Collection/" class="archive-article-date">
-  	<time datetime="2019-01-02T13:07:28.380Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/02/Java.Garbage.Collection/">Java.Garbage.Collection</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
+    <div class="article-entry" itemprop="articleBody">
       
-        </div></section>
+        <h2 id="StartProcess提纲"><a href="#StartProcess提纲" class="headerlink" title="StartProcess提纲"></a>StartProcess提纲</h2><ul>
+<li><a href="#">启动流程过程</a></li>
+<li><a href="#">具体源码分析</a></li>
+</ul>
+<p>SpringBoot如果要说是SpringFrameWork的封装那么也不全是，个人认为从思想上来说是两个东西。<br>SpringBoot主要具备如下特性<br>1.自动装配<br>2.内置tomcat等web容器<br>3.与devops天然集成，这也可以认为是微服务的特点。<br><a id="more"></a></p>
+<h2 id="启动流程过程"><a href="#启动流程过程" class="headerlink" title="启动流程过程"></a>启动流程过程</h2><p>首先创建SpringApplication对象期间初始化程序运行环境拉取listener以及获取ApplicationContextInitializer<br>接着会运行run方法具体会执行如下步骤<br>1.获取并启动监听器<br>2.构造容器环境,加载application配置文件或者自定义配置文件位置<br>3.创建容器<br>4.准备预处理容器<br>5.刷新容器<br>6.刷新容器后调用扩展接口<br>经过上面几步整个程序就运行起来了</p>
+<p>下面咱们看下代码</p>
+<h2 id="具体源码分析"><a href="#具体源码分析" class="headerlink" title="具体源码分析"></a>具体源码分析</h2><p>下面是一段程序的启动入口代码，这块代码其实可以自己自定义new一个SpringApplication对象启动<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    SpringApplication.run(DemoApplication.class, args);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>咱们跟进run方法中去，会看到下面这一段代码，。这里如上面开头所说有两个步骤<br>1.初始化SpringApplication对象<br>2.执行run方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(Class&lt;?&gt;[] primarySources,</span></span></span><br><span class="line"><span class="function"><span class="params">    String[] args)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> SpringApplication(primarySources).run(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先看初始化SpringApplication,咱们点进去看一下构造函数干了些啥</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SpringApplication</span><span class="params">(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//resourceLoader加载配置资源但是没在这初始化，后面再说</span></span><br><span class="line">    <span class="keyword">this</span>.resourceLoader = resourceLoader;</span><br><span class="line">    <span class="comment">//默认是启动类，不过有可能你自定义了一个配置类放到main class运行就需要配置一下</span></span><br><span class="line">    Assert.notNull(primarySources, <span class="string">"PrimarySources must not be null"</span>);</span><br><span class="line">    <span class="comment">//springApplication配置类</span></span><br><span class="line">    <span class="keyword">this</span>.primarySources = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));</span><br><span class="line">    <span class="comment">//设置servlet环境</span></span><br><span class="line">    <span class="keyword">this</span>.webApplicationType = deduceWebApplicationType();</span><br><span class="line">    <span class="comment">////获取ApplicationContextInitializer，也是在这里开始首次加载spring.factories文件</span></span><br><span class="line">    setInitializers((Collection) getSpringFactoriesInstances(</span><br><span class="line">        ApplicationContextInitializer.class));</span><br><span class="line">    <span class="comment">//获取监听器，这里是第二次加载spring.factories文件</span></span><br><span class="line">    setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));</span><br><span class="line">    <span class="keyword">this</span>.mainApplicationClass = deduceMainApplicationClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的重点其实都在setInitializers与setListeners<br>这两个的初始化其实是SPI的Spring实现<br>getSpringFactoriesInstances这个方法挺有意思的<br>原理就是获取配置文件下type是哪一类的key配置的class名，然后通过反射实例化。</p>
+<p>咱们继续往下看run方法<br>上一段代码，在代码里面有注释。先看看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Run the Spring application, creating and refreshing a new</span></span><br><span class="line"><span class="comment">   * &#123;<span class="doctag">@link</span> ApplicationContext&#125;.</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> args the application arguments (usually passed from a Java main method)</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> a running &#123;<span class="doctag">@link</span> ApplicationContext&#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ConfigurableApplicationContext <span class="title">run</span><span class="params">(String... args)</span> </span>&#123;</span><br><span class="line">    StopWatch stopWatch = <span class="keyword">new</span> StopWatch();</span><br><span class="line">    stopWatch.start();</span><br><span class="line">    ConfigurableApplicationContext context = <span class="keyword">null</span>;</span><br><span class="line">    Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    configureHeadlessProperty();</span><br><span class="line">    <span class="comment">//第一步：获取并启动监听器.org.springframework.boot.context.event.EventPublishingRunListener</span></span><br><span class="line">    SpringApplicationRunListeners listeners = getRunListeners(args);</span><br><span class="line">    listeners.starting();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      ApplicationArguments applicationArguments = <span class="keyword">new</span> DefaultApplicationArguments(</span><br><span class="line">          args);</span><br><span class="line">      <span class="comment">//第二步：构造容器环境,加载application配置文件或者自定义配置文件位置</span></span><br><span class="line">      ConfigurableEnvironment environment = prepareEnvironment(listeners,</span><br><span class="line">          applicationArguments);</span><br><span class="line">      <span class="comment">//设置需要忽略的bean</span></span><br><span class="line">      configureIgnoreBeanInfo(environment);</span><br><span class="line">      Banner printedBanner = printBanner(environment);</span><br><span class="line">      <span class="comment">//第三步：创建容器</span></span><br><span class="line">      context = createApplicationContext();</span><br><span class="line">      <span class="comment">//第四步：实例化SpringBootExceptionReporter.class，用来支持报告关于启动的错误</span></span><br><span class="line">      exceptionReporters = getSpringFactoriesInstances(</span><br><span class="line">          SpringBootExceptionReporter.class,</span><br><span class="line">          <span class="keyword">new</span> Class[] &#123; ConfigurableApplicationContext.class &#125;, context);</span><br><span class="line">      <span class="comment">//第五步：准备容器</span></span><br><span class="line">      prepareContext(context, environment, listeners, applicationArguments,</span><br><span class="line">          printedBanner);</span><br><span class="line">      <span class="comment">//第六步：刷新容器</span></span><br><span class="line">      refreshContext(context);</span><br><span class="line">      <span class="comment">//第七步：刷新容器后的扩展接口</span></span><br><span class="line">      afterRefresh(context, applicationArguments);</span><br><span class="line">      stopWatch.stop();</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">        <span class="keyword">new</span> StartupInfoLogger(<span class="keyword">this</span>.mainApplicationClass)</span><br><span class="line">            .logStarted(getApplicationLog(), stopWatch);</span><br><span class="line">      &#125;</span><br><span class="line">      listeners.started(context);</span><br><span class="line">      callRunners(context, applicationArguments);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      handleRunFailure(context, ex, exceptionReporters, listeners);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      listeners.running(context);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      handleRunFailure(context, ex, exceptionReporters, <span class="keyword">null</span>);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> context;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>  首先监听器是一个好东西，每当程序执行到哪个步骤的时候就根据相应的Event去执行相应的方法<br>  不过需要将实现了的接口类都加载进来才会去执行，这里的这个监听器是SpringApplicationRunListener<br>  也可以认为是第一个执行的监听器，钩子类监听器拉起来一堆的其它监听<br>  接着就构造Environment<br>  然后就是容器的创建，预处理准备容器，刷新容器<br>  最后执行刷新后的容器扩展接口整个程序如果没有报错则会启动。</p>
+<p>  总结一下<br>  这篇是先大概将SpringBoot的大流程说一下，从俯视角度看全局做到心中有数。<br>  我们后续再详细拆分一小块一小块的细写。<br>  不然一上来就每行代码的过，这样看Spring源码容易陷进去出不来。<br>  导致最后感觉啥都不会</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/26/JMM详解/" class="archive-article-date">
-  	<time datetime="2018-12-26T14:20:43.501Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/26/JMM详解/">JMM详解</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/01/18/SpringBoot2.StartProcess/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/26/Java.Memory.Model/" class="archive-article-date">
-  	<time datetime="2018-12-25T16:29:00.227Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2019/01/15/SpringBoot/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SpringBoot大纲</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/26/Java.Memory.Model/">Java.Memory.Model</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/23/JUC.微服务/" class="archive-article-date">
-  	<time datetime="2018-12-22T17:08:58.418Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/23/JUC.微服务/">微服务与模块化</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/" class="archive-article-date">
-  	<time datetime="2018-12-20T14:17:42.133Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/">JUC.CopyOnWriteArrayList</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/19/ThreadLocal的那些事/" class="archive-article-date">
-  	<time datetime="2018-12-19T15:32:30.861Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/19/ThreadLocal的那些事/">ThreadLocal的那些事</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2018/12/15/JUC.LRBTree/" class="archive-article-date">
-  	<time datetime="2018-12-15T12:09:23.987Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2018/12/15/JUC.LRBTree/">红黑树原理</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/holyShit/archives/page/2/">2</a><a class="page-number" href="/holyShit/archives/page/3/">3</a><a class="extend next" rel="next" href="/holyShit/archives/page/2/">Next &raquo;</a>
-    </nav>
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'SpringBoot2.StartProcess',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -460,8 +325,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
