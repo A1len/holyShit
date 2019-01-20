@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives: 2019 | Al1en的博客</title>
+  <title>SpringBoot2.StartProcess.自动装配 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/2019/index.html">
+  <meta name="description" content="自动装配提纲 自动装配BeanDefinetions 自动配置  这里的主要逻辑其实还是在SpringFrame里面实现并没有多少特殊的地方咱们继续进入到AbstarctApplicationContext的refresh方法中去看看SpringBoot的这一块具体加载BeanDefinetions主要在invokeBeanFactoryPostProcessors该方法中加载完了之后进行实例化就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot2.StartProcess.自动装配">
+<meta property="og:url" content="https://github.com/2019/01/20/SpringBoot2.自动装配/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="自动装配提纲 自动装配BeanDefinetions 自动配置  这里的主要逻辑其实还是在SpringFrame里面实现并没有多少特殊的地方咱们继续进入到AbstarctApplicationContext的refresh方法中去看看SpringBoot的这一块具体加载BeanDefinetions主要在invokeBeanFactoryPostProcessors该方法中加载完了之后进行实例化就">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-20T13:32:25.978Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="SpringBoot2.StartProcess.自动装配">
+<meta name="twitter:description" content="自动装配提纲 自动装配BeanDefinetions 自动配置  这里的主要逻辑其实还是在SpringFrame里面实现并没有多少特殊的地方咱们继续进入到AbstarctApplicationContext的refresh方法中去看看SpringBoot的这一块具体加载BeanDefinetions主要在invokeBeanFactoryPostProcessors该方法中加载完了之后进行实例化就">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,184 +142,169 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-SpringBoot2.自动装配" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      SpringBoot2.StartProcess.自动装配
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/20/SpringBoot2.自动装配/" class="archive-article-date">
+
+        
+        <a href="/holyShit/2019/01/20/SpringBoot2.自动装配/" class="archive-article-date">
   	<time datetime="2019-01-20T10:13:31.286Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-20</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/20/SpringBoot2.自动装配/">SpringBoot2.StartProcess.自动装配</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="自动装配提纲"><a href="#自动装配提纲" class="headerlink" title="自动装配提纲"></a>自动装配提纲</h2><ul>
+<li><a href="#">自动装配BeanDefinetions</a></li>
+<li><a href="#">自动配置</a></li>
+</ul>
+<p>这里的主要逻辑其实还是在SpringFrame里面实现<br>并没有多少特殊的地方<br>咱们继续进入到AbstarctApplicationContext的refresh方法中去看看<br>SpringBoot的这一块具体加载BeanDefinetions主要在invokeBeanFactoryPostProcessors该方法中<br>加载完了之后进行实例化就实现了自动化配置<br>所以咱们主要看加载BeanDefinetions<br>并且Spring代码的执行都是一环扣一环，相当的紧凑不会出现两个毫无关联的逻辑放在一个方法里面的情况<br><a id="more"></a></p>
+<h2 id="自动装配BeanDefinetions"><a href="#自动装配BeanDefinetions" class="headerlink" title="自动装配BeanDefinetions"></a>自动装配BeanDefinetions</h2><p>说到自动装配咱们就得看看<br>invokeBeanFactoryPostProcessors方法<br>这方法看上去很长其实做的事情很简单大过程其实就做了两步<br>1.处理Spring.factories中加载进来的process,将ConfigurationClassPostProcessor注册。当然还有一些其他的操作，不过可以先不管那些。<br>2.使用ConfigurationClassPostProcessor去parse解析注解类</p>
+<p>看下具体的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里是第一步</span></span><br><span class="line"><span class="keyword">if</span> (beanFactory <span class="keyword">instanceof</span> BeanDefinitionRegistry) &#123;</span><br><span class="line">      BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;</span><br><span class="line">      List&lt;BeanFactoryPostProcessor&gt; regularPostProcessors = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">      List&lt;BeanDefinitionRegistryPostProcessor&gt; registryProcessors = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) &#123;</span><br><span class="line">        <span class="keyword">if</span> (postProcessor <span class="keyword">instanceof</span> BeanDefinitionRegistryPostProcessor) &#123;</span><br><span class="line">          BeanDefinitionRegistryPostProcessor registryProcessor =</span><br><span class="line">              (BeanDefinitionRegistryPostProcessor) postProcessor;</span><br><span class="line">          <span class="comment">//主要逻辑注册ConfigurationClassPostProcessor，这个bean是在SpringApplication的构造函数中初始化进去的。</span></span><br><span class="line">          registryProcessor.postProcessBeanDefinitionRegistry(registry);</span><br><span class="line">          registryProcessors.add(registryProcessor);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">          regularPostProcessors.add(postProcessor);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这里是第二步，执行ConfigurationClassPostProcessor</span></span><br><span class="line">invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);</span><br></pre></td></tr></table></figure>
+<p>上面的代码就完成了具体的两个步骤咱们继续进入到process里面看看具体怎么加载</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Invoke the given BeanDefinitionRegistryPostProcessor beans.调用bean的方法</span></span><br><span class="line"><span class="comment"> * 咱们看下postProcessBeanDefinitionRegistry方法里面的具体执行逻辑processConfigBeanDefinitions方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">invokeBeanDefinitionRegistryPostProcessors</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    Collection&lt;? extends BeanDefinitionRegistryPostProcessor&gt; postProcessors, BeanDefinitionRegistry registry)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (BeanDefinitionRegistryPostProcessor postProcessor : postProcessors) &#123;</span><br><span class="line">    postProcessor.postProcessBeanDefinitionRegistry(registry);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在processConfigBeanDefinitions这个方法里面首先做的一件事情其实就是通过<br>SpringBoot的启动配置类进行解析，里面有一个具体的实现方法parse。该方法实现类在ConfigurationClassParser<br>咱们进去看一眼</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parse</span><span class="params">(Set&lt;BeanDefinitionHolder&gt; configCandidates)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.deferredImportSelectors = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (BeanDefinitionHolder holder : configCandidates) &#123;</span><br><span class="line">    BeanDefinition bd = holder.getBeanDefinition();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (bd <span class="keyword">instanceof</span> AnnotatedBeanDefinition) &#123;</span><br><span class="line">        <span class="comment">//解析注解配置类，从启动类里面配置的那个配置类开始。一直循环直到结束。</span></span><br><span class="line">        parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (bd <span class="keyword">instanceof</span> AbstractBeanDefinition &amp;&amp; ((AbstractBeanDefinition) bd).hasBeanClass()) &#123;</span><br><span class="line">        parse(((AbstractBeanDefinition) bd).getBeanClass(), holder.getBeanName());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        parse(bd.getBeanClassName(), holder.getBeanName());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (BeanDefinitionStoreException ex) &#123;</span><br><span class="line">      <span class="keyword">throw</span> ex;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(</span><br><span class="line">          <span class="string">"Failed to parse configuration class ["</span> + bd.getBeanClassName() + <span class="string">"]"</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//传说中的SpringBoot八爪鱼，通过SPI去获取各个自动配置具体实现类。</span></span><br><span class="line">  processDeferredImportSelectors();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的方法分为两步<br>1.加载项目中的注解beanDefiniton<br>2.加载自动配置的beanDefiniton</p>
+<p>第一步的实现代码<br>在doProcessConfigurationClass里面<br>具体做了下面三件事<br>1.处理PropertySource注解<br>2.处理ComponentScan注解<br>3.处理Import注解<br>做完上面三件事，咱们项目里面的bean以及import进来的class就都将信息注册到了BeanDefinitons,可以用于后面的实例化</p>
+<p>咱们再看一眼<br>processDeferredImportSelectors这个方法加载外部配置类，实现自动配置。<br>其实就是通过EnableAutoConfiguration注解中import进来的AutoConfigurationImportSelector类去处理<br>执行里面的selectImports方法，然后去Spring.factories中加载EnableAutoConfiguration的配置类。还是通过Springle中实现的SPI。</p>
+<p>做完上面这些操作基本整个流程就结束了</p>
+<p>##自动配置</p>
+<p>咱们看一个mybatis-plus的配置类的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span><span class="comment">//标明这是一个配置类</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123;SqlSessionFactory.class, SqlSessionFactoryBean.class&#125;)<span class="comment">//存在上面两个classs的时候执行</span></span><br><span class="line"><span class="meta">@ConditionalOnSingleCandidate</span>(DataSource.class)<span class="comment">//datasource是单例</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(MybatisPlusProperties.class)<span class="comment">//配置类</span></span><br><span class="line"><span class="meta">@AutoConfigureAfter</span>(DataSourceAutoConfiguration.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisPlusAutoConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//其实就是通过上面这些注解的使用执行相应的逻辑，所以如果咱们觉得自带的配置不好用</span></span><br><span class="line"><span class="comment">//完全可以自己覆盖，然后实现一个自己的</span></span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/01/20/SpringBoot2.自动装配/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/19/SpringBoot2.StartProcess.depth/" class="archive-article-date">
-  	<time datetime="2019-01-19T15:35:47.866Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-19</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2019/01/19/SpringBoot2.StartProcess.depth/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SpringBoot2.StartProcess.depth</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/19/SpringBoot2.StartProcess.depth/">SpringBoot2.StartProcess.depth</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/18/SpringBoot2.StartProcess/" class="archive-article-date">
-  	<time datetime="2019-01-18T14:32:37.406Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/18/SpringBoot2.StartProcess/">SpringBoot2.StartProcess</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/15/SpringBoot/" class="archive-article-date">
-  	<time datetime="2019-01-15T15:00:28.214Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/15/SpringBoot/">SpringBoot大纲</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/08/Java.TimSort/" class="archive-article-date">
-  	<time datetime="2019-01-08T14:03:17.830Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
-</a>
-        </div>
-    	 
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'SpringBoot2.StartProcess.自动装配',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/08/Java.TimSort/">Java.TimSort</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/02/Java.Garbage.Collection/" class="archive-article-date">
-  	<time datetime="2019-01-02T13:07:28.380Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/02/Java.Garbage.Collection/">Java.Garbage.Collection</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -338,8 +327,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

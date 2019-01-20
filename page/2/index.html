@@ -140,6 +140,77 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ThreadLocal的那些事" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/19/ThreadLocal的那些事/">ThreadLocal的那些事</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/19/ThreadLocal的那些事/" class="archive-article-date">
+  	<time datetime="2018-12-19T15:32:30.861Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="ThreadLocal提纲"><a href="#ThreadLocal提纲" class="headerlink" title="ThreadLocal提纲"></a>ThreadLocal提纲</h2><ul>
+<li><a href="#">ThreadLocal简介</a></li>
+<li><a href="#">ThreadLocal源码解析</a></li>
+<li><a href="#">ThreadLocal与InheritableThreadLocal的坑</a></li>
+</ul>
+<p>最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。<br>但是这部分内容其实水很深，怕没写好所以又在看书回顾。<br>所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块了。</p>
+<h2 id="ThreadLocal简介"><a href="#ThreadLocal简介" class="headerlink" title="ThreadLocal简介"></a>ThreadLocal简介</h2><p>ThreadLocal线程上下文，怎么说了就是每个线程都有一份自己的map.里面存放着当前线程存入的key value。<br>InheritableThreadLocal是父线程会将数据拷贝一份给子线程的ThreadLocal(这里有两个坑后面说)<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/19/ThreadLocal的那些事/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/19/ThreadLocal的那些事/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-JUC.LRBTree" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -734,76 +805,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/04/JUC.自定义锁/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.ReentrantLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/04/JUC.ReentrantLock/">JUC.ReentrantLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/04/JUC.ReentrantLock/" class="archive-article-date">
-  	<time datetime="2018-12-04T12:01:05.142Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="ReentrantLock提纲"><a href="#ReentrantLock提纲" class="headerlink" title="ReentrantLock提纲"></a>ReentrantLock提纲</h2><ul>
-<li><a href="#">ReentrantLock简介</a></li>
-<li><a href="#">获取与释放锁</a></li>
-<li><a href="#">Condition讲解</a></li>
-</ul>
-<h2 id="ReentrantLock简介"><a href="#ReentrantLock简介" class="headerlink" title="ReentrantLock简介"></a>ReentrantLock简介</h2><p>ReentrantLock是可重入的独占锁，同时只允许一个线程获取该锁，其它被阻塞的锁会放入AQS队列里面。首先看下ReentrantLock的类图<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/04/JUC.ReentrantLock/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/04/JUC.ReentrantLock/">展开全文 >></a>
         </p>
       
 
