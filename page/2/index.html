@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JUC.CopyOnWriteArrayList" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/">JUC.CopyOnWriteArrayList</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/" class="archive-article-date">
+  	<time datetime="2018-12-20T15:12:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CopyOnWriteArrayList提纲"><a href="#CopyOnWriteArrayList提纲" class="headerlink" title="CopyOnWriteArrayList提纲"></a>CopyOnWriteArrayList提纲</h2><ul>
+<li><a href="#">CopyOnWriteArrayList简介</a></li>
+<li><a href="#">CopyOnWriteArrayList源码解读</a></li>
+</ul>
+<h2 id="CopyOnWriteArrayList简介"><a href="#CopyOnWriteArrayList简介" class="headerlink" title="CopyOnWriteArrayList简介"></a>CopyOnWriteArrayList简介</h2><p>CopyOnWriteArrayList是一个适用于都多写少的线程安全集合类，但是也需要明白的是读写分离的集合都会存在弱一致性。说人话就是会有脏读的情况出现呀。<br>不过总体来说是一个不错的工具类，今天孤尽老师说到有人用这个类来当写多读少的用。<br>我其实想了一下为什么这哥们会这么玩。应该是有两种情况<br>1.真不明白原理<br>2.因为不会用的别方式实现线程安全的集合，然后该集合又正好实现了线程安全的写。所以就用了。。。。当万精油用咯<br>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/20/JUC.CopyOnWriteArrayList/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ThreadLocal的那些事" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -350,78 +419,6 @@
 
 
   
-    <article id="post-mysq3" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/mysq3/">MySql索引设计</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/mysq3/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:55:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="索引设计提纲"><a href="#索引设计提纲" class="headerlink" title="索引设计提纲"></a>索引设计提纲</h2><ul>
-<li><a href="#">索引概述</a></li>
-<li><a href="#">索引类型</a></li>
-<li><a href="#">高性能索引策略</a></li>
-</ul>
-<h2 id="索引概述"><a href="#索引概述" class="headerlink" title="索引概述"></a>索引概述</h2><ul>
-<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。</li>
-</ul>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/mysq3/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/mysq3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-mysq2" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -467,6 +464,78 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/14/mysq2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysq3" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/14/mysq3/">MySql索引设计</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/14/mysq3/" class="archive-article-date">
+  	<time datetime="2018-12-14T11:55:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="索引设计提纲"><a href="#索引设计提纲" class="headerlink" title="索引设计提纲"></a>索引设计提纲</h2><ul>
+<li><a href="#">索引概述</a></li>
+<li><a href="#">索引类型</a></li>
+<li><a href="#">高性能索引策略</a></li>
+</ul>
+<h2 id="索引概述"><a href="#索引概述" class="headerlink" title="索引概述"></a>索引概述</h2><ul>
+<li><a href="#">什么是索引</a><br>索引是存储引擎用于快速找到记录的一种数据结构，这是索引的基本功能。<br>索引对于良好的性能非常关键。尤其当数据量越来越大的时候，索引对于性能愈发重要。不恰当的索引会导致随着数据量增大，性能急剧下降。</li>
+</ul>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/14/mysq3/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/14/mysq3/">展开全文 >></a>
         </p>
       
 
@@ -751,76 +820,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/14/mysql/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.自定义锁" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.自定义锁/">JUC.自定义非可重入独占锁</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.自定义锁/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="UnableReentrantLock提纲"><a href="#UnableReentrantLock提纲" class="headerlink" title="UnableReentrantLock提纲"></a>UnableReentrantLock提纲</h2><ul>
-<li><a href="#">可重入锁</a></li>
-<li><a href="#">非可重入锁实现</a></li>
-<li><a href="#">测试死锁</a></li>
-</ul>
-<h2 id="UnableReentrantLock简介"><a href="#UnableReentrantLock简介" class="headerlink" title="## UnableReentrantLock简介"></a>## UnableReentrantLock简介</h2><p>可重入锁，也叫做递归锁，指的是在同一线程内，外层函数获得锁之后，内层递归函数仍然可以获取到该锁。换一种说法：同一个线程再次进入同步代码时，可以使用自己已获取到的锁。<br>防止在同一线程中多次获取锁而导致死锁发生。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.自定义锁/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.自定义锁/">展开全文 >></a>
         </p>
       
 
