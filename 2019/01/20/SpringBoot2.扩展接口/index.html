@@ -10,18 +10,18 @@
   <link rel="dns-prefetch" href="https://github.com">
   <title>SpringBoot2.扩展接口 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Springboot扩展接口 Spring扩展接口  Spring扩展判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放咱们先看一张流程图">
+  <meta name="description" content="Spring扩展描述判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot2.扩展接口">
 <meta property="og:url" content="https://github.com/2019/01/20/SpringBoot2.扩展接口/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="Springboot扩展接口 Spring扩展接口  Spring扩展判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放咱们先看一张流程图">
+<meta property="og:description" content="Spring扩展描述判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://github.com/holyShit//img/spring.process.png">
-<meta property="og:updated_time" content="2019-02-18T15:45:05.142Z">
+<meta property="og:updated_time" content="2019-02-18T17:15:45.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot2.扩展接口">
-<meta name="twitter:description" content="Springboot扩展接口 Spring扩展接口  Spring扩展判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放咱们先看一张流程图">
+<meta name="twitter:description" content="Spring扩展描述判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放">
 <meta name="twitter:image" content="https://github.com/holyShit//img/spring.process.png">
   
   
@@ -164,10 +164,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Springboot扩展接口"><a href="#Springboot扩展接口" class="headerlink" title="Springboot扩展接口"></a>Springboot扩展接口</h2><ul>
-<li><a href="#">Spring扩展接口</a></li>
-</ul>
-<h2 id="Spring扩展"><a href="#Spring扩展" class="headerlink" title="Spring扩展"></a>Spring扩展</h2><p>判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。<br>毫无疑问Spring扩展性这方面做的不错。<br>说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）<br>实现原则严格按照开闭原则，内部修改关闭，对扩展开放<br>咱们先看一张流程图<br><img src="/holyShit//img/spring.process.png" alt="avatar"><br><a id="more"></a></p>
+        <h2 id="Spring扩展描述"><a href="#Spring扩展描述" class="headerlink" title="Spring扩展描述"></a>Spring扩展描述</h2><p>判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。<br>毫无疑问Spring扩展性这方面做的不错。<br>说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）<br>实现原则严格按照开闭原则，内部修改关闭，对扩展开放<br><a id="more"></a><br>咱们先看一张流程图<br><img src="/holyShit//img/spring.process.png" alt="avatar"><br>如上图中主要的画出来了具体的执行流程，下面会具体说到每一个扩展接口的使用场景</p>
+<h2 id="BeanDefinitionRegistryPostProcessor"><a href="#BeanDefinitionRegistryPostProcessor" class="headerlink" title="BeanDefinitionRegistryPostProcessor"></a>BeanDefinitionRegistryPostProcessor</h2><p>通过实现下面的接口可以动态注册beanDefinition<br>postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)</p>
+<h2 id="BeanFactoryPostProcessor"><a href="#BeanFactoryPostProcessor" class="headerlink" title="BeanFactoryPostProcessor"></a>BeanFactoryPostProcessor</h2><p>通过实现下面的接口可以修改所有注册的beanDefinition<br>postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)</p>
+<h2 id="InstantiationAwareBeanPostProcessor"><a href="#InstantiationAwareBeanPostProcessor" class="headerlink" title="InstantiationAwareBeanPostProcessor"></a>InstantiationAwareBeanPostProcessor</h2><p>实现该接口方法可以用于动态代理或者增强bean<br>default Object postProcessBeforeInstantiation(Class&lt;?&gt; beanClass, String beanName) throws BeansException {<br>        return null;<br>}</p>
+<p>用于bean中的属性值填充比如@Autowired<br>default PropertyValues postProcessPropertyValues(<br>        PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeansException {</p>
+<pre><code>return pvs;
+</code></pre><p>}</p>
+<h2 id="SmartInstantiationAwareBeanPostProcessor"><a href="#SmartInstantiationAwareBeanPostProcessor" class="headerlink" title="SmartInstantiationAwareBeanPostProcessor"></a>SmartInstantiationAwareBeanPostProcessor</h2><p>用于判断构造器方法<br>determineCandidateConstructors<br>发生bean循环依赖依赖的时候调用<br>default Object getEarlyBeanReference(Object bean, String beanName) throws BeansException </p>
+<h2 id="ApplicationContextAwareProcessor"><a href="#ApplicationContextAwareProcessor" class="headerlink" title="ApplicationContextAwareProcessor"></a>ApplicationContextAwareProcessor</h2><p>这里得看一段具体的代码在该类中有如下方法，可以用来获取容器的变量，用于项目中使用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">invokeAwareInterfaces</span><span class="params">(Object bean)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> Aware) &#123;</span><br><span class="line">			<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> EnvironmentAware) &#123;</span><br><span class="line">				((EnvironmentAware) bean).setEnvironment(<span class="keyword">this</span>.applicationContext.getEnvironment());</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> EmbeddedValueResolverAware) &#123;</span><br><span class="line">				((EmbeddedValueResolverAware) bean).setEmbeddedValueResolver(<span class="keyword">this</span>.embeddedValueResolver);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ResourceLoaderAware) &#123;</span><br><span class="line">				((ResourceLoaderAware) bean).setResourceLoader(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ApplicationEventPublisherAware) &#123;</span><br><span class="line">				((ApplicationEventPublisherAware) bean).setApplicationEventPublisher(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> MessageSourceAware) &#123;</span><br><span class="line">				((MessageSourceAware) bean).setMessageSource(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (bean <span class="keyword">instanceof</span> ApplicationContextAware) &#123;</span><br><span class="line">				((ApplicationContextAware) bean).setApplicationContext(<span class="keyword">this</span>.applicationContext);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="BeanPostProcessor"><a href="#BeanPostProcessor" class="headerlink" title="BeanPostProcessor"></a>BeanPostProcessor</h2><p>bean属性设置之前对bean实例修改<br>default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {<br>        return bean;<br>}</p>
+<p>bean属性初始化之后对bean修改，aop代理类实现的地方<br>default Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {<br>        return bean;<br>}</p>
+<h2 id="InitializingBean"><a href="#InitializingBean" class="headerlink" title="InitializingBean"></a>InitializingBean</h2><p>初始化bean的时候调用，一般用来针对某个bean配置<br>afterPropertiesSet</p>
 
       
 
