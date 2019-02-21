@@ -8,15 +8,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Al1en的博客</title>
+  <title>SpringBoot2.动态@Value实现 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/page/3/index.html">
+  <meta name="description" content="前言前面文章有详细描述过各个不同阶段对于bean的扩展接口所以今天就基于BeanPostProcessor实现Spring中的@Value注解值动态变化基于上面也可以实现一个配置中心，比如说Apollo具体的实现步骤分为如下几步1.通过BeanPostProcessor取得有使用@Value注解的bean,并存储到map中2.动态修改map中的bean字段的值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot2.动态@Value实现">
+<meta property="og:url" content="https://github.com/2019/02/21/SpringBoot2.动态@Value/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="前言前面文章有详细描述过各个不同阶段对于bean的扩展接口所以今天就基于BeanPostProcessor实现Spring中的@Value注解值动态变化基于上面也可以实现一个配置中心，比如说Apollo具体的实现步骤分为如下几步1.通过BeanPostProcessor取得有使用@Value注解的bean,并存储到map中2.动态修改map中的bean字段的值">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-21T11:13:12.033Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="SpringBoot2.动态@Value实现">
+<meta name="twitter:description" content="前言前面文章有详细描述过各个不同阶段对于bean的扩展接口所以今天就基于BeanPostProcessor实现Spring中的@Value注解值动态变化基于上面也可以实现一个配置中心，比如说Apollo具体的实现步骤分为如下几步1.通过BeanPostProcessor取得有使用@Value注解的bean,并存储到map中2.动态修改map中的bean字段的值">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,44 +142,34 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-mysql" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+            <article id="post-SpringBoot2.动态@Value" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/mysql/">MySql体系结构和存储引擎</a>
+    <h1 class="article-title" itemprop="name">
+      SpringBoot2.动态@Value实现
     </h1>
   
 
         
-        <a href="/holyShit/2018/12/14/mysql/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:23:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
+        <a href="/holyShit/2019/02/21/SpringBoot2.动态@Value/" class="archive-article-date">
+  	<time datetime="2019-02-21T11:13:12.033Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li><a href="#">关键字 关于mysql 体系结构 插件式存储引擎</a></li>
-</ul>
-<h2 id="关于mysql"><a href="#关于mysql" class="headerlink" title="关于mysql"></a>关于mysql</h2><ul>
-<li><a href="#">1995年成立于瑞典并发布第一个版本</a></li>
-<li><a href="#">2008年2月被Sun收购</a></li>
-<li><a href="#">2010年1月被Oracle收购</a></li>
-<li><a href="#">2010年12月发布5.5版本</a></li>
-<li><a href="#">2012年2月发布7.2</a></li>
-<li><a href="#">2013念2月发布5.6</a></li>
-<li><a href="#">2015年10月发布5.7</a></li>
-<li><a href="#">2018年发布8.0</a></li>
-</ul>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/mysql/#more">more >></a>
-        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面文章有详细描述过各个不同阶段对于bean的扩展接口<br>所以今天就基于BeanPostProcessor实现Spring中的@Value注解值动态变化<br>基于上面也可以实现一个配置中心，比如说Apollo<br>具体的实现步骤分为如下几步<br>1.通过BeanPostProcessor取得有使用@Value注解的bean,并存储到map中<br>2.动态修改map中的bean字段的值<br><a id="more"></a></p>
+<h2 id="获取bean"><a href="#获取bean" class="headerlink" title="获取bean"></a>获取bean</h2><p>首先写一个类实现BeanPostProcessor接口，只需要使用其中的一个函数就可以。前后都可以用来实现，并不影响最终的使用，因为咱们只是需要bean的实例。<br>接下来看一下具体实现代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.allen.apollo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.BeansException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.BeanPostProcessor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.util.ReflectionUtils;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringValueProcessor</span> <span class="keyword">implements</span> <span class="title">BeanPostProcessor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlaceholderHelper placeholderHelper = <span class="keyword">new</span> PlaceholderHelper();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (beanName.equals(<span class="string">"springValueController"</span>)) &#123;</span><br><span class="line">            Class obj = bean.getClass();</span><br><span class="line">            List&lt;Field&gt; fields = findAllField(obj);</span><br><span class="line">            <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">                Value value = field.getAnnotation(Value.class);</span><br><span class="line">                <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    Set&lt;String&gt; keys = placeholderHelper.extractPlaceholderKeys(value.value());</span><br><span class="line">                    <span class="keyword">for</span> (String key : keys) &#123;</span><br><span class="line">                        SpringValue springValue = <span class="keyword">new</span> SpringValue(key, value.value(), bean, beanName, field, <span class="keyword">false</span>);</span><br><span class="line">                        SpringValueCacheMap.map.put(key, springValue);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;Field&gt; <span class="title">findAllField</span><span class="params">(Class clazz)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> List&lt;Field&gt; res = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        ReflectionUtils.doWithFields(clazz, <span class="keyword">new</span> ReflectionUtils.FieldCallback() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doWith</span><span class="params">(Field field)</span> <span class="keyword">throws</span> IllegalArgumentException, IllegalAccessException </span>&#123;</span><br><span class="line">                res.add(field);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码咱们就已经拿到了SpringValueController这个实例bean并存储到了map当中，下面看一下测试代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * cache  field,存储bean 字段</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"><span class="keyword">package</span> com.allen.apollo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.google.common.collect.LinkedListMultimap;</span><br><span class="line"><span class="keyword">import</span> com.google.common.collect.Multimap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringValueCacheMap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Multimap&lt;String, SpringValue&gt; map = LinkedListMultimap.create();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">package</span> com.allen.apollo;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.ref.WeakReference;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Type;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.core.MethodParameter;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringValue</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MethodParameter methodParameter;</span><br><span class="line">    <span class="keyword">private</span> Field field;</span><br><span class="line">    <span class="keyword">private</span> WeakReference&lt;Object&gt; beanRef;</span><br><span class="line">    <span class="keyword">private</span> String beanName;</span><br><span class="line">    <span class="keyword">private</span> String key;</span><br><span class="line">    <span class="keyword">private</span> String placeholder;</span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt; targetType;</span><br><span class="line">    <span class="keyword">private</span> Type genericType;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> isJson;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SpringValue</span><span class="params">(String key, String placeholder, Object bean, String beanName, Field field, <span class="keyword">boolean</span> isJson)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.beanRef = <span class="keyword">new</span> WeakReference&lt;&gt;(bean);</span><br><span class="line">        <span class="keyword">this</span>.beanName = beanName;</span><br><span class="line">        <span class="keyword">this</span>.field = field;</span><br><span class="line">        <span class="keyword">this</span>.key = key;</span><br><span class="line">        <span class="keyword">this</span>.placeholder = placeholder;</span><br><span class="line">        <span class="keyword">this</span>.targetType = field.getType();</span><br><span class="line">        <span class="keyword">this</span>.isJson = isJson;</span><br><span class="line">        <span class="keyword">if</span> (isJson) &#123;</span><br><span class="line">            <span class="keyword">this</span>.genericType = field.getGenericType();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SpringValue</span><span class="params">(String key, String placeholder, Object bean, String beanName, Method method, <span class="keyword">boolean</span> isJson)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.beanRef = <span class="keyword">new</span> WeakReference&lt;&gt;(bean);</span><br><span class="line">        <span class="keyword">this</span>.beanName = beanName;</span><br><span class="line">        <span class="keyword">this</span>.methodParameter = <span class="keyword">new</span> MethodParameter(method, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">this</span>.key = key;</span><br><span class="line">        <span class="keyword">this</span>.placeholder = placeholder;</span><br><span class="line">        Class&lt;?&gt;[] paramTps = method.getParameterTypes();</span><br><span class="line">        <span class="keyword">this</span>.targetType = paramTps[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">this</span>.isJson = isJson;</span><br><span class="line">        <span class="keyword">if</span> (isJson) &#123;</span><br><span class="line">            <span class="keyword">this</span>.genericType = method.getGenericParameterTypes()[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Object newVal)</span> <span class="keyword">throws</span> IllegalAccessException, InvocationTargetException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isField()) &#123;</span><br><span class="line">            injectField(newVal);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            injectMethod(newVal);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">injectField</span><span class="params">(Object newVal)</span> <span class="keyword">throws</span> IllegalAccessException </span>&#123;</span><br><span class="line">        Object bean = beanRef.get();</span><br><span class="line">        <span class="keyword">if</span> (bean == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span> accessible = field.isAccessible();</span><br><span class="line">        field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        field.set(bean, newVal);</span><br><span class="line">        field.setAccessible(accessible);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">injectMethod</span><span class="params">(Object newVal)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> InvocationTargetException, IllegalAccessException </span>&#123;</span><br><span class="line">        Object bean = beanRef.get();</span><br><span class="line">        <span class="keyword">if</span> (bean == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        methodParameter.getMethod().invoke(bean, newVal);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getBeanName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> beanName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Class&lt;?&gt; getTargetType() &#123;</span><br><span class="line">        <span class="keyword">return</span> targetType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPlaceholder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.placeholder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MethodParameter <span class="title">getMethodParameter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> methodParameter;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isField</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.field != <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Field <span class="title">getField</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> field;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Type <span class="title">getGenericType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> genericType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isJson</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> isJson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isTargetBeanValid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> beanRef.get() != <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Object bean = beanRef.get();</span><br><span class="line">        <span class="keyword">if</span> (bean == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (isField()) &#123;</span><br><span class="line">            <span class="keyword">return</span> String</span><br><span class="line">                    .format(<span class="string">"key: %s, beanName: %s, field: %s.%s"</span>, key, beanName, bean.getClass().getName(), field.getName());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> String.format(<span class="string">"key: %s, beanName: %s, method: %s.%s"</span>, key, beanName, bean.getClass().getName(),</span><br><span class="line">                methodParameter.getMethod().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.allen.apollo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.google.common.base.Strings;</span><br><span class="line"><span class="keyword">import</span> com.google.common.collect.Sets;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.BeanDefinition;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.BeanExpressionContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.ConfigurableBeanFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.Scope;</span><br><span class="line"><span class="keyword">import</span> org.springframework.util.StringUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Placeholder helper functions.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlaceholderHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PLACEHOLDER_PREFIX = <span class="string">"$&#123;"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PLACEHOLDER_SUFFIX = <span class="string">"&#125;"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String VALUE_SEPARATOR = <span class="string">":"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SIMPLE_PLACEHOLDER_PREFIX = <span class="string">"&#123;"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EXPRESSION_PREFIX = <span class="string">"#&#123;"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EXPRESSION_SUFFIX = <span class="string">"&#125;"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Resolve placeholder property values, e.g.</span></span><br><span class="line"><span class="comment">   * &lt;br /&gt;</span></span><br><span class="line"><span class="comment">   * &lt;br /&gt;</span></span><br><span class="line"><span class="comment">   * "$&#123;somePropertyValue&#125;" -&gt; "the actual property value"</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">resolvePropertyValue</span><span class="params">(ConfigurableBeanFactory beanFactory, String beanName, String placeholder)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// resolve string value</span></span><br><span class="line">    String strVal = beanFactory.resolveEmbeddedValue(placeholder);</span><br><span class="line"></span><br><span class="line">    BeanDefinition bd = (beanFactory.containsBean(beanName) ? beanFactory</span><br><span class="line">        .getMergedBeanDefinition(beanName) : <span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// resolve expressions like "#&#123;systemProperties.myProp&#125;"</span></span><br><span class="line">    <span class="keyword">return</span> evaluateBeanDefinitionString(beanFactory, strVal, bd);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> Object <span class="title">evaluateBeanDefinitionString</span><span class="params">(ConfigurableBeanFactory beanFactory, String value,</span></span></span><br><span class="line"><span class="function"><span class="params">                                              BeanDefinition beanDefinition)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (beanFactory.getBeanExpressionResolver() == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">    Scope scope = (beanDefinition != <span class="keyword">null</span> ? beanFactory</span><br><span class="line">        .getRegisteredScope(beanDefinition.getScope()) : <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">return</span> beanFactory.getBeanExpressionResolver()</span><br><span class="line">        .evaluate(value, <span class="keyword">new</span> BeanExpressionContext(beanFactory, scope));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Extract keys from placeholder, e.g.</span></span><br><span class="line"><span class="comment">   * &lt;ul&gt;</span></span><br><span class="line"><span class="comment">   * &lt;li&gt;$&#123;some.key&#125; =&gt; "some.key"&lt;/li&gt;</span></span><br><span class="line"><span class="comment">   * &lt;li&gt;$&#123;some.key:$&#123;some.other.key:100&#125;&#125; =&gt; "some.key", "some.other.key"&lt;/li&gt;</span></span><br><span class="line"><span class="comment">   * &lt;li&gt;$&#123;$&#123;some.key&#125;&#125; =&gt; "some.key"&lt;/li&gt;</span></span><br><span class="line"><span class="comment">   * &lt;li&gt;$&#123;$&#123;some.key:other.key&#125;&#125; =&gt; "some.key"&lt;/li&gt;</span></span><br><span class="line"><span class="comment">   * &lt;li&gt;$&#123;$&#123;some.key&#125;:$&#123;another.key&#125;&#125; =&gt; "some.key", "another.key"&lt;/li&gt;</span></span><br><span class="line"><span class="comment">   * &lt;li&gt;#&#123;new java.text.SimpleDateFormat('$&#123;some.key&#125;').parse('$&#123;another.key&#125;')&#125; =&gt; "some.key", "another.key"&lt;/li&gt;</span></span><br><span class="line"><span class="comment">   * &lt;/ul&gt;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Set&lt;String&gt; <span class="title">extractPlaceholderKeys</span><span class="params">(String propertyString)</span> </span>&#123;</span><br><span class="line">    Set&lt;String&gt; placeholderKeys = Sets.newHashSet();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!isNormalizedPlaceholder(propertyString) &amp;&amp; !isExpressionWithPlaceholder(propertyString)) &#123;</span><br><span class="line">      <span class="keyword">return</span> placeholderKeys;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Stack&lt;String&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    stack.push(propertyString);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">      String strVal = stack.pop();</span><br><span class="line">      <span class="keyword">int</span> startIndex = strVal.indexOf(PLACEHOLDER_PREFIX);</span><br><span class="line">      <span class="keyword">if</span> (startIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">        placeholderKeys.add(strVal);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">int</span> endIndex = findPlaceholderEndIndex(strVal, startIndex);</span><br><span class="line">      <span class="keyword">if</span> (endIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// invalid placeholder?</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      String placeholderCandidate = strVal.substring(startIndex + PLACEHOLDER_PREFIX.length(), endIndex);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// $&#123;some.key:other.key&#125;</span></span><br><span class="line">      <span class="keyword">if</span> (placeholderCandidate.startsWith(PLACEHOLDER_PREFIX)) &#123;</span><br><span class="line">        stack.push(placeholderCandidate);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// some.key:$&#123;some.other.key:100&#125;</span></span><br><span class="line">        <span class="keyword">int</span> separatorIndex = placeholderCandidate.indexOf(VALUE_SEPARATOR);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (separatorIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">          stack.push(placeholderCandidate);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          stack.push(placeholderCandidate.substring(<span class="number">0</span>, separatorIndex));</span><br><span class="line">          String defaultValuePart =</span><br><span class="line">              normalizeToPlaceholder(placeholderCandidate.substring(separatorIndex + VALUE_SEPARATOR.length()));</span><br><span class="line">          <span class="keyword">if</span> (!Strings.isNullOrEmpty(defaultValuePart)) &#123;</span><br><span class="line">            stack.push(defaultValuePart);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// has remaining part, e.g. $&#123;a&#125;.$&#123;b&#125;</span></span><br><span class="line">      <span class="keyword">if</span> (endIndex + PLACEHOLDER_SUFFIX.length() &lt; strVal.length() - <span class="number">1</span>) &#123;</span><br><span class="line">        String remainingPart = normalizeToPlaceholder(strVal.substring(endIndex + PLACEHOLDER_SUFFIX.length()));</span><br><span class="line">        <span class="keyword">if</span> (!Strings.isNullOrEmpty(remainingPart)) &#123;</span><br><span class="line">          stack.push(remainingPart);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> placeholderKeys;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isNormalizedPlaceholder</span><span class="params">(String propertyString)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> propertyString.startsWith(PLACEHOLDER_PREFIX) &amp;&amp; propertyString.endsWith(PLACEHOLDER_SUFFIX);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isExpressionWithPlaceholder</span><span class="params">(String propertyString)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> propertyString.startsWith(EXPRESSION_PREFIX) &amp;&amp; propertyString.endsWith(EXPRESSION_SUFFIX)</span><br><span class="line">        &amp;&amp; propertyString.contains(PLACEHOLDER_PREFIX);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> String <span class="title">normalizeToPlaceholder</span><span class="params">(String strVal)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> startIndex = strVal.indexOf(PLACEHOLDER_PREFIX);</span><br><span class="line">    <span class="keyword">if</span> (startIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> endIndex = strVal.lastIndexOf(PLACEHOLDER_SUFFIX);</span><br><span class="line">    <span class="keyword">if</span> (endIndex == -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> strVal.substring(startIndex, endIndex + PLACEHOLDER_SUFFIX.length());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">findPlaceholderEndIndex</span><span class="params">(CharSequence buf, <span class="keyword">int</span> startIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> index = startIndex + PLACEHOLDER_PREFIX.length();</span><br><span class="line">    <span class="keyword">int</span> withinNestedPlaceholder = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (index &lt; buf.length()) &#123;</span><br><span class="line">      <span class="keyword">if</span> (StringUtils.substringMatch(buf, index, PLACEHOLDER_SUFFIX)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (withinNestedPlaceholder &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          withinNestedPlaceholder--;</span><br><span class="line">          index = index + PLACEHOLDER_SUFFIX.length();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> index;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (StringUtils.substringMatch(buf, index, SIMPLE_PLACEHOLDER_PREFIX)) &#123;</span><br><span class="line">        withinNestedPlaceholder++;</span><br><span class="line">        index = index + SIMPLE_PLACEHOLDER_PREFIX.length();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        index++;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.allen.apollo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.util.StringUtils;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringValueController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;test:123&#125;"</span>)</span><br><span class="line">    <span class="keyword">public</span> String zax;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;test:123&#125;"</span>)</span><br><span class="line">    <span class="keyword">public</span> String test;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>((<span class="string">"$&#123;zed:zed&#125;"</span>))</span><br><span class="line">    <span class="keyword">public</span> String zed;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/test"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(String a, String b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!StringUtils.isEmpty(a)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">for</span> (SpringValue springValue : SpringValueCacheMap.map.get(<span class="string">"test"</span>)) &#123;</span><br><span class="line">                    springValue.update(a);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">for</span> (SpringValue springValue : SpringValueCacheMap.map.get(<span class="string">"zed"</span>)) &#123;</span><br><span class="line">                    springValue.update(b);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException | InvocationTargetException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> String.format(<span class="string">"test: %s, zax: %s, zed: %s"</span>, test, zax, zed);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
 
       
@@ -186,16 +180,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/mysql/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/02/21/SpringBoot2.动态@Value/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2019/01/20/SpringBoot2.扩展接口/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SpringBoot2.扩展接口</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -215,637 +268,30 @@
 
 
 
-
-  
-    <article id="post-JUC.自定义锁" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.自定义锁/">JUC.自定义非可重入独占锁</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.自定义锁/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="UnableReentrantLock提纲"><a href="#UnableReentrantLock提纲" class="headerlink" title="UnableReentrantLock提纲"></a>UnableReentrantLock提纲</h2><ul>
-<li><a href="#">可重入锁</a></li>
-<li><a href="#">非可重入锁实现</a></li>
-<li><a href="#">测试死锁</a></li>
-</ul>
-<h2 id="UnableReentrantLock简介"><a href="#UnableReentrantLock简介" class="headerlink" title="## UnableReentrantLock简介"></a>## UnableReentrantLock简介</h2><p>可重入锁，也叫做递归锁，指的是在同一线程内，外层函数获得锁之后，内层递归函数仍然可以获取到该锁。换一种说法：同一个线程再次进入同步代码时，可以使用自己已获取到的锁。<br>防止在同一线程中多次获取锁而导致死锁发生。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.自定义锁/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.自定义锁/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.StampedLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.StampedLock/">JUC.StampedLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.StampedLock/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="StampedLock提纲"><a href="#StampedLock提纲" class="headerlink" title="StampedLock提纲"></a>StampedLock提纲</h2><ul>
-<li><a href="#">StampedLock简介</a></li>
-<li><a href="#">原理剖析</a></li>
-</ul>
-<h2 id="StampedLock简介"><a href="#StampedLock简介" class="headerlink" title="StampedLock简介"></a>StampedLock简介</h2><p>首先大方向看下StampedLock类图<br><img src="/holyShit//img/StampedLock.png" alt="avatar"><br>从图中可以看出这个锁貌似有点屌屌的有读锁写锁读写锁。这个锁看上去很厉害，其实这个锁不像其它锁那么安全使用，存在很高的风险性。<br>听说该锁设计之初是为了作为工具类开发其它线程安全组件，用好了提升性能。没用好会发生死锁，CPU飙升耗死资源的情况，以及读写锁脏数据<br>为什么出现死锁，如果记得我前一章所写的非可重入锁就知道了。这个大哥也是非可重入的，哈哈哈~<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.StampedLock/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.StampedLock/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.Semaphore" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.Semaphore/">JUC.Semaphore</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.Semaphore/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Semaphore提纲"><a href="#Semaphore提纲" class="headerlink" title="Semaphore提纲"></a>Semaphore提纲</h2><ul>
-<li><a href="#">Semaphore简介</a></li>
-<li><a href="#">Semaphore源码解析</a></li>
-</ul>
-<h2 id="Semaphore简介"><a href="#Semaphore简介" class="headerlink" title="Semaphore简介"></a>Semaphore简介</h2><p>一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。<br>所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。<br>综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿CountDownLatch或者CyclicBarrier都不是问题。<br>或者搞一个限流啥的都不成问题。<br>因为原理都是一样<br>抽象出来其实还是AQS的精髓，多线程访问资源，仅满足特定条件线程可继续执行其余都排队阻塞。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.Semaphore/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.Semaphore/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.ReentrantReadWriteLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.ReentrantReadWriteLock/">JUC.ReentrantReadWriteLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.ReentrantReadWriteLock/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="ReentrantReadWriteLock提纲"><a href="#ReentrantReadWriteLock提纲" class="headerlink" title="ReentrantReadWriteLock提纲"></a>ReentrantReadWriteLock提纲</h2><ul>
-<li><a href="#">ReentrantReadWriteLock简介</a></li>
-<li><a href="#">原理剖析</a></li>
-</ul>
-<h2 id="ReentrantReadWriteLock简介"><a href="#ReentrantReadWriteLock简介" class="headerlink" title="ReentrantReadWriteLock简介"></a>ReentrantReadWriteLock简介</h2><p>ReentrantReadWriteLock适用于读多写少的场景，ReentrantReadWriteLock采用的是读写分离的方式。相比较上一章的StampedLock来说由于没有使用乐观锁的方式，可以保证强一致性。<br>但是也存在一个问题那就是很有可能会导致写锁饿死。因为有读锁存在则写锁需要等待，有写锁存在则读锁需要等待。上面的StampedLock可以解决这个问题，但是前面也有提到使用的注意规则小心脏数据。<br>综合来说具体怎么用，用哪种方式还是根据具体的业务场景来判断。没有完美的方案，不然也不会存在两个锁了。接着继续说ReentrantReadWriteLock。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.ReentrantReadWriteLock/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.ReentrantReadWriteLock/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.ReentrantLock" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.ReentrantLock/">JUC.ReentrantLock</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.ReentrantLock/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="ReentrantLock提纲"><a href="#ReentrantLock提纲" class="headerlink" title="ReentrantLock提纲"></a>ReentrantLock提纲</h2><ul>
-<li><a href="#">ReentrantLock简介</a></li>
-<li><a href="#">获取与释放锁</a></li>
-<li><a href="#">Condition讲解</a></li>
-</ul>
-<h2 id="ReentrantLock简介"><a href="#ReentrantLock简介" class="headerlink" title="ReentrantLock简介"></a>ReentrantLock简介</h2><p>ReentrantLock是可重入的独占锁，同时只允许一个线程获取该锁，其它被阻塞的锁会放入AQS队列里面。首先看下ReentrantLock的类图<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.ReentrantLock/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.ReentrantLock/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.CyclicBarrier" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.CyclicBarrier/">JUC.CyclicBarrier</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.CyclicBarrier/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="CyclicBarrier提纲"><a href="#CyclicBarrier提纲" class="headerlink" title="CyclicBarrier提纲"></a>CyclicBarrier提纲</h2><ul>
-<li><a href="#">CyclicBarrier简介</a></li>
-<li><a href="#">CyclicBarrier源码解析</a></li>
-</ul>
-<h2 id="CyclicBarrier简介"><a href="#CyclicBarrier简介" class="headerlink" title="CyclicBarrier简介"></a>CyclicBarrier简介</h2><p>如果说CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>那么CyclicBarrier就是多个线程之间互相等待。<br>具体可以举一个例子来理解，比如说五个人组团打lol。得等到五个人都吃饱喝足了然后一起到齐了才能开始游戏，进入游戏界面得五个人都点确定才能继续开始。<br>这里出现了两个阶段的任务执行，如果使用CountDownLatch完全没法实现。<br>但是根据存在即合理的原则，CountDownLatch也有它的好处。<br>简单任务多个线程执行结束没有后续处理只需要一个或多个等待线程处理还是用CountDownLatch吧。毕竟不用放入阻塞队列占用线程了。该干嘛干嘛去<br>具体怎么用还是根据实际业务场景分析来使用没有绝对的方案。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CyclicBarrier/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CyclicBarrier/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.CAS" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.CAS/">JUC.CAS及原子类源码</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.CAS/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="CAS提纲"><a href="#CAS提纲" class="headerlink" title="CAS提纲"></a>CAS提纲</h2><ul>
-<li><a href="#">CAS简介</a></li>
-<li><a href="#">暴力拆迁CAS</a></li>
-</ul>
-<p>我觉得网上很多写CAS和原子类源码的都是垃圾。我不是在针对他们个人，而是真心觉得他们写的垃圾。所以没办法被迫写一篇博客给程序员同胞做贡献。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CAS/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CAS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.AQS" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.AQS/">JUC.AQS</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.AQS/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:22:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="AQS提纲"><a href="#AQS提纲" class="headerlink" title="AQS提纲"></a>AQS提纲</h2><ul>
-<li><a href="#">AQS简介</a></li>
-<li><a href="#">依赖工具类LockSupport</a></li>
-<li><a href="#">获取与释放锁</a></li>
-<li><a href="#">ConditionObject</a></li>
-</ul>
-<h2 id="AQS简介"><a href="#AQS简介" class="headerlink" title="AQS简介"></a>AQS简介</h2><p>AbstractQueuedSynchronizer抽象同步简称AQS，它是实现同步器的基础组件，并发包中的锁底层就是通过AQS实现。下面看下AQS类的UML类图<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.AQS/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.AQS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.CountDownLatch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.CountDownLatch/">JUC.CountDownLatch</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.CountDownLatch/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:21:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="CountDownLatch提纲"><a href="#CountDownLatch提纲" class="headerlink" title="CountDownLatch提纲"></a>CountDownLatch提纲</h2><ul>
-<li><a href="#">ReentrantLock简介</a></li>
-<li><a href="#">CountDownLatch源码解析</a></li>
-</ul>
-<h2 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h2><p>CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。<br>首先使用线程池的好处是线程复用，理论上可以减少线程创建时间。其次起到控制程序中线程数并掌控程序全局的做作用。<br>所以一般情况下就只能使用CountDownLatch了，而且相比join来说也更灵活。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CountDownLatch/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CountDownLatch/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/holyShit/page/2/">&laquo; Prev</a><a class="page-number" href="/holyShit/">1</a><a class="page-number" href="/holyShit/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/holyShit/page/4/">4</a><a class="extend next" rel="next" href="/holyShit/page/4/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'SpringBoot2.动态@Value实现',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -868,8 +314,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
