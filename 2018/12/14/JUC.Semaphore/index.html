@@ -17,12 +17,13 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="Semaphore提纲 Semaphore简介 Semaphore源码解析  Semaphore简介一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿Count">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://github.com/holyShit//img/Semaphore.png">
-<meta property="og:updated_time" content="2018-12-14T11:22:46.000Z">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/Semaphore.png">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-02-25T12:36:34.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JUC.Semaphore">
 <meta name="twitter:description" content="Semaphore提纲 Semaphore简介 Semaphore源码解析  Semaphore简介一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿Count">
-<meta name="twitter:image" content="https://github.com/holyShit//img/Semaphore.png">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/Semaphore.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -169,7 +170,7 @@
 <li><a href="#">Semaphore源码解析</a></li>
 </ul>
 <h2 id="Semaphore简介"><a href="#Semaphore简介" class="headerlink" title="Semaphore简介"></a>Semaphore简介</h2><p>一句话介绍Semaphore就是资源的控制访问许可控制。限流听说过吧，令牌桶算法听说过呗。<br>所以Semaphore就是一个桶里面放入特定的令牌，当有需要访问资源的时候就去里面拿一个令牌。没了就阻塞住需要访问资源的线程。<br>综上Semaphore想怎么用，可以发挥想象力。想怎么玩怎么玩，比如说模仿CountDownLatch或者CyclicBarrier都不是问题。<br>或者搞一个限流啥的都不成问题。<br>因为原理都是一样<br>抽象出来其实还是AQS的精髓，多线程访问资源，仅满足特定条件线程可继续执行其余都排队阻塞。<br><a id="more"></a></p>
-<h2 id="Semaphore源码解析"><a href="#Semaphore源码解析" class="headerlink" title="Semaphore源码解析"></a>Semaphore源码解析</h2><p>Semaphore要不看一下类图？<br><img src="/holyShit//img/Semaphore.png" alt="avatar"><br>写这个JUC我其实挺烦的每天都写一些重复的东西。。。。。<br>还是那么老套路AQS不想解释类图了，直接说内部实现以及重写了些啥。<br>Semaphore内部维护一个计数器，tryAcquireShared就减少state，tryReleaseShared就增加state。<br>其余的还是老套路进队列等待唤醒</p>
+<h2 id="Semaphore源码解析"><a href="#Semaphore源码解析" class="headerlink" title="Semaphore源码解析"></a>Semaphore源码解析</h2><p>Semaphore要不看一下类图？<br><img src="https://a1len.github.io/holyShit//img/Semaphore.png" alt="avatar"><br>写这个JUC我其实挺烦的每天都写一些重复的东西。。。。。<br>还是那么老套路AQS不想解释类图了，直接说内部实现以及重写了些啥。<br>Semaphore内部维护一个计数器，tryAcquireShared就减少state，tryReleaseShared就增加state。<br>其余的还是老套路进队列等待唤醒</p>
 <ul>
 <li><p><a href="#">手撕源码acquire</a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化permits许可个数，别以为一定就要大于0。就不能初始化为0，然后再release几次把permits加上去？</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>&#123;</span><br><span class="line">    sync = <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//接着看一下tryAcquireShared</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nonfairTryAcquireShared(acquires);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">int</span> <span class="title">nonfairTryAcquireShared</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">int</span> available = getState();<span class="comment">//获取AQS中state也就是permits</span></span><br><span class="line">            <span class="keyword">int</span> remaining = available - acquires;<span class="comment">//减少值</span></span><br><span class="line">            <span class="comment">//remaining小于0直接进队列，大于0则CAS替换值然后返回</span></span><br><span class="line">            <span class="keyword">if</span> (remaining &lt; <span class="number">0</span> ||</span><br><span class="line">                compareAndSetState(available, remaining))</span><br><span class="line">                <span class="keyword">return</span> remaining;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -179,6 +180,7 @@
 </li>
 </ul>
 <p>Semaphore只要想明白就是一个水桶里面放了许可，干任何事情都要从里面拿一个令牌，做完往里面添加一个，<br>没有许可的都去排队。然后具体你要用它做什么，随你开心就好了。</p>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
 
       
 

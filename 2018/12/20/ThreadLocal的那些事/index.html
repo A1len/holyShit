@@ -17,10 +17,12 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="ThreadLocal提纲 ThreadLocal简介 ThreadLocal源码解析 ThreadLocal与InheritableThreadLocal的坑  最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。但是这部分内容其实水很深，怕没写好所以又在看书回顾。所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-19T16:28:38.000Z">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-02-25T12:30:30.079Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadLocal的那些事">
 <meta name="twitter:description" content="ThreadLocal提纲 ThreadLocal简介 ThreadLocal源码解析 ThreadLocal与InheritableThreadLocal的坑  最近不是不写博客了。而是想搞一个大事情，想体系的写JVM从内存模型到垃圾回收器以及一些我自己推理的阀值设定公式再到类加载。但是这部分内容其实水很深，怕没写好所以又在看书回顾。所以有点时间会写一点这种小的工具类的源码，没时间就暂时不写这块">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -180,6 +182,7 @@
 </li>
 </ul>
 <h2 id="ThreadLocal与InheritableThreadLocal的坑"><a href="#ThreadLocal与InheritableThreadLocal的坑" class="headerlink" title="ThreadLocal与InheritableThreadLocal的坑"></a>ThreadLocal与InheritableThreadLocal的坑</h2><p>ThreadLocal的坑<br>1.内存泄漏，虽然key会清空但是value不会。所以用完了记得remove<br>2.线程池会线程复用，导致数据脏读。如果没有set方法的时候，用完记得remove。<br>InheritableThreadLocal是在new Thread的时候会拷贝一份数据到子线程中。<br>所以很容易推理出下面几个问题<br>1.线程池的使用，导致数据只能拷贝一次。因为你也就只新建一次Thread，这个东西很多书上把它吹上天。<br>有时候我是选择拒绝的。<br>2.父线程修改了数据，子线程是看不到的。因为子线程就是一份复制的数据。<br>所以如果你真的要用，一定是父线程初始化完数据之后再也不会改变数据的情况下使用。<br>拷贝的方法在Thread的构造方法里面，有兴趣看一下。这个东西不实用，所以不打算多写。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (parent.inheritableThreadLocals != <span class="keyword">null</span>)</span><br><span class="line">         <span class="keyword">this</span>.inheritableThreadLocals =</span><br><span class="line">             ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);</span><br></pre></td></tr></table></figure></p>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
 
       
 

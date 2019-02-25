@@ -17,12 +17,13 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="Spring扩展描述判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://github.com/holyShit//img/spring.process.png">
-<meta property="og:updated_time" content="2019-02-18T17:18:10.591Z">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/spring.process.png">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-02-25T12:39:17.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot2.扩展接口">
 <meta name="twitter:description" content="Spring扩展描述判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。毫无疑问Spring扩展性这方面做的不错。说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）实现原则严格按照开闭原则，内部修改关闭，对扩展开放">
-<meta name="twitter:image" content="https://github.com/holyShit//img/spring.process.png">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/spring.process.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -164,7 +165,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Spring扩展描述"><a href="#Spring扩展描述" class="headerlink" title="Spring扩展描述"></a>Spring扩展描述</h2><p>判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。<br>毫无疑问Spring扩展性这方面做的不错。<br>说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）<br>实现原则严格按照开闭原则，内部修改关闭，对扩展开放<br><a id="more"></a><br>咱们先看一张流程图<br><img src="/holyShit//img/spring.process.png" alt="avatar"><br>如上图中主要的画出来了具体的执行流程，下面会具体说到每一个扩展接口的使用场景</p>
+        <h2 id="Spring扩展描述"><a href="#Spring扩展描述" class="headerlink" title="Spring扩展描述"></a>Spring扩展描述</h2><p>判断一个框架或者程序的好坏直观的方法就是看其扩展性如何。<br>毫无疑问Spring扩展性这方面做的不错。<br>说到扩展主要还是在容器的refresh这块，也有listener（这一块先放放）<br>实现原则严格按照开闭原则，内部修改关闭，对扩展开放<br><a id="more"></a><br>咱们先看一张流程图<br><img src="https://a1len.github.io/holyShit//img/spring.process.png" alt="avatar"><br>如上图中主要的画出来了具体的执行流程，下面会具体说到每一个扩展接口的使用场景</p>
 <h2 id="BeanDefinitionRegistryPostProcessor"><a href="#BeanDefinitionRegistryPostProcessor" class="headerlink" title="BeanDefinitionRegistryPostProcessor"></a>BeanDefinitionRegistryPostProcessor</h2><p>通过实现下面的接口可以动态注册beanDefinition<br>postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)</p>
 <h2 id="BeanFactoryPostProcessor"><a href="#BeanFactoryPostProcessor" class="headerlink" title="BeanFactoryPostProcessor"></a>BeanFactoryPostProcessor</h2><p>通过实现下面的接口可以修改所有注册的beanDefinition<br>postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)</p>
 <h2 id="InstantiationAwareBeanPostProcessor"><a href="#InstantiationAwareBeanPostProcessor" class="headerlink" title="InstantiationAwareBeanPostProcessor"></a>InstantiationAwareBeanPostProcessor</h2><p>实现该接口方法可以用于动态代理或者增强bean<br>default Object postProcessBeforeInstantiation(Class&lt;?&gt; beanClass, String beanName) throws BeansException {<br>        return null;<br>}</p>
@@ -174,6 +175,7 @@
 <h2 id="BeanPostProcessor"><a href="#BeanPostProcessor" class="headerlink" title="BeanPostProcessor"></a>BeanPostProcessor</h2><p>bean属性设置之前对bean实例修改<br>default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {<br>        return bean;<br>}</p>
 <p>bean属性初始化之后对bean修改，aop代理类实现的地方<br>default Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {<br>        return bean;<br>}</p>
 <h2 id="InitializingBean"><a href="#InitializingBean" class="headerlink" title="InitializingBean"></a>InitializingBean</h2><p>初始化bean的时候调用，一般用来针对某个bean配置<br>afterPropertiesSet</p>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
 
       
 
@@ -246,18 +248,18 @@
   
 <nav id="article-nav">
   
-    <a href="/holyShit/2019/02/21/SpringBoot2.动态@Value/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/holyShit/2019/01/20/SpringBoot2.自动装配/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          SpringBoot2.动态@Value实现
+          SpringBoot2.StartProcess.自动装配
         
       </div>
     </a>
   
   
-    <a href="/holyShit/2019/01/20/SpringBoot2.自动装配/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">SpringBoot2.StartProcess.自动装配</div>
+    <a href="/holyShit/2019/01/20/SpringBoot2.StartProcess.depth/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SpringBoot2.StartProcess.depth</div>
       <i class="icon-circle-right"></i>
     </a>
   
