@@ -17,10 +17,12 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="自动装配提纲 自动装配BeanDefinetions 自动配置  这里的主要逻辑其实还是在SpringFrame里面实现并没有多少特殊的地方咱们继续进入到AbstarctApplicationContext的refresh方法中去看看SpringBoot的这一块具体加载BeanDefinetions主要在invokeBeanFactoryPostProcessors该方法中加载完了之后进行实例化就">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-20T13:32:24.000Z">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-02-25T12:43:15.053Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot2.StartProcess.自动装配">
 <meta name="twitter:description" content="自动装配提纲 自动装配BeanDefinetions 自动配置  这里的主要逻辑其实还是在SpringFrame里面实现并没有多少特殊的地方咱们继续进入到AbstarctApplicationContext的refresh方法中去看看SpringBoot的这一块具体加载BeanDefinetions主要在invokeBeanFactoryPostProcessors该方法中加载完了之后进行实例化就">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -181,6 +183,7 @@
 <p>##自动配置</p>
 <p>咱们看一个mybatis-plus的配置类的代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span><span class="comment">//标明这是一个配置类</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123;SqlSessionFactory.class, SqlSessionFactoryBean.class&#125;)<span class="comment">//存在上面两个classs的时候执行</span></span><br><span class="line"><span class="meta">@ConditionalOnSingleCandidate</span>(DataSource.class)<span class="comment">//datasource是单例</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(MybatisPlusProperties.class)<span class="comment">//配置类</span></span><br><span class="line"><span class="meta">@AutoConfigureAfter</span>(DataSourceAutoConfiguration.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisPlusAutoConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//其实就是通过上面这些注解的使用执行相应的逻辑，所以如果咱们觉得自带的配置不好用</span></span><br><span class="line"><span class="comment">//完全可以自己覆盖，然后实现一个自己的</span></span><br></pre></td></tr></table></figure>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
 
       
 

@@ -17,10 +17,12 @@
 <meta property="og:site_name" content="Al1en的博客">
 <meta property="og:description" content="StartProcess提纲 启动监听器 获取环境 创建容器 准备容器 刷新容器 刷新容器后扩展  昨天了咱们把大的过程说了一下，今天咱们把细化的过程详细写写。之后再根据这几个细化过程，继续来一遍深入的源码解读。一点关于源码阅读的心得就是先看大架构布局，然后细看各个组成模块。明白各个模块用到的技术通过上面的方式去看源码其实是很轻松的一件事情。可能有人会说了，他妈的就是不知道才去看源码的呀知道还看源">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-19T17:34:24.000Z">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-02-25T12:43:25.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot2.StartProcess.depth">
 <meta name="twitter:description" content="StartProcess提纲 启动监听器 获取环境 创建容器 准备容器 刷新容器 刷新容器后扩展  昨天了咱们把大的过程说了一下，今天咱们把细化的过程详细写写。之后再根据这几个细化过程，继续来一遍深入的源码解读。一点关于源码阅读的心得就是先看大架构布局，然后细看各个组成模块。明白各个模块用到的技术通过上面的方式去看源码其实是很轻松的一件事情。可能有人会说了，他妈的就是不知道才去看源码的呀知道还看源">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -186,6 +188,7 @@
 <p>这里实际会进入AbstractApplicationContext中去执行refresh方法，这就和常见的springFrame基本一样了<br>如果不清楚调用过程，可以通过idea看一下AnnotationConfigServletWebServerApplicationContext<br>这个类的继承结构类图</p>
 <h2 id="刷新容器后扩展"><a href="#刷新容器后扩展" class="headerlink" title="刷新容器后扩展"></a>刷新容器后扩展</h2><p>这里是一个预留的扩展接口啥都没干，可以自己实现</p>
 <p>到这里咱们又过了一遍启动流程，后面再具体说bean注册实例化自动配置怎么实现的。</p>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
 
       
 
