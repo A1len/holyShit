@@ -18,7 +18,7 @@
 <meta property="og:description" content="前言换风格了哈，以后写的博客内容都中英文混合。保持英语环境的感觉，毕竟还有追求。 Sometimes we use if-else to handle everything in a logical condition. but it not fairly well. so , we can use the design patterns. Design patterns are the gift">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
-<meta property="og:updated_time" content="2019-03-10T09:51:39.816Z">
+<meta property="og:updated_time" content="2019-03-10T09:53:39.363Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Refactoring code">
 <meta name="twitter:description" content="前言换风格了哈，以后写的博客内容都中英文混合。保持英语环境的感觉，毕竟还有追求。 Sometimes we use if-else to handle everything in a logical condition. but it not fairly well. so , we can use the design patterns. Design patterns are the gift">
@@ -170,8 +170,8 @@
 <li>简化代码</li>
 <li>便于扩展</li>
 </ul>
-<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>###背景<br>先说一下背景，为啥写这篇博客<br>前几天有一个老哥写了一篇关于策略模式的博客关于重构代码中的if-else。然后就有小伙伴问我了，说看了挺多设计模式的文章以及博客，但是找不到实际的应用场景。<br>emmm～～～<br>这的确有那么一点点的尴尬，所以我打算下面举一个实际的例子来讲解一下咯。</p>
-<p>###策略模式是啥<br>在策略模式（Strategy Pattern）中，一个类的行为或其算法可以在运行时更改。这种类型的设计模式属于行为型模式。<br>在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context 对象。策略对象改变 context 对象的执行算法。<br>看了上面这一段话是否有不清楚？<br>说白了就是一件事情有不同的实现方式，具体执行的时候选择对应的实现方式。<br>比如说我姐欠了我一顿饭，我叫她请我吃饭<br>这里就会存在三个角色<br>1.我 只管吃饭，并提供一个条件（清淡点，什么时间）<br>2.姐 根据我提供的条件判断选择什么餐馆定几点的座<br>3.餐馆 提供吃的<br>而这里的餐馆就是一种策略，因为满足条件的餐馆N多可以供选择。<br>再举一个实际代码中的例子<br>需要提供一个接口去支付<br>这个接口就可以抽象出来下面三个角色<br>1.服务调用者（提供抽取数据的条件）<br>2.选择者（根据条件选择具体的策略）<br>3.执行者（具体的对应支付系统接口）<br>现在应该明白了啥是策略模式了下面no bb ,show code</p>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>先说一下背景，为啥写这篇博客<br>前几天有一个老哥写了一篇关于策略模式的博客关于重构代码中的if-else。然后就有小伙伴问我了，说看了挺多设计模式的文章以及博客，但是找不到实际的应用场景。<br>emmm～～～<br>这的确有那么一点点的尴尬，所以我打算下面举一个实际的例子来讲解一下咯。</p>
+<h3 id="策略模式是啥"><a href="#策略模式是啥" class="headerlink" title="策略模式是啥"></a>策略模式是啥</h3><p>在策略模式（Strategy Pattern）中，一个类的行为或其算法可以在运行时更改。这种类型的设计模式属于行为型模式。<br>在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context 对象。策略对象改变 context 对象的执行算法。<br>看了上面这一段话是否有不清楚？<br>说白了就是一件事情有不同的实现方式，具体执行的时候选择对应的实现方式。<br>比如说我姐欠了我一顿饭，我叫她请我吃饭<br>这里就会存在三个角色<br>1.我 只管吃饭，并提供一个条件（清淡点，什么时间）<br>2.姐 根据我提供的条件判断选择什么餐馆定几点的座<br>3.餐馆 提供吃的<br>而这里的餐馆就是一种策略，因为满足条件的餐馆N多可以供选择。<br>再举一个实际代码中的例子<br>需要提供一个接口去支付<br>这个接口就可以抽象出来下面三个角色<br>1.服务调用者（提供抽取数据的条件）<br>2.选择者（根据条件选择具体的策略）<br>3.执行者（具体的对应支付系统接口）<br>现在应该明白了啥是策略模式了下面no bb ,show code</p>
 <h3 id="策略模式具体实现"><a href="#策略模式具体实现" class="headerlink" title="策略模式具体实现"></a>策略模式具体实现</h3><p>还是根据上面那个例子写一个if-else的代码吧<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (CONST.ALIPAY.equals(msg))&#123;</span><br><span class="line">     alipay();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(CONST.WXPAY.equals(msg))&#123;</span><br><span class="line">    wxpay();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    defaultPay();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上面这段代码存在的问题挺明显</p>
 <ul>
