@@ -140,6 +140,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-并发编程" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/holyShit/2018/12/14/并发编程/">并发编程线程通信（一）</a>
+    </h1>
+  
+
+        
+        <a href="/holyShit/2018/12/14/并发编程/" class="archive-article-date">
+  	<time datetime="2018-12-14T11:24:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#">关键字wait notify</a></li>
+<li><a href="#">CountDownLatch的使用</a></li>
+</ul>
+<h2 id="wait以及notify基础知识"><a href="#wait以及notify基础知识" class="headerlink" title="wait以及notify基础知识"></a>wait以及notify基础知识</h2><p>wait线程等待并释放锁，notify通知唤醒线程但不释放锁。看下面一段代码t2获取lock对象但并不满足执行条件选择wait.<br>t1执行过程中达到了t2需要的条件立即通知t2,t2执行完代码通知t1可以继续执行.</p>
+        
+          <a class="article-more-a" href="/holyShit/2018/12/14/并发编程/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/holyShit/2018/12/14/并发编程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-mysql" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -744,75 +813,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/holyShit/2018/12/14/JUC.AQS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JUC.CountDownLatch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.CountDownLatch/">JUC.CountDownLatch</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/12/14/JUC.CountDownLatch/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:21:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="CountDownLatch提纲"><a href="#CountDownLatch提纲" class="headerlink" title="CountDownLatch提纲"></a>CountDownLatch提纲</h2><ul>
-<li><a href="#">ReentrantLock简介</a></li>
-<li><a href="#">CountDownLatch源码解析</a></li>
-</ul>
-<h2 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h2><p>CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。<br>首先使用线程池的好处是线程复用，理论上可以减少线程创建时间。其次起到控制程序中线程数并掌控程序全局的做作用。<br>所以一般情况下就只能使用CountDownLatch了，而且相比join来说也更灵活。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CountDownLatch/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CountDownLatch/">展开全文 >></a>
         </p>
       
 

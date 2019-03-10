@@ -8,15 +8,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Al1en的博客</title>
+  <title>Refactoring code | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/page/4/index.html">
+  <meta name="description" content="前言换风格了哈，以后写的博客内容都中英文混合。保持英语环境的感觉，毕竟还有追求。 Sometimes we use if-else to handle everything in a logical condition. but it not fairly well. so , we can use the design patterns. Design patterns are the gift">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Refactoring code">
+<meta property="og:url" content="https://github.com/2019/03/10/StrategyPattern/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="前言换风格了哈，以后写的博客内容都中英文混合。保持英语环境的感觉，毕竟还有追求。 Sometimes we use if-else to handle everything in a logical condition. but it not fairly well. so , we can use the design patterns. Design patterns are the gift">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-03-10T09:51:39.816Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="Refactoring code">
+<meta name="twitter:description" content="前言换风格了哈，以后写的博客内容都中英文混合。保持英语环境的感觉，毕竟还有追求。 Sometimes we use if-else to handle everything in a logical condition. but it not fairly well. so , we can use the design patterns. Design patterns are the gift">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,56 +144,129 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-JUC.CountDownLatch" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+            <article id="post-StrategyPattern" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/12/14/JUC.CountDownLatch/">JUC.CountDownLatch</a>
+    <h1 class="article-title" itemprop="name">
+      Refactoring code
     </h1>
   
 
         
-        <a href="/holyShit/2018/12/14/JUC.CountDownLatch/" class="archive-article-date">
-  	<time datetime="2018-12-14T11:21:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-14</time>
+        <a href="/holyShit/2019/03/10/StrategyPattern/" class="archive-article-date">
+  	<time datetime="2019-03-10T09:51:39.816Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="CountDownLatch提纲"><a href="#CountDownLatch提纲" class="headerlink" title="CountDownLatch提纲"></a>CountDownLatch提纲</h2><ul>
-<li><a href="#">ReentrantLock简介</a></li>
-<li><a href="#">CountDownLatch源码解析</a></li>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>换风格了哈，以后写的博客内容都中英文混合。保持英语环境的感觉，毕竟还有追求。<br> Sometimes we use if-else to handle everything in a logical condition.<br> but it not fairly well.<br> so , we can use the design patterns.<br> Design patterns are the gift for all soft enginner.<br> <a id="more"></a></p>
+<h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h2><ul>
+<li>提高代码可读性</li>
+<li>简化代码</li>
+<li>便于扩展</li>
 </ul>
-<h2 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h2><p>CountDownLatch让一个或者多个线程等待其它线程完成操作。<br>实际开发中是否遇到过多线程计算汇总结果的情况？使用join一点毛病都没有，但是实际开发过程中会让你自己随意新建线程？基本都会使用线程池。<br>首先使用线程池的好处是线程复用，理论上可以减少线程创建时间。其次起到控制程序中线程数并掌控程序全局的做作用。<br>所以一般情况下就只能使用CountDownLatch了，而且相比join来说也更灵活。<br>
-        
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CountDownLatch/#more">more >></a>
-        
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>###背景<br>先说一下背景，为啥写这篇博客<br>前几天有一个老哥写了一篇关于策略模式的博客关于重构代码中的if-else。然后就有小伙伴问我了，说看了挺多设计模式的文章以及博客，但是找不到实际的应用场景。<br>emmm～～～<br>这的确有那么一点点的尴尬，所以我打算下面举一个实际的例子来讲解一下咯。</p>
+<p>###策略模式是啥<br>在策略模式（Strategy Pattern）中，一个类的行为或其算法可以在运行时更改。这种类型的设计模式属于行为型模式。<br>在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context 对象。策略对象改变 context 对象的执行算法。<br>看了上面这一段话是否有不清楚？<br>说白了就是一件事情有不同的实现方式，具体执行的时候选择对应的实现方式。<br>比如说我姐欠了我一顿饭，我叫她请我吃饭<br>这里就会存在三个角色<br>1.我 只管吃饭，并提供一个条件（清淡点，什么时间）<br>2.姐 根据我提供的条件判断选择什么餐馆定几点的座<br>3.餐馆 提供吃的<br>而这里的餐馆就是一种策略，因为满足条件的餐馆N多可以供选择。<br>再举一个实际代码中的例子<br>需要提供一个接口去支付<br>这个接口就可以抽象出来下面三个角色<br>1.服务调用者（提供抽取数据的条件）<br>2.选择者（根据条件选择具体的策略）<br>3.执行者（具体的对应支付系统接口）<br>现在应该明白了啥是策略模式了下面no bb ,show code</p>
+<h3 id="策略模式具体实现"><a href="#策略模式具体实现" class="headerlink" title="策略模式具体实现"></a>策略模式具体实现</h3><p>还是根据上面那个例子写一个if-else的代码吧<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (CONST.ALIPAY.equals(msg))&#123;</span><br><span class="line">     alipay();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(CONST.WXPAY.equals(msg))&#123;</span><br><span class="line">    wxpay();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    defaultPay();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面这段代码存在的问题挺明显</p>
+<ul>
+<li>不方便扩展，稍微一修改就要动代码</li>
+<li>耦合度太高，以后逻辑再复杂一点里面的代码看不懂</li>
+<li>不符合开闭原则</li>
+</ul>
+<p>那咱们如果想设计好点可以怎么做了</p>
+<ul>
+<li>根据开闭原则，实现动态可插拔</li>
+<li>层层抽象</li>
+</ul>
+<p>首先可以抽象出来一个大模块支付模块，根据策略模式选择对应支付模块<br>其次可以再对应的具体支付模块里面再抽象出具体的执行步骤，可以运用指令模式<br>最后实现动态可插拔，插件式代码<br>下面看一下具体的策略模式代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PayStrategy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">excutePay</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AliPay</span> <span class="keyword">implements</span> <span class="title">PayStrategy</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excutePay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">do</span> ali pay....</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WXPay</span> <span class="keyword">implements</span> <span class="title">PayStrategy</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excutePay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">do</span> wx pay ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultPay</span> <span class="keyword">implements</span> <span class="title">PayStrategy</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excutePay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">do</span> <span class="keyword">default</span> pay ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PayStrategyCatch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, PayStrategy&gt; map = <span class="keyword">new</span> Map&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Synchronized Map&lt;String, PayStrategy&gt; <span class="title">loadPayStrategy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//这里可以设计一个插拔式的SPI去捞取实际的实现类，可以根据Springboot学习</span></span><br><span class="line">        Map&lt;String, PayStrategy&gt; map = <span class="keyword">new</span> Map&lt;&gt;();</span><br><span class="line">        <span class="comment">//load the class</span></span><br><span class="line">        String key = cover( <span class="class"><span class="keyword">class</span>.<span class="title">getName</span>())</span>;</span><br><span class="line">        map.put(key, <span class="class"><span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="keyword">return</span> map;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据msg获取对应的策略实现类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> PayStrategy <span class="title">getPayStrategy</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> map.get(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Context</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> PayStrategy strategy;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Context</span><span class="params">(Strategy strategy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">executePayStrategy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         strategy.excutePay();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StrategyPatternDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String msg = <span class="string">"key"</span>;</span><br><span class="line">        Context context = <span class="keyword">new</span> Context(PayStrategyCatch.getPayStrategy(msg));</span><br><span class="line">        context.executePayStrategy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>好了以后这段代码就彻底解耦出来了，并且扩展性也更好点。<br>这里面的代码需要具体生产用的话还需要更多细节的考虑才能保证代码健壮性<br>比如说各种判空啥的呀</p>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
+
       
 
       
-    </p></div>
+    </div>
     <div class="article-info article-info-index">
       
       
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/12/14/JUC.CountDownLatch/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/03/10/StrategyPattern/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2019/02/21/SpringBoot2.动态@Value/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SpringBoot2.动态@Value实现</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -207,76 +286,30 @@
 
 
 
-
-  
-    <article id="post-startBlog" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/holyShit/2018/01/06/startBlog/">一直想记录点什么</a>
-    </h1>
-  
-
-        
-        <a href="/holyShit/2018/01/06/startBlog/" class="archive-article-date">
-  	<time datetime="2018-01-06T12:15:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这几天生病一直在想是不是该记录点什么。<br>病了就天天想，会不会就这么走了。<br>《冰与火之歌》里，史塔克家族家训“凛冬将至”的逼格何在？<br>最终达成了谜一般的结论，它跟“中华民族到了最危险的时候”的意境是一样的…<br>其实不无道理。起风了，唯努力生存。<br>希望每个人都能在这个时节照顾好自己。</p>
-<p> <a href="#"> Winter creeps on</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/holyShit/2018/01/06/startBlog/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/holyShit/page/3/">&laquo; Prev</a><a class="page-number" href="/holyShit/">1</a><a class="page-number" href="/holyShit/page/2/">2</a><a class="page-number" href="/holyShit/page/3/">3</a><span class="page-number current">4</span>
-    </nav>
+  
+
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Refactoring code',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -299,8 +332,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
