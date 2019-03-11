@@ -8,15 +8,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>Archives: 2019 | Al1en的博客</title>
+  <title>Login Logic | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Al1en的博客">
-<meta property="og:url" content="https://github.com/archives/2019/index.html">
+  <meta name="description" content="前言 a few days ago, somebody asked me about distributed login logic. at that time i didn’t have time to explain in detail. better late than never. so,here we go . 分布式系统登陆其实没多复杂点，主要还是细节的把控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Login Logic">
+<meta property="og:url" content="https://github.com/2019/03/11/login-logic/index.html">
 <meta property="og:site_name" content="Al1en的博客">
+<meta property="og:description" content="前言 a few days ago, somebody asked me about distributed login logic. at that time i didn’t have time to explain in detail. better late than never. so,here we go . 分布式系统登陆其实没多复杂点，主要还是细节的把控">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/login.png">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/login-2.png">
+<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta property="og:updated_time" content="2019-03-11T14:21:55.326Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Al1en的博客">
+<meta name="twitter:title" content="Login Logic">
+<meta name="twitter:description" content="前言 a few days ago, somebody asked me about distributed login logic. at that time i didn’t have time to explain in detail. better late than never. so,here we go . 分布式系统登陆其实没多复杂点，主要还是细节的把控">
+<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/login.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -138,292 +146,160 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-login-logic" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      Login Logic
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/holyShit/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/03/11/login-logic/" class="archive-article-date">
+
+        
+        <a href="/holyShit/2019/03/11/login-logic/" class="archive-article-date">
   	<time datetime="2019-03-11T14:21:55.326Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-11</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/03/11/login-logic/">Login Logic</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p> a few days ago, somebody asked me about distributed login logic.<br> at that time i didn’t have time to explain in detail.<br> better late than never.<br> so,here we go .<br> 分布式系统登陆其实没多复杂点，主要还是细节的把控<br> <a id="more"></a></p>
+<h2 id="重点细节"><a href="#重点细节" class="headerlink" title="重点细节"></a>重点细节</h2><ul>
+<li>token存储</li>
+<li>用户信息存储</li>
+<li>安全控制</li>
+</ul>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><h3 id="方案演变"><a href="#方案演变" class="headerlink" title="方案演变"></a>方案演变</h3><p>单机系统的时候咱们常用session以及数据最多再加一个redis来实现登陆。<br>这一块感觉不用多说感觉大家应该都挺清楚<br>那么到了分布式架构的情况下又有何区别了？<br>首先session存储用户信息的方案已经不够用<br>其次登陆逻辑不该耦合在具体业务模块中了<br>最后多微服务情况下网关的存在所有不安全的请求该被网关拦截<br>根据上面的情况<br>现在咱们要做的其实和以前没多大区别只是把以前的一个整理拆分成各个模块来做。</p>
+<h3 id="方案实现"><a href="#方案实现" class="headerlink" title="方案实现"></a>方案实现</h3><p>有很多小伙伴问我JWT什么的其实方案是灵活多变的，JWT也仅仅只是一种思路而已。<br>咱们学习任何一项技术学习的应该是背后的思想而不是具体实现<br>不然那永远是东施笑颦<br>如不知所以，然不知所来<br>如来～<br>划水够了，具体说说我具体的实现方案吧<br>使用会话凭证分级，登陆可以获取到永久token（其实也有过期时间只是比较长比如一个月），token可以换取临时会话temptoken（会话级token）<br>所以免登陆的方式是通过用户第一次用户名密码登陆的方式拿到token之后存储到客户端<br>下次再唤醒app或者web登录的时候直接拿token与服务端交互<br>服务端校验token有效性以及是否过期，通过token可以获取temptoken<br>综上token为了保证不丢失存储到数据库！<br>temptoken存储到redis<br>上面已经说了大的实现逻辑<br>咱们下面再聊聊细节<br>token与temptoken生成的加密算法以及密钥都是隔一段时间动态变化生成<br>这时候细心的小伙伴肯定会问如果我token没过期，但是算法和密钥变了这不就坑了嘛<br>当然会坑<br>所以咱们会比较token是否过期，没过期但是数据库或者redis有责刷新一个新的token放到报文里返回给客户端。<br>至于过期时间可以根据自己的业务场景具体选择实现，甚至可以每次请求都返回一个新的temptoken</p>
+<h3 id="方案时序图"><a href="#方案时序图" class="headerlink" title="方案时序图"></a>方案时序图</h3><p><img src="https://a1len.github.io/holyShit//img/login.png" alt="avatar"><br><img src="https://a1len.github.io/holyShit//img/login-2.png" alt="avatar"></p>
+<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/03/11/login-logic/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/03/10/StrategyPattern/" class="archive-article-date">
-  	<time datetime="2019-03-10T09:51:39.816Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-10</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/holyShit/2019/03/10/StrategyPattern/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Refactoring code</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/03/10/StrategyPattern/">Refactoring code</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/02/21/SpringBoot2.动态@Value/" class="archive-article-date">
-  	<time datetime="2019-02-21T11:13:12.033Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/02/21/SpringBoot2.动态@Value/">SpringBoot2.动态@Value实现</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/20/SpringBoot2.扩展接口/" class="archive-article-date">
-  	<time datetime="2019-01-20T13:32:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/20/SpringBoot2.扩展接口/">SpringBoot2.扩展接口</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/20/SpringBoot2.自动装配/" class="archive-article-date">
-  	<time datetime="2019-01-20T13:32:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-20</time>
-</a>
-        </div>
-    	 
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
+<script src="https://jjeejj.github.io/js/gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Login Logic',
+  owner: 'A1len',
+  repo: 'comment',
+  oauth: {
+    client_id: 'f7c0073548dc7587c316',
+    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/20/SpringBoot2.自动装配/">SpringBoot2.StartProcess.自动装配</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/20/SpringBoot2.StartProcess.depth/" class="archive-article-date">
-  	<time datetime="2019-01-19T17:34:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/20/SpringBoot2.StartProcess.depth/">SpringBoot2.StartProcess.depth</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/18/SpringBoot2.StartProcess/" class="archive-article-date">
-  	<time datetime="2019-01-18T15:22:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/18/SpringBoot2.StartProcess/">SpringBoot2.StartProcess</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/15/SpringBoot/" class="archive-article-date">
-  	<time datetime="2019-01-15T15:10:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/15/SpringBoot/">SpringBoot大纲</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/08/Java.TimSort/" class="archive-article-date">
-  	<time datetime="2019-01-08T14:12:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/08/Java.TimSort/">Java.TimSort</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/holyShit/2019/01/03/Java.Garbage.Collection/" class="archive-article-date">
-  	<time datetime="2019-01-03T15:40:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/holyShit/2019/01/03/Java.Garbage.Collection/">Java.Garbage.Collection</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -446,8 +322,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
