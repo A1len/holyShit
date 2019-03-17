@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://a1len.github.io/holyShit//img/token.png">
 <meta property="og:image" content="https://a1len.github.io/holyShit//img/login_diagram.png">
 <meta property="og:image" content="https://a1len.github.io/holyShit//img/qrcode.jpg">
-<meta property="og:updated_time" content="2019-03-16T14:16:18.649Z">
+<meta property="og:updated_time" content="2019-03-17T03:58:28.517Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="API网关设计（一）之Token多平台身份认证方案">
 <meta name="twitter:description" content="API网关设计（一）之Token多平台身份认证方案 随着4g的发展现如今早已不是当年的web登陆单一模式，而不久5g的到来又会带来无人车等其他设备的接入。所以为了应对将来的时代的变化，一个好的多平台认证登陆方案是切实所需。  概述今天咱们面对移动互联网的发展，系统一般是多个客户端对应一个服务端。客户端统一通过F5或者Nginx代理转发到API网关，最后发送到服务API。如下图架构图所示这个过程当中">
@@ -196,7 +196,58 @@
 <li>Token使用频率</li>
 <li>Token失效时间</li>
 </ul>
-<p>级别划分 1～3 分别为低中高<br>| Token | 名称 |级别 | 使用频率 | 有效期 | 保密级别 | 变化成本<br>|—–|—–|——|——|——|——|——|<br>| webtoken |web端token| 3（持久化）   | 1 | &gt;=1天 | 3 | 3 |<br>| mobiletoken |mobile端token| 3（持久化）   | 1 | &gt;=1天 | 3 | 3 |<br>| sessiontoken | 会话token|2（会话级）   | 3 | 分钟级别 | 3 | 1 |<br>| accesstoken | API认证token|1（短暂认证）   | 3 | 秒级 | 2 | 1 |</p>
+<p>级别划分 1～3 分别为低中高</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>名称</th>
+<th>级别</th>
+<th>使用频率</th>
+<th>有效期</th>
+<th>保密级别</th>
+<th>变化成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>webtoken</td>
+<td>web端token</td>
+<td>3（持久化）</td>
+<td>1</td>
+<td>&gt;=1天</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>mobiletoken</td>
+<td>mobile端token</td>
+<td>3（持久化）</td>
+<td>1</td>
+<td>&gt;=1天</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>sessiontoken</td>
+<td>会话token</td>
+<td>2（会话级）</td>
+<td>3</td>
+<td>分钟级别</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>accesstoken</td>
+<td>API认证token</td>
+<td>1（短暂认证）</td>
+<td>3</td>
+<td>秒级</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
 <hr>
 <p>再具体看一张token层级架构图<br><img src="https://a1len.github.io/holyShit//img/token.png" alt="avatar"><br>为啥要将token分这么多类型了？<br>咱们先根据上图捋一下思路具体如下几步</p>
 <ul>
