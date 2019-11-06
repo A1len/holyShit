@@ -8,21 +8,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com">
-  <title>SpringBoot2.StartProcess.depth | Al1en的博客</title>
+  <title>Archives: 2019/11 | Al1en的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="StartProcess提纲 启动监听器 获取环境 创建容器 准备容器 刷新容器 刷新容器后扩展  昨天了咱们把大的过程说了一下，今天咱们把细化的过程详细写写。之后再根据这几个细化过程，继续来一遍深入的源码解读。一点关于源码阅读的心得就是先看大架构布局，然后细看各个组成模块。明白各个模块用到的技术通过上面的方式去看源码其实是很轻松的一件事情。可能有人会说了，他妈的就是不知道才去看源码的呀知道还看源">
-<meta property="og:type" content="article">
-<meta property="og:title" content="SpringBoot2.StartProcess.depth">
-<meta property="og:url" content="https://github.com/2019/01/20/SpringBoot2.StartProcess.depth/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Al1en的博客">
+<meta property="og:url" content="https://github.com/archives/2019/11/index.html">
 <meta property="og:site_name" content="Al1en的博客">
-<meta property="og:description" content="StartProcess提纲 启动监听器 获取环境 创建容器 准备容器 刷新容器 刷新容器后扩展  昨天了咱们把大的过程说了一下，今天咱们把细化的过程详细写写。之后再根据这几个细化过程，继续来一遍深入的源码解读。一点关于源码阅读的心得就是先看大架构布局，然后细看各个组成模块。明白各个模块用到的技术通过上面的方式去看源码其实是很轻松的一件事情。可能有人会说了，他妈的就是不知道才去看源码的呀知道还看源">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
-<meta property="og:updated_time" content="2019-02-25T12:43:25.658Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SpringBoot2.StartProcess.depth">
-<meta name="twitter:description" content="StartProcess提纲 启动监听器 获取环境 创建容器 准备容器 刷新容器 刷新容器后扩展  昨天了咱们把大的过程说了一下，今天咱们把细化的过程详细写写。之后再根据这几个细化过程，继续来一遍深入的源码解读。一点关于源码阅读的心得就是先看大架构布局，然后细看各个组成模块。明白各个模块用到的技术通过上面的方式去看源码其实是很轻松的一件事情。可能有人会说了，他妈的就是不知道才去看源码的呀知道还看源">
-<meta name="twitter:image" content="https://a1len.github.io/holyShit//img/know.jpeg">
+<meta name="twitter:title" content="Al1en的博客">
   
   
     <link rel="icon" href="/favicon.png">
@@ -144,184 +138,49 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-SpringBoot2.StartProcess.depth" class="article article-type-post " itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      SpringBoot2.StartProcess.depth
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/holyShit/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/holyShit/2019/11/06/集合中的迭代器/" class="archive-article-date">
+  	<time datetime="2019-11-06T13:01:02.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-06</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/holyShit/2019/11/06/集合中的迭代器/">集合中的迭代器模式详解</a>
     </h1>
   
 
-        
-        <a href="/holyShit/2019/01/20/SpringBoot2.StartProcess.depth/" class="archive-article-date">
-  	<time datetime="2019-01-19T17:34:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="StartProcess提纲"><a href="#StartProcess提纲" class="headerlink" title="StartProcess提纲"></a>StartProcess提纲</h2><ul>
-<li><a href="#">启动监听器</a></li>
-<li><a href="#">获取环境</a></li>
-<li><a href="#">创建容器</a></li>
-<li><a href="#">准备容器</a></li>
-<li><a href="#">刷新容器</a></li>
-<li><a href="#">刷新容器后扩展</a></li>
-</ul>
-<p>昨天了咱们把大的过程说了一下，今天咱们把细化的过程详细写写。<br>之后再根据这几个细化过程，继续来一遍深入的源码解读。<br>一点关于源码阅读的心得就是先看大架构布局，然后细看各个组成模块。<br>明白各个模块用到的技术<br>通过上面的方式去看源码其实是很轻松的一件事情。<br>可能有人会说了，他妈的就是不知道才去看源码的呀<br>知道还看源码干啥<br>其实哦这样说也能理解，不过难道不可以看看官方文档明白架构？<br>不能看看别人的博客吸取的经验，然后再去看源码？<br>有些事情能站在别人的肩膀上就在别人肩膀上，时间就是生命就是金钱。<br>看源码的动力，你可以认为每弄懂一个框架。<br>年薪就能加10W<br>等超牛逼了年薪百万小问题，顺带着还有超强的成就感。<br>最屌的是能出名呀<br>粉丝一大堆的感觉真爽，还能帮助社区的发展。<br><a id="more"></a></p>
-<h2 id="启动监听器"><a href="#启动监听器" class="headerlink" title="启动监听器"></a>启动监听器</h2><p>在run方法中有下面两句代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SpringApplicationRunListeners listeners = getRunListeners(args);</span><br><span class="line">listeners.starting();</span><br></pre></td></tr></table></figure></p>
-<p>咱们先看一下getRunListeners<br>代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> SpringApplicationRunListeners <span class="title">getRunListeners</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">  Class&lt;?&gt;[] types = <span class="keyword">new</span> Class&lt;?&gt;[] &#123; SpringApplication.class, String[].class &#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> SpringApplicationRunListeners(logger, getSpringFactoriesInstances(</span><br><span class="line">      SpringApplicationRunListener.class, types, <span class="keyword">this</span>, args));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面的代码还是通过getSpringFactoriesInstances这个方法去Spring.factories配置文件拉取监听器通过反射实例化对象<br>该处实例化的class是EventPublishingRunListener，事件发布监听器<br>接着就是将它Starting<br>继续看下代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">starting</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.initialMulticaster.multicastEvent(</span><br><span class="line">      <span class="comment">//关键代码，这里是创建application启动事件ApplicationStartingEvent</span></span><br><span class="line">      <span class="keyword">new</span> ApplicationStartingEvent(<span class="keyword">this</span>.application, <span class="keyword">this</span>.args));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中有这么一个方法multicastEvent看名字就知道了事件传播<br>是否还记得咱们第一章里面说到的SpringApplication初始化的时候加载的一大堆监听器<br>就是这里通过Event类型，然后invoke调用的。<br>这里用到的设计模式了就是观察者模式，这堆监听器里面具体做了啥我也没怎么看就不写了。</p>
-<h2 id="获取环境"><a href="#获取环境" class="headerlink" title="获取环境"></a>获取环境</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> ConfigurableEnvironment <span class="title">prepareEnvironment</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    SpringApplicationRunListeners listeners,</span></span></span><br><span class="line"><span class="function"><span class="params">    ApplicationArguments applicationArguments)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Create and configure the environment</span></span><br><span class="line">  <span class="comment">//获取对应的ConfigurableEnvironment</span></span><br><span class="line">  ConfigurableEnvironment environment = getOrCreateEnvironment();</span><br><span class="line">  <span class="comment">//配置property,以及profiles</span></span><br><span class="line">  configureEnvironment(environment, applicationArguments.getSourceArgs());</span><br><span class="line">  <span class="comment">//发布环境已准备事件，这是第二次发布事件</span></span><br><span class="line">  listeners.environmentPrepared(environment);</span><br><span class="line">  bindToSpringApplication(environment);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.webApplicationType == WebApplicationType.NONE) &#123;</span><br><span class="line">    environment = <span class="keyword">new</span> EnvironmentConverter(getClassLoader())</span><br><span class="line">        .convertToStandardEnvironmentIfNecessary(environment);</span><br><span class="line">  &#125;</span><br><span class="line">  ConfigurationPropertySources.attach(environment);</span><br><span class="line">  <span class="keyword">return</span> environment;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> ConfigurableEnvironment <span class="title">getOrCreateEnvironment</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="comment">//根据不同web类型获取不同的环境class类，在这里会获取到系统参数以及启动参数比如spring.profiles.acitve</span></span><br><span class="line"><span class="comment">//构造函数在abstract里面调用，然后子类重写了父类方法</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.environment != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.environment;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.webApplicationType == WebApplicationType.SERVLET) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> StandardServletEnvironment();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> StandardEnvironment();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> 到上面咱们都还没有获取到应用程序的配置文件主要实现在事件里面，还是通过钩子去发布一个ApplicationEnvironmentPreparedEvent事件<br> 然后起调ConfigFileApplicationListener中的onApplicationEnvironmentPreparedEvent方法</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">onApplicationEnvironmentPreparedEvent</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    ApplicationEnvironmentPreparedEvent event)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//去spring.factories中加载处理流程</span></span><br><span class="line">  List&lt;EnvironmentPostProcessor&gt; postProcessors = loadPostProcessors();</span><br><span class="line">  <span class="comment">//将自己也加入进去DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/,file:./,file:./config/";这个下面最后再加载一次</span></span><br><span class="line">  postProcessors.add(<span class="keyword">this</span>);</span><br><span class="line">  AnnotationAwareOrderComparator.sort(postProcessors);</span><br><span class="line">  <span class="keyword">for</span> (EnvironmentPostProcessor postProcessor : postProcessors) &#123;</span><br><span class="line">    postProcessor.postProcessEnvironment(event.getEnvironment(),</span><br><span class="line">        event.getSpringApplication());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> 到这就加载到了所有的环境信息</p>
-<h2 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据不同的应用类型加载不同的web ApplicationContext也就是大家常听到的BeanFactory,记住不是FactoryBean。这两个完全不是同一个东西！</span></span><br><span class="line"><span class="comment">//由于是一个web应用加载这AnnotationConfigServletWebServerApplicationContext</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> ConfigurableApplicationContext <span class="title">createApplicationContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Class&lt;?&gt; contextClass = <span class="keyword">this</span>.applicationContextClass;</span><br><span class="line">    <span class="keyword">if</span> (contextClass == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.webApplicationType) &#123;</span><br><span class="line">        <span class="keyword">case</span> SERVLET:</span><br><span class="line">          contextClass = Class.forName(DEFAULT_WEB_CONTEXT_CLASS);</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> REACTIVE:</span><br><span class="line">          contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">          contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">catch</span> (ClassNotFoundException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</span><br><span class="line">            <span class="string">"Unable create a default ApplicationContext, "</span></span><br><span class="line">                + <span class="string">"please specify an ApplicationContextClass"</span>,</span><br><span class="line">            ex);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="准备容器"><a href="#准备容器" class="headerlink" title="准备容器"></a>准备容器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">prepareContext</span><span class="params">(ConfigurableApplicationContext context,</span></span></span><br><span class="line"><span class="function"><span class="params">    ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,</span></span></span><br><span class="line"><span class="function"><span class="params">    ApplicationArguments applicationArguments, Banner printedBanner)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//设置环境到容器</span></span><br><span class="line">  context.setEnvironment(environment);</span><br><span class="line">  <span class="comment">//执行前置处理，前置后置处理器是运行在bean初始化的前后</span></span><br><span class="line">  postProcessApplicationContext(context);</span><br><span class="line">  <span class="comment">//执行容器中的ApplicationContextInitializer（包括 spring.factories和自定义的实例）</span></span><br><span class="line">  applyInitializers(context);</span><br><span class="line">  <span class="comment">//发布一个容器准备就绪事件</span></span><br><span class="line">  listeners.contextPrepared(context);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">    logStartupInfo(context.getParent() == <span class="keyword">null</span>);</span><br><span class="line">    logStartupProfileInfo(context);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Add boot specific singleton beans</span></span><br><span class="line">  context.getBeanFactory().registerSingleton(<span class="string">"springApplicationArguments"</span>,</span><br><span class="line">      applicationArguments);</span><br><span class="line">  <span class="keyword">if</span> (printedBanner != <span class="keyword">null</span>) &#123;</span><br><span class="line">    context.getBeanFactory().registerSingleton(<span class="string">"springBootBanner"</span>, printedBanner);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Load the sources</span></span><br><span class="line">  <span class="comment">//获取我们的启动类指定的参数，可以是多个</span></span><br><span class="line">  Set&lt;Object&gt; sources = getAllSources();</span><br><span class="line">  Assert.notEmpty(sources, <span class="string">"Sources must not be empty"</span>);</span><br><span class="line">  <span class="comment">//加载我们的启动类，将启动类注入容器</span></span><br><span class="line">  load(context, sources.toArray(<span class="keyword">new</span> Object[<span class="number">0</span>]));</span><br><span class="line">  <span class="comment">//发布容器已加载事件</span></span><br><span class="line">  listeners.contextLoaded(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里的执行顺序是before initialize after</p>
-<h2 id="刷新容器"><a href="#刷新容器" class="headerlink" title="刷新容器"></a>刷新容器</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">refreshContext</span><span class="params">(ConfigurableApplicationContext context)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//调用AbstractApplicationContext</span></span><br><span class="line">  refresh(context);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.registerShutdownHook) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      context.registerShutdownHook();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (AccessControlException ex) &#123;</span><br><span class="line">      <span class="comment">// Not allowed in some environments.</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里实际会进入AbstractApplicationContext中去执行refresh方法，这就和常见的springFrame基本一样了<br>如果不清楚调用过程，可以通过idea看一下AnnotationConfigServletWebServerApplicationContext<br>这个类的继承结构类图</p>
-<h2 id="刷新容器后扩展"><a href="#刷新容器后扩展" class="headerlink" title="刷新容器后扩展"></a>刷新容器后扩展</h2><p>这里是一个预留的扩展接口啥都没干，可以自己实现</p>
-<p>到这里咱们又过了一遍启动流程，后面再具体说bean注册实例化自动配置怎么实现的。</p>
-<p>欢迎扫码加入知识星球继续讨论<br><img src="https://a1len.github.io/holyShit//img/know.jpeg" alt="avatar"></p>
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://github.com/2019/01/20/SpringBoot2.StartProcess.depth/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/holyShit/2019/01/20/SpringBoot2.扩展接口/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          SpringBoot2.扩展接口
-        
-      </div>
-    </a>
   
   
-    <a href="/holyShit/2019/01/18/SpringBoot2.StartProcess/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">SpringBoot2.StartProcess</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="https://jjeejj.github.io/css/gitment.css">
-<script src="https://jjeejj.github.io/js/gitment.js"></script>
-<script>
-var gitment = new Gitment({
-  id: 'SpringBoot2.StartProcess.depth',
-  owner: 'A1len',
-  repo: 'comment',
-  oauth: {
-    client_id: 'f7c0073548dc7587c316',
-    client_secret: '3674d0e08bd8f06a2a96f8fd4e63c05d215ef19e',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
-  
+    
 
 
           </div>
@@ -344,8 +203,8 @@ gitment.render('gitment-ctn')
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
